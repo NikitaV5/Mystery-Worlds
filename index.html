@@ -11,26 +11,32 @@
         * { -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
         body { 
             background: #000; font-family: 'Rajdhani', sans-serif; color: #e2e8f0; 
-            margin: 0; padding: 0; min-height: 100vh; overflow: hidden;
+            margin: 0; padding: 0; min-height: 100vh;
             background-size: cover; background-position: center;
-            transition: background-image 0.8s ease-in-out;
+            transition: background-image 1s ease-in-out;
+            overflow-x: hidden;
         }
         .glass { background: var(--panel-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; }
         .bar-fill { height: 100%; border-radius: 10px; transition: width 0.4s ease; }
         .energy-fill { background: linear-gradient(90deg, #10b981, #34d399); }
         .xp-fill { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-        .evolution-img { filter: drop-shadow(0 0 30px rgba(0, 210, 255, 0.3)); animation: float 3s ease-in-out infinite; cursor: pointer; }
+        .evolution-img { filter: drop-shadow(0 0 30px rgba(0, 210, 255, 0.3)); animation: float 3s ease-in-out infinite; cursor: pointer; transition: transform 0.1s; }
+        .evolution-img:active { transform: scale(0.9); }
         @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-15px) scale(1.05); } }
         
         .quest-card { background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 14px; margin-bottom: 8px; border: 1px solid transparent; transition: all 0.5s ease; }
-        .quest-card.done { opacity: 0.5; border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05); transform: translateX(20px); pointer-events: none; }
-        .quest-card.done .title-text { text-decoration: line-through; color: #10b981; }
-        .quest-card.fade-out { opacity: 0; transform: translateX(100px); }
+        .quest-card.done { border-color: #10b981; background: rgba(16, 185, 129, 0.1); pointer-events: none; }
+        .quest-card.fade-out { opacity: 0; transform: translateX(50px); }
 
         #auth-screen { position: fixed; inset: 0; background: #0a0b10; z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        #game-ui { display: none; height: 100vh; overflow-y: auto; padding-bottom: 40px; }
+        #game-ui { display: none; padding-bottom: 40px; }
         #modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 3000; display: none; align-items: center; justify-content: center; }
-        .nrg-pop { position: absolute; color: #10b981; font-weight: bold; animation: nrg-up 0.6s ease-out forwards; pointer-events: none; z-index: 100; }
+        
+        .loc-item { padding: 8px 12px; border-radius: 12px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; border: 1px solid rgba(255,255,255,0.05); }
+        .loc-locked { opacity: 0.5; background: rgba(0,0,0,0.2); }
+        .loc-active { background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.5); }
+
+        .nrg-pop { position: absolute; color: #10b981; font-weight: bold; animation: nrg-up 0.6s ease-out forwards; pointer-events: none; z-index: 1000; }
         @keyframes nrg-up { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-60px); } }
         input { background: rgba(255,255,255,0.07) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; }
     </style>
@@ -38,103 +44,112 @@
 <body id="bg-layer">
 
     <div id="auth-screen">
-        <div class="glass p-8 w-full max-w-sm">
-            <h1 class="font-['Orbitron'] text-2xl text-center text-blue-400 mb-8 uppercase tracking-widest">Mystery World</h1>
+        <div class="glass p-8 w-full max-w-sm text-center">
+            <h1 class="font-['Orbitron'] text-2xl text-blue-400 mb-8 uppercase tracking-widest">Mythic RPG</h1>
             <input type="text" id="auth-user" placeholder="Логін" class="w-full p-4 rounded-xl mb-3 outline-none">
             <input type="password" id="auth-pass" placeholder="Пароль" class="w-full p-4 rounded-xl mb-6 outline-none">
-            <div class="flex flex-col gap-3">
-                <button onclick="account.login()" class="bg-blue-600 p-4 rounded-xl font-bold uppercase text-white shadow-lg active:scale-95 transition">Увійти</button>
-                <button onclick="account.register()" class="text-gray-400 text-sm py-2">Створити акаунт</button>
-            </div>
+            <button onclick="account.login()" class="w-full bg-blue-600 p-4 rounded-xl font-bold uppercase text-white shadow-lg active:scale-95 transition">Увійти</button>
+            <button onclick="account.register()" class="w-full text-gray-400 text-sm mt-4">Створити акаунт</button>
         </div>
     </div>
 
     <div id="game-ui" class="p-4 max-w-md mx-auto">
-        <div class="glass p-5 mb-6 flex justify-between items-center">
+        <div class="glass p-5 mb-4 flex justify-between items-center">
             <div>
                 <h2 id="user-display" class="font-bold text-blue-400 text-lg">Герой</h2>
-                <p class="text-[10px] text-gray-500 uppercase tracking-widest">Локація: <span id="ui-location-name" class="text-white">Ліс</span></p>
+                <div class="flex items-center gap-1 text-[10px] text-gray-400 font-bold uppercase">
+                    <span id="ui-loc-icon">🌲</span> <span id="ui-location-name">Ліс</span>
+                </div>
             </div>
             <div id="ui-gems" class="text-yellow-500 text-2xl font-black">0 💎</div>
         </div>
 
-        <div class="relative flex flex-col items-center justify-center py-6">
+        <div class="relative flex flex-col items-center justify-center py-4">
+            <div class="mb-2 bg-black/40 px-6 py-1 rounded-full backdrop-blur-sm border border-white/10">
+                <h3 id="world-title" class="font-['Orbitron'] text-sm font-bold text-blue-300 tracking-[0.2em] uppercase">...</h3>
+            </div>
             <div id="char-icon" class="text-[140px] evolution-img" onclick="game.click(event)">🐣</div>
             <div class="text-center mt-4">
-                <h3 id="world-title" class="font-['Orbitron'] text-2xl font-bold uppercase text-white tracking-widest">...</h3>
-                <span id="rank-text" class="text-[10px] bg-blue-500/20 text-blue-400 px-4 py-1 rounded-full font-bold uppercase">Lvl <span id="ui-lvl">1</span></span>
+                <p class="text-[10px] text-gray-400 uppercase mb-2">Кліки: <span id="click-counter" class="text-blue-400">0</span>/10 ⚡</p>
+                <span class="text-[10px] bg-blue-500/20 text-blue-400 px-6 py-1.5 rounded-full font-bold border border-blue-500/30">LVL <span id="ui-lvl">1</span></span>
             </div>
         </div>
 
         <div class="glass p-5 mb-6 space-y-4">
             <div>
                 <div class="flex justify-between text-[11px] font-bold mb-1"><span>⚡ ЕНЕРГІЯ</span><span id="ui-energy">100/100</span></div>
-                <div class="h-2.5 bg-white/5 rounded-full overflow-hidden"><div id="bar-energy" class="bar-fill energy-fill"></div></div>
+                <div class="h-2 bg-white/5 rounded-full overflow-hidden"><div id="bar-energy" class="bar-fill energy-fill"></div></div>
             </div>
             <div>
                 <div class="flex justify-between text-[11px] font-bold mb-1"><span>🌟 ДОСВІД</span><span id="ui-xp">0/100</span></div>
-                <div class="h-2.5 bg-white/5 rounded-full overflow-hidden"><div id="bar-xp" class="bar-fill xp-fill"></div></div>
+                <div class="h-2 bg-white/5 rounded-full overflow-hidden"><div id="bar-xp" class="bar-fill xp-fill"></div></div>
             </div>
         </div>
 
         <div class="mb-6">
             <div class="flex justify-between items-center mb-3 px-2">
-                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest">Завдання</h4>
-                <button onclick="ui.openModal()" class="bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-lg">+</button>
+                <h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Твої Завдання</h4>
+                <button onclick="ui.openModal()" class="bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-lg text-xl">+</button>
             </div>
             <div id="quest-list"></div>
         </div>
 
+        <div class="glass p-5 mb-6">
+            <h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Карта Світу</h4>
+            <div id="location-map"></div>
+        </div>
+
         <div class="grid grid-cols-3 gap-2">
-            <button onclick="game.upgrade('str')" class="glass p-3 text-center active:bg-blue-900/20">
+            <button onclick="game.upgrade('str')" class="glass p-3 text-center active:scale-95 transition">
                 <div class="text-xl">⚔️</div>
-                <div class="text-[9px] font-bold uppercase mt-1">Str Lvl <span id="sk-str-lvl">0</span></div>
-                <div id="sk-str-cost" class="text-[9px] text-yellow-500">50 💎</div>
+                <div class="text-[9px] font-bold mt-1 text-gray-400 tracking-tighter uppercase">Сила <span id="sk-str-lvl" class="text-white">0</span></div>
+                <div id="sk-str-cost" class="text-[9px] text-yellow-500 font-bold">50</div>
             </button>
-            <button onclick="game.upgrade('int')" class="glass p-3 text-center active:bg-purple-900/20">
+            <button onclick="game.upgrade('int')" class="glass p-3 text-center active:scale-95 transition">
                 <div class="text-xl">🧠</div>
-                <div class="text-[9px] font-bold uppercase mt-1">Int Lvl <span id="sk-int-lvl">0</span></div>
-                <div id="sk-int-cost" class="text-[9px] text-yellow-500">75 💎</div>
+                <div class="text-[9px] font-bold mt-1 text-gray-400 tracking-tighter uppercase">Інт <span id="sk-int-lvl" class="text-white">0</span></div>
+                <div id="sk-int-cost" class="text-[9px] text-yellow-500 font-bold">75</div>
             </button>
-            <button onclick="game.upgrade('luk')" class="glass p-3 text-center active:bg-yellow-900/20">
+            <button onclick="game.upgrade('luk')" class="glass p-3 text-center active:scale-95 transition">
                 <div class="text-xl">🍀</div>
-                <div class="text-[9px] font-bold uppercase mt-1">Luk Lvl <span id="sk-luk-lvl">0</span></div>
-                <div id="sk-luk-cost" class="text-[9px] text-yellow-500">100 💎</div>
+                <div class="text-[9px] font-bold mt-1 text-gray-400 tracking-tighter uppercase">Удача <span id="sk-luk-lvl" class="text-white">0</span></div>
+                <div id="sk-luk-cost" class="text-[9px] text-yellow-500 font-bold">100</div>
             </button>
         </div>
     </div>
 
     <div id="modal">
         <div class="glass p-6 w-full max-w-xs mx-4">
-            <h2 id="modal-title" class="font-['Orbitron'] text-blue-400 mb-4 text-center uppercase text-sm">Новий квест</h2>
-            <input type="text" id="q-input" placeholder="Що треба зробити?" class="w-full p-4 rounded-xl mb-4 outline-none">
+            <h2 class="font-['Orbitron'] text-blue-400 mb-4 text-center uppercase text-sm tracking-widest">Нове завдання</h2>
+            <input type="text" id="q-input" placeholder="Опис..." class="w-full p-4 rounded-xl mb-4 outline-none">
             <div class="flex gap-2">
-                <button onclick="ui.closeModal()" class="flex-1 p-3 text-[10px] uppercase font-bold text-gray-400">Скасувати</button>
-                <button onclick="game.saveQuest()" class="flex-1 bg-blue-600 p-3 rounded-xl font-bold text-[10px] uppercase">Зберегти</button>
+                <button onclick="ui.closeModal()" class="flex-1 p-3 text-[10px] uppercase font-bold text-gray-500">Назад</button>
+                <button onclick="game.saveQuest()" class="flex-1 bg-blue-600 p-3 rounded-xl font-bold text-[10px] uppercase">ОК</button>
             </div>
         </div>
     </div>
 
     <script>
         const LOCATIONS = [
-            { id: 'forest', name: 'Магічний Ліс', minLvl: 1, char: '🐣', bg: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=1000' },
-            { id: 'cave', name: 'Кристальна Печера', minLvl: 5, char: '🦎', bg: 'https://images.unsplash.com/photo-1509023467864-1ecbb3f6354b?auto=format&fit=crop&q=80&w=1000' },
-            { id: 'cyber', name: 'Неонове Місто', minLvl: 10, char: '🤖', bg: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&q=80&w=1000' }
+            { id: 'forest', name: 'Магічний Ліс', icon: '🌲', char: '🐣', minLvl: 1, bg: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1000' },
+            { id: 'desert', name: 'Забута Пустеля', icon: '🏜️', char: '🦂', minLvl: 5, bg: 'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=1000' },
+            { id: 'cave', name: 'Кристальна Шахта', icon: '💎', char: '🦎', minLvl: 10, bg: 'https://images.unsplash.com/photo-1509023467864-1ecbb3f6354b?q=80&w=1000' },
+            { id: 'cyber', name: 'Неоновий Токіо', icon: '🏙️', char: '🤖', minLvl: 15, bg: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1000' }
         ];
 
-        let currentUser = null, state = null, editingQuestId = null;
+        let currentUser = null, state = null, editingQuestId = null, clickCounter = 0;
 
         const account = {
-            getUsers() { return JSON.parse(localStorage.getItem('mythic_rpg_v2')) || {}; },
+            getUsers() { return JSON.parse(localStorage.getItem('mythic_rpg_v4')) || {}; },
             register() {
                 const u = document.getElementById('auth-user').value.trim();
                 const p = document.getElementById('auth-pass').value.trim();
                 if(!u || !p) return alert("Заповни поля!");
                 let users = this.getUsers();
-                if(users[u]) return alert("Логін зайнятий!");
+                if(users[u]) return alert("Нік зайнятий!");
                 users[u] = { pass: p, data: { lvl:1, xp:0, energy:100, gems:50, skills:{str:0, int:0, luk:0}, quests:[] } };
-                localStorage.setItem('mythic_rpg_v2', JSON.stringify(users));
-                alert("Успішно!");
+                localStorage.setItem('mythic_rpg_v4', JSON.stringify(users));
+                alert("Акаунт створено!");
             },
             login() {
                 const u = document.getElementById('auth-user').value.trim();
@@ -146,14 +161,14 @@
                     document.getElementById('game-ui').style.display = 'block';
                     document.getElementById('user-display').innerText = currentUser;
                     game.render();
-                } else alert("Помилка входу");
+                } else alert("Помилка");
             }
         };
 
         const game = {
             save() {
                 let users = account.getUsers();
-                if(currentUser) { users[currentUser].data = state; localStorage.setItem('mythic_rpg_v2', JSON.stringify(users)); }
+                if(currentUser) { users[currentUser].data = state; localStorage.setItem('mythic_rpg_v4', JSON.stringify(users)); }
                 this.render();
             },
             render() {
@@ -167,32 +182,53 @@
                 document.getElementById('bar-xp').style.width = (state.xp/cap*100) + "%";
                 document.getElementById('ui-lvl').innerText = state.lvl;
                 document.getElementById('ui-gems').innerText = state.gems + " 💎";
-                document.getElementById('world-title').innerText = loc.name;
+                
                 document.getElementById('ui-location-name').innerText = loc.name;
+                document.getElementById('ui-loc-icon').innerText = loc.icon;
+                document.getElementById('world-title').innerText = loc.name;
                 document.getElementById('char-icon').innerText = loc.char;
                 document.getElementById('bg-layer').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${loc.bg}')`;
+                document.getElementById('click-counter').innerText = clickCounter;
 
-                document.getElementById('quest-list').innerHTML = state.quests.map(q => `
-                    <div id="q-${q.id}" class="quest-card flex justify-between items-center ${q.completed ? 'done' : ''}">
+                // Render Quests
+                document.getElementById('quest-list').innerHTML = state.quests.map(q => {
+                    const intBonus = state.skills.int * 2;
+                    return `
+                    <div id="q-${q.id}" class="quest-card flex justify-between items-center ${q.timer !== undefined ? 'done' : ''}">
                         <div class="flex-1" onclick="game.doQuest(${q.id})">
-                            <div class="font-bold text-sm uppercase title-text tracking-wide">${q.completed ? '✅ ' : ''}${q.title}</div>
-                            <div class="text-[10px] text-blue-400 font-semibold">${q.completed ? 'ГОТОВО (зникне через 3с)' : 'ЕНЕРГІЯ: -30'}</div>
+                            <div class="font-bold text-sm uppercase tracking-wide">${q.timer !== undefined ? '✅ ' : ''}${q.title}</div>
+                            <div class="text-[10px] font-bold mt-1">
+                                <span class="text-blue-400">⚡ -${q.costNRG}</span> | 
+                                <span class="text-purple-400">🌟 +${q.rewardXP + intBonus}</span>
+                                ${q.timer !== undefined ? ` | <span class="text-green-400">${q.timer}с...</span>` : ''}
+                            </div>
                         </div>
-                        <div class="flex gap-4 ml-2">
-                            <button onclick="ui.openModal(${q.id})" class="text-blue-400 text-sm">✏️</button>
-                            <button onclick="game.delQuest(${q.id})" class="text-red-500 text-lg">✕</button>
-                        </div>
-                    </div>
-                `).join('');
+                        <button onclick="game.delQuest(${q.id})" class="text-red-500 ml-4">✕</button>
+                    </div>`}).join('');
+
+                // Render Map (New Section)
+                document.getElementById('location-map').innerHTML = LOCATIONS.map(l => {
+                    const isActive = loc.id === l.id;
+                    const isLocked = state.lvl < l.minLvl;
+                    return `
+                    <div class="loc-item ${isActive ? 'loc-active' : ''} ${isLocked ? 'loc-locked' : ''}">
+                        <span class="font-bold">${l.icon} ${l.name}</span>
+                        <span class="font-bold opacity-70">${isLocked ? '🔒 Рівень ' + l.minLvl : 'ВІДКРИТО'}</span>
+                    </div>`;
+                }).join('');
 
                 ['str', 'int', 'luk'].forEach(s => {
                     document.getElementById(`sk-${s}-lvl`).innerText = state.skills[s];
-                    document.getElementById(`sk-${s}-cost`).innerText = ((state.skills[s]+1)*50) + " 💎";
+                    document.getElementById(`sk-${s}-cost`).innerText = ((state.skills[s]+1)*50);
                 });
             },
             click(e) {
-                state.energy = Math.min(100, state.energy + 1);
-                this.nrgPop(e);
+                clickCounter++;
+                if(clickCounter >= 10) {
+                    clickCounter = 0;
+                    state.energy = Math.min(100, state.energy + 1);
+                    this.nrgPop(e);
+                }
                 this.save();
             },
             nrgPop(e) {
@@ -202,41 +238,40 @@
             },
             doQuest(id) {
                 const q = state.quests.find(x => x.id === id);
-                if(q.completed || state.energy < 30) return;
-                
-                state.energy -= 30;
-                state.xp += (40 + state.skills.int * 10);
-                state.gems += (15 + state.skills.luk * 5);
-                q.completed = true;
-                
+                if(q.timer !== undefined || state.energy < q.costNRG) return;
+                state.energy -= q.costNRG;
+                state.xp += (q.rewardXP + state.skills.int * 2);
+                state.gems += (q.rewardGems || 10) + state.skills.luk * 2;
+                q.timer = 5;
                 this.checkLvl();
+                this.startQuestTimer(id);
                 this.save();
-
-                // ТАЙМЕР НА ВИДАЛЕННЯ (3 секунди)
-                setTimeout(() => {
-                    const el = document.getElementById(`q-${id}`);
-                    if(el) el.classList.add('fade-out'); // Плавна анімація зникнення
-                    
-                    setTimeout(() => {
+            },
+            startQuestTimer(id) {
+                const interval = setInterval(() => {
+                    const q = state.quests.find(x => x.id === id);
+                    if (!q) { clearInterval(interval); return; }
+                    q.timer--;
+                    if (q.timer <= 0) {
+                        clearInterval(interval);
                         this.delQuest(id);
-                    }, 500); // Час на анімацію
-                }, 3000);
+                    } else { this.render(); }
+                }, 1000);
             },
             checkLvl() {
                 const cap = 100 + (state.lvl * 50);
-                if(state.xp >= cap) { state.lvl++; state.xp = 0; state.energy = 100; alert("НОВИЙ РІВЕНЬ!"); }
+                if(state.xp >= cap) { state.lvl++; state.xp = 0; state.energy = 100; alert("LEVEL UP!"); }
             },
             saveQuest() {
                 const val = document.getElementById('q-input').value.trim();
                 if(!val) return;
-                if(editingQuestId) {
-                    const q = state.quests.find(x => x.id === editingQuestId);
-                    if(q) q.title = val;
-                } else {
-                    state.quests.unshift({ id: Date.now(), title: val, completed: false });
-                }
-                ui.closeModal();
-                this.save();
+                state.quests.unshift({ 
+                    id: Date.now(), title: val,
+                    costNRG: Math.floor(Math.random() * 6) + 10, // 10-15
+                    rewardXP: Math.floor(Math.random() * 11) + 20, // 20-30
+                    rewardGems: Math.floor(Math.random() * 11) + 5 // 5-15
+                });
+                ui.closeModal(); this.save();
             },
             delQuest(id) { state.quests = state.quests.filter(q => q.id !== id); this.save(); },
             upgrade(s) {
@@ -246,22 +281,11 @@
         };
 
         const ui = {
-            openModal(id = null) {
-                editingQuestId = id;
-                const input = document.getElementById('q-input');
-                if(id) {
-                    const q = state.quests.find(x => x.id === id);
-                    input.value = q.title;
-                } else {
-                    input.value = "";
-                }
-                document.getElementById('modal').style.display = 'flex';
-                input.focus();
-            },
-            closeModal() { document.getElementById('modal').style.display = 'none'; editingQuestId = null; }
+            openModal() { document.getElementById('modal').style.display = 'flex'; document.getElementById('q-input').value = ""; },
+            closeModal() { document.getElementById('modal').style.display = 'none'; }
         };
 
-        setInterval(() => { if(state && state.energy < 100) { state.energy = Math.min(100, state.energy + 0.2); game.render(); } }, 3000);
+        setInterval(() => { if(state && state.energy < 100) { state.energy = Math.min(100, state.energy + 0.3); game.render(); } }, 3000);
     </script>
 </body>
 </html>
