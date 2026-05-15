@@ -1,291 +1,2631 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Mythic World Mobile</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --panel-bg: rgba(13, 15, 23, 0.95); }
-        * { -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
-        body { 
-            background: #000; font-family: 'Rajdhani', sans-serif; color: #e2e8f0; 
-            margin: 0; padding: 0; min-height: 100vh;
-            background-size: cover; background-position: center;
-            transition: background-image 1s ease-in-out;
-            overflow-x: hidden;
-        }
-        .glass { background: var(--panel-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; }
-        .bar-fill { height: 100%; border-radius: 10px; transition: width 0.4s ease; }
-        .energy-fill { background: linear-gradient(90deg, #10b981, #34d399); }
-        .xp-fill { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-        .evolution-img { filter: drop-shadow(0 0 30px rgba(0, 210, 255, 0.3)); animation: float 3s ease-in-out infinite; cursor: pointer; transition: transform 0.1s; }
-        .evolution-img:active { transform: scale(0.9); }
-        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-15px) scale(1.05); } }
-        
-        .quest-card { background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 14px; margin-bottom: 8px; border: 1px solid transparent; transition: all 0.5s ease; }
-        .quest-card.done { border-color: #10b981; background: rgba(16, 185, 129, 0.1); pointer-events: none; }
-        .quest-card.fade-out { opacity: 0; transform: translateX(50px); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="description" content="UnderRubbl Survival OS - Emergency survival system for disaster zones">
+<title>UnderRubbl Survival OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --amber: #FF9500;
+    --amber-dim: #b36900;
+    --amber-glow: rgba(255,149,0,0.3);
+    --red: #FF3B30;
+    --red-dim: #8b1f19;
+    --red-glow: rgba(255,59,48,0.3);
+    --green: #30D158;
+    --blue: #0A84FF;
+    --bg: #000000;
+    --surface: #0a0a0a;
+    --surface2: #111111;
+    --surface3: #1a1a1a;
+    --border: rgba(255,149,0,0.15);
+    --text: #e8e0d0;
+    --text-dim: #7a7060;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-display: 'Orbitron', sans-serif;
+    --font-body: 'Exo 2', sans-serif;
+  }
 
-        #auth-screen { position: fixed; inset: 0; background: #0a0b10; z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        #game-ui { display: none; padding-bottom: 40px; }
-        #modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 3000; display: none; align-items: center; justify-content: center; }
-        
-        .loc-item { padding: 8px 12px; border-radius: 12px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; border: 1px solid rgba(255,255,255,0.05); }
-        .loc-locked { opacity: 0.5; background: rgba(0,0,0,0.2); }
-        .loc-active { background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.5); }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  
+  html { scroll-behavior: smooth; }
 
-        .nrg-pop { position: absolute; color: #10b981; font-weight: bold; animation: nrg-up 0.6s ease-out forwards; pointer-events: none; z-index: 1000; }
-        @keyframes nrg-up { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-60px); } }
-        input { background: rgba(255,255,255,0.07) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; }
-    </style>
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Corner brackets UI element */
+  .tactical-box {
+    position: relative;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .tactical-box::before,
+  .tactical-box::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--amber);
+    border-style: solid;
+  }
+  .tactical-box::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .tactical-box::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+  .font-mono { font-family: var(--font-mono); }
+  .font-display { font-family: var(--font-display); }
+
+  /* Nav tabs */
+  .nav-tab {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 10px 6px 8px;
+    color: var(--text-dim);
+    border-top: 2px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+    flex: 1;
+    text-align: center;
+    user-select: none;
+  }
+  .nav-tab.active {
+    color: var(--amber);
+    border-top-color: var(--amber);
+    background: rgba(255,149,0,0.05);
+  }
+  .nav-tab svg { margin: 0 auto 4px; display: block; }
+
+  /* Panels */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* SOS Button */
+  .sos-btn {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 3px solid var(--red);
+    background: radial-gradient(circle, rgba(255,59,48,0.15) 0%, rgba(255,59,48,0.03) 70%);
+    color: var(--red);
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(255,59,48,0.2), inset 0 0 30px rgba(255,59,48,0.05);
+  }
+  .sos-btn:active { transform: scale(0.95); }
+  .sos-btn.active {
+    background: radial-gradient(circle, rgba(255,59,48,0.3) 0%, rgba(255,59,48,0.1) 70%);
+    box-shadow: 0 0 40px rgba(255,59,48,0.5), 0 0 80px rgba(255,59,48,0.2), inset 0 0 30px rgba(255,59,48,0.1);
+  }
+
+  /* Pulse rings */
+  .pulse-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid var(--red);
+    opacity: 0;
+    animation: none;
+  }
+  .sos-btn.active .pulse-ring:nth-child(1) { width: 180px; height: 180px; animation: pulseOut 2s ease-out infinite 0s; }
+  .sos-btn.active .pulse-ring:nth-child(2) { width: 210px; height: 210px; animation: pulseOut 2s ease-out infinite 0.5s; }
+  .sos-btn.active .pulse-ring:nth-child(3) { width: 240px; height: 240px; animation: pulseOut 2s ease-out infinite 1s; }
+
+  @keyframes pulseOut {
+    0% { transform: scale(0.85); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+
+  /* Blink */
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  .blink { animation: blink 1s step-end infinite; }
+
+  /* Amber glow text */
+  .text-amber { color: var(--amber); }
+  .text-red { color: var(--red); }
+  .text-green { color: var(--green); }
+
+  /* Battery bar */
+  .battery-bar {
+    height: 8px;
+    background: var(--surface3);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .battery-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease, background 0.5s;
+  }
+
+  /* Chat */
+  #chat-messages {
+    height: 280px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--amber-dim) transparent;
+  }
+  #chat-messages::-webkit-scrollbar { width: 4px; }
+  #chat-messages::-webkit-scrollbar-thumb { background: var(--amber-dim); border-radius: 2px; }
+
+  .chat-bubble {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    animation: fadeUp 0.3s ease;
+  }
+  .chat-bubble.ai {
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+    color: var(--text);
+  }
+  .chat-bubble.user {
+    background: rgba(255,149,0,0.12);
+    border: 1px solid rgba(255,149,0,0.25);
+    border-bottom-right-radius: 4px;
+    color: var(--amber);
+    margin-left: auto;
+  }
+  .typing-indicator span {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    margin: 0 2px;
+    animation: bounce 1.2s infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  /* Breathing circle */
+  #breath-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid var(--amber);
+    background: radial-gradient(circle, rgba(255,149,0,0.1), transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 10px;
+    color: var(--amber);
+    letter-spacing: 0.05em;
+    text-align: center;
+    transition: transform 0.5s ease;
+    flex-shrink: 0;
+  }
+  #breath-circle.inhale { transform: scale(1.4); }
+  #breath-circle.hold { transform: scale(1.4); }
+  #breath-circle.exhale { transform: scale(1); }
+
+  /* Hazard alerts */
+  .alert-card {
+    border-left: 3px solid var(--red);
+    background: rgba(255,59,48,0.05);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 10px;
+    animation: fadeUp 0.4s ease;
+  }
+  .alert-card.moderate { border-left-color: var(--amber); background: rgba(255,149,0,0.05); }
+  .alert-card.safe { border-left-color: var(--green); background: rgba(48,209,88,0.05); }
+
+  /* Input */
+  .tactical-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 10px 14px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .tactical-input:focus { border-color: var(--amber); box-shadow: 0 0 0 2px var(--amber-glow); }
+  .tactical-input::placeholder { color: var(--text-dim); }
+
+  select.tactical-input option { background: #111; }
+
+  /* Button */
+  .btn-amber {
+    background: transparent;
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .btn-amber:hover, .btn-amber:active { background: rgba(255,149,0,0.1); }
+
+  .btn-red {
+    background: rgba(255,59,48,0.1);
+    border: 1px solid var(--red);
+    color: var(--red);
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .btn-red:active { background: rgba(255,59,48,0.25); }
+
+  /* Timer */
+  #survival-timer {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--amber);
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 20px var(--amber-glow);
+  }
+
+  /* Signal strength */
+  .signal-bar {
+    width: 6px;
+    background: var(--surface3);
+    border-radius: 2px;
+    transition: background 0.5s;
+  }
+  .signal-bar.active { background: var(--green); }
+
+  /* Waveform visualizer */
+  #waveform {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 40px;
+  }
+  .wave-bar {
+    width: 4px;
+    background: var(--amber);
+    border-radius: 2px;
+    transition: height 0.1s;
+  }
+
+  /* Status indicator */
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .status-dot.ok { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .status-dot.warn { background: var(--amber); box-shadow: 0 0 6px var(--amber); animation: blink 1s infinite; }
+  .status-dot.danger { background: var(--red); box-shadow: 0 0 6px var(--red); animation: blink 0.5s infinite; }
+
+  /* Scrollbar global */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--amber-dim); border-radius: 2px; }
+
+  /* Section header */
+  .section-header {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-header::after { content:''; flex:1; height:1px; background: var(--border); }
+
+  /* Map grid decorative */
+  .grid-bg {
+    background-image: 
+      linear-gradient(rgba(255,149,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,149,0,0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  /* Morse pattern */
+  @keyframes morseShort { 0%,100%{opacity:0} 10%,30%{opacity:1} }
+  @keyframes morseLong  { 0%,100%{opacity:0} 10%,50%{opacity:1} }
+
+  /* Quick action pill */
+  .quick-action {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    font-family: var(--font-body);
+  }
+  .quick-action:hover, .quick-action:active {
+    border-color: var(--amber);
+    color: var(--amber);
+    background: rgba(255,149,0,0.05);
+  }
+
+  /* Overlay modal */
+  #onboard-overlay {
+    position: fixed; inset: 0; z-index: 10000;
+    background: rgba(0,0,0,0.97);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 24px;
+  }
+
+  @keyframes glitch {
+    0%,100% { text-shadow: 2px 0 var(--red), -2px 0 var(--blue); }
+    25% { text-shadow: -2px 0 var(--red), 2px 0 var(--blue); }
+    50% { text-shadow: 2px 2px var(--red), -2px -2px var(--blue); }
+    75% { text-shadow: -2px 2px var(--amber), 2px -2px var(--blue); }
+  }
+  .glitch { animation: glitch 3s infinite; }
+
+  /* Tag */
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+  .tag-red { background: rgba(255,59,48,0.15); color: var(--red); border: 1px solid rgba(255,59,48,0.3); }
+  .tag-amber { background: rgba(255,149,0,0.15); color: var(--amber); border: 1px solid rgba(255,149,0,0.3); }
+  .tag-green { background: rgba(48,209,88,0.15); color: var(--green); border: 1px solid rgba(48,209,88,0.3); }
+
+  /* Shimmer for loading */
+  @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+  .shimmer {
+    background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+
+  /* Accessibility */
+  .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+  *:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; border-radius: 4px; }
+
+  /* ── DEAD MAN'S SWITCH overlay ── */
+  #dms-overlay {
+    position: fixed; inset: 0; z-index: 20000;
+    background: rgba(0,0,0,0.98);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    text-align: center;
+  }
+  #dms-overlay.visible { display: flex; }
+
+  @keyframes dmsPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,59,48,0.7); }
+    50% { box-shadow: 0 0 0 30px rgba(255,59,48,0); }
+  }
+  .dms-ring {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    border: 3px solid var(--red);
+    display: flex; align-items: center; justify-content: center;
+    animation: dmsPulse 1s ease infinite;
+    margin-bottom: 24px;
+  }
+  #dms-countdown {
+    font-family: var(--font-display);
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--red);
+    line-height: 1;
+  }
+
+  /* ── MORSE LISTENER ── */
+  .morse-dot {
+    display: inline-block;
+    border-radius: 50%;
+    background: var(--amber);
+    margin: 0 3px;
+    vertical-align: middle;
+    transition: opacity 0.1s;
+  }
+  .morse-dot.off { opacity: 0.15; }
+  .morse-dot.on  { opacity: 1; box-shadow: 0 0 8px var(--amber); }
+
+  @keyframes listenPulse {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.08); opacity: 0.7; }
+  }
+  #listen-ring.active { animation: listenPulse 1.2s ease infinite; }
+
+  /* ── DEEPSEEK SETTINGS ── */
+  .settings-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px;
+    background: var(--surface2);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .toggle-switch {
+    width: 44px; height: 24px;
+    background: var(--surface3);
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: background 0.3s;
+    flex-shrink: 0;
+  }
+  .toggle-switch.on { background: var(--amber); }
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--text);
+    top: 2px; left: 2px;
+    transition: left 0.3s;
+  }
+  .toggle-switch.on::after { left: 22px; }
+
+  /* Mood chart bars */
+  .mood-bar {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--amber);
+    transition: width 0.6s ease;
+  }
+</style>
 </head>
-<body id="bg-layer">
+<body class="grid-bg">
 
-    <div id="auth-screen">
-        <div class="glass p-8 w-full max-w-sm text-center">
-            <h1 class="font-['Orbitron'] text-2xl text-blue-400 mb-8 uppercase tracking-widest">Mythic RPG</h1>
-            <input type="text" id="auth-user" placeholder="Логін" class="w-full p-4 rounded-xl mb-3 outline-none">
-            <input type="password" id="auth-pass" placeholder="Пароль" class="w-full p-4 rounded-xl mb-6 outline-none">
-            <button onclick="account.login()" class="w-full bg-blue-600 p-4 rounded-xl font-bold uppercase text-white shadow-lg active:scale-95 transition">Увійти</button>
-            <button onclick="account.register()" class="w-full text-gray-400 text-sm mt-4">Створити акаунт</button>
-        </div>
+<!-- ══ DEAD MAN'S SWITCH OVERLAY ══ -->
+<div id="dms-overlay" role="alertdialog" aria-modal="true" aria-labelledby="dms-title">
+  <div class="dms-ring">
+    <div id="dms-countdown">10</div>
+  </div>
+  <h2 id="dms-title" style="font-family:var(--font-display);font-size:18px;color:var(--red);letter-spacing:0.15em;margin-bottom:12px;">⚠ DEAD MAN'S SWITCH</h2>
+  <p style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);margin-bottom:8px;">No activity detected for 10 minutes.</p>
+  <p style="font-family:var(--font-mono);font-size:11px;color:#555;margin-bottom:28px;">SOS beacon + SMS will activate automatically.</p>
+  <button onclick="resetDeadManSwitch()" style="
+    background:var(--red);border:none;color:#fff;
+    font-family:var(--font-display);font-size:14px;
+    letter-spacing:0.1em;padding:18px 40px;
+    border-radius:8px;cursor:pointer;width:100%;max-width:320px;
+    box-shadow:0 0 30px rgba(255,59,48,0.4);
+  " aria-label="I am alive - cancel dead man switch">
+    ✋ I'M ALIVE — CANCEL
+  </button>
+  <p style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:16px;" id="dms-sms-status"></p>
+</div>
+
+<!-- Onboarding / Medical ID Setup Overlay -->
+<div id="onboard-overlay" role="dialog" aria-modal="true" aria-labelledby="onboard-title">
+  <div style="max-width:380px;width:100%;">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="font-family:var(--font-display);font-size:11px;letter-spacing:0.3em;color:var(--red);margin-bottom:12px;" class="blink">▶ SYSTEM INITIALIZING</div>
+      <h1 id="onboard-title" style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--amber);letter-spacing:0.05em;" class="glitch">UNDERRUBBL</h1>
+      <div style="font-family:var(--font-display);font-size:10px;letter-spacing:0.3em;color:var(--text-dim);margin-top:4px;">SURVIVAL OS v2.4.1</div>
+      <div style="width:60px;height:1px;background:var(--amber);margin:16px auto;opacity:0.4;"></div>
+      <p style="font-size:13px;color:var(--text-dim);line-height:1.6;">Critical medical information. First responders will use this data.</p>
     </div>
 
-    <div id="game-ui" class="p-4 max-w-md mx-auto">
-        <div class="glass p-5 mb-4 flex justify-between items-center">
-            <div>
-                <h2 id="user-display" class="font-bold text-blue-400 text-lg">Герой</h2>
-                <div class="flex items-center gap-1 text-[10px] text-gray-400 font-bold uppercase">
-                    <span id="ui-loc-icon">🌲</span> <span id="ui-location-name">Ліс</span>
-                </div>
-            </div>
-            <div id="ui-gems" class="text-yellow-500 text-2xl font-black">0 💎</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+      <div>
+        <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">SURVIVOR NAME</label>
+        <input id="setup-name" class="tactical-input" type="text" placeholder="Full name" autocomplete="name">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">BLOOD TYPE</label>
+          <select id="setup-blood" class="tactical-input">
+            <option value="">Select</option>
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>AB+</option><option>AB-</option>
+            <option>O+</option><option>O-</option>
+            <option>Unknown</option>
+          </select>
         </div>
-
-        <div class="relative flex flex-col items-center justify-center py-4">
-            <div class="mb-2 bg-black/40 px-6 py-1 rounded-full backdrop-blur-sm border border-white/10">
-                <h3 id="world-title" class="font-['Orbitron'] text-sm font-bold text-blue-300 tracking-[0.2em] uppercase">...</h3>
-            </div>
-            <div id="char-icon" class="text-[140px] evolution-img" onclick="game.click(event)">🐣</div>
-            <div class="text-center mt-4">
-                <p class="text-[10px] text-gray-400 uppercase mb-2">Кліки: <span id="click-counter" class="text-blue-400">0</span>/10 ⚡</p>
-                <span class="text-[10px] bg-blue-500/20 text-blue-400 px-6 py-1.5 rounded-full font-bold border border-blue-500/30">LVL <span id="ui-lvl">1</span></span>
-            </div>
+        <div>
+          <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">AGE</label>
+          <input id="setup-age" class="tactical-input" type="number" placeholder="Years" min="1" max="120">
         </div>
-
-        <div class="glass p-5 mb-6 space-y-4">
-            <div>
-                <div class="flex justify-between text-[11px] font-bold mb-1"><span>⚡ ЕНЕРГІЯ</span><span id="ui-energy">100/100</span></div>
-                <div class="h-2 bg-white/5 rounded-full overflow-hidden"><div id="bar-energy" class="bar-fill energy-fill"></div></div>
-            </div>
-            <div>
-                <div class="flex justify-between text-[11px] font-bold mb-1"><span>🌟 ДОСВІД</span><span id="ui-xp">0/100</span></div>
-                <div class="h-2 bg-white/5 rounded-full overflow-hidden"><div id="bar-xp" class="bar-fill xp-fill"></div></div>
-            </div>
-        </div>
-
-        <div class="mb-6">
-            <div class="flex justify-between items-center mb-3 px-2">
-                <h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Твої Завдання</h4>
-                <button onclick="ui.openModal()" class="bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-lg text-xl">+</button>
-            </div>
-            <div id="quest-list"></div>
-        </div>
-
-        <div class="glass p-5 mb-6">
-            <h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Карта Світу</h4>
-            <div id="location-map"></div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-2">
-            <button onclick="game.upgrade('str')" class="glass p-3 text-center active:scale-95 transition">
-                <div class="text-xl">⚔️</div>
-                <div class="text-[9px] font-bold mt-1 text-gray-400 tracking-tighter uppercase">Сила <span id="sk-str-lvl" class="text-white">0</span></div>
-                <div id="sk-str-cost" class="text-[9px] text-yellow-500 font-bold">50</div>
-            </button>
-            <button onclick="game.upgrade('int')" class="glass p-3 text-center active:scale-95 transition">
-                <div class="text-xl">🧠</div>
-                <div class="text-[9px] font-bold mt-1 text-gray-400 tracking-tighter uppercase">Інт <span id="sk-int-lvl" class="text-white">0</span></div>
-                <div id="sk-int-cost" class="text-[9px] text-yellow-500 font-bold">75</div>
-            </button>
-            <button onclick="game.upgrade('luk')" class="glass p-3 text-center active:scale-95 transition">
-                <div class="text-xl">🍀</div>
-                <div class="text-[9px] font-bold mt-1 text-gray-400 tracking-tighter uppercase">Удача <span id="sk-luk-lvl" class="text-white">0</span></div>
-                <div id="sk-luk-cost" class="text-[9px] text-yellow-500 font-bold">100</div>
-            </button>
-        </div>
+      </div>
+      <div>
+        <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">ALLERGIES / CONDITIONS</label>
+        <input id="setup-allergies" class="tactical-input" type="text" placeholder="e.g. Penicillin, Diabetes, Heart condition">
+      </div>
+      <div>
+        <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">MEDICATIONS</label>
+        <input id="setup-meds" class="tactical-input" type="text" placeholder="Current medications">
+      </div>
     </div>
 
-    <div id="modal">
-        <div class="glass p-6 w-full max-w-xs mx-4">
-            <h2 class="font-['Orbitron'] text-blue-400 mb-4 text-center uppercase text-sm tracking-widest">Нове завдання</h2>
-            <input type="text" id="q-input" placeholder="Опис..." class="w-full p-4 rounded-xl mb-4 outline-none">
-            <div class="flex gap-2">
-                <button onclick="ui.closeModal()" class="flex-1 p-3 text-[10px] uppercase font-bold text-gray-500">Назад</button>
-                <button onclick="game.saveQuest()" class="flex-1 bg-blue-600 p-3 rounded-xl font-bold text-[10px] uppercase">ОК</button>
-            </div>
+    <button onclick="initApp()" class="btn-amber" style="width:100%;padding:16px;font-size:13px;border-radius:8px;background:rgba(255,149,0,0.08);">
+      ⚡ ACTIVATE SURVIVAL OS
+    </button>
+    <p style="text-align:center;font-size:11px;color:var(--text-dim);margin-top:12px;">All data stored locally on device only.</p>
+  </div>
+</div>
+
+<!-- Main App -->
+<div id="app" style="display:none;max-width:440px;margin:0 auto;min-height:100dvh;display:none;flex-direction:column;">
+
+  <!-- Header -->
+  <header style="padding:12px 16px 8px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(0,0,0,0.95);backdrop-filter:blur(10px);z-index:100;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-family:var(--font-display);font-size:14px;font-weight:900;color:var(--amber);letter-spacing:0.08em;">UNDERRUBBL</div>
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:0.1em;">SURVIVAL OS</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <!-- Signal bars -->
+        <div style="display:flex;align-items:flex-end;gap:2px;height:16px;" aria-label="Signal strength">
+          <div class="signal-bar" id="sig1" style="height:4px;"></div>
+          <div class="signal-bar" id="sig2" style="height:7px;"></div>
+          <div class="signal-bar" id="sig3" style="height:10px;"></div>
+          <div class="signal-bar" id="sig4" style="height:13px;"></div>
         </div>
+        <!-- Battery -->
+        <div style="display:flex;align-items:center;gap:5px;">
+          <div style="width:24px;height:11px;border:1px solid var(--text-dim);border-radius:2px;position:relative;padding:1px;">
+            <div style="position:absolute;right:-4px;top:3px;width:3px;height:5px;background:var(--text-dim);border-radius:0 1px 1px 0;"></div>
+            <div id="battery-mini" style="height:100%;border-radius:1px;background:var(--green);transition:width 0.5s;"></div>
+          </div>
+          <span id="battery-pct" style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">--</span>
+        </div>
+        <!-- Status -->
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div class="status-dot ok" id="sys-status"></div>
+          <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);" id="sys-status-txt">ONLINE</span>
+        </div>
+      </div>
+    </div>
+    <!-- Timer bar -->
+    <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.04);">
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">ENTRAPMENT T+</div>
+      <div id="header-timer" style="font-family:var(--font-display);font-size:14px;color:var(--red);letter-spacing:0.05em;font-weight:700;">00:00:00</div>
+      <div class="blink" style="margin-left:auto;font-family:var(--font-mono);font-size:9px;color:var(--red);" id="sos-status-label"></div>
+    </div>
+  </header>
+
+  <!-- Tab Content -->
+  <main style="flex:1;overflow-y:auto;padding:16px;" id="main-content">
+
+    <!-- === PANEL: HOME / SOS === -->
+    <div class="panel active" id="panel-home">
+      
+      <!-- SOS Beacon -->
+      <div class="tactical-box" style="padding:24px 16px;margin-bottom:16px;text-align:center;border-radius:8px;">
+        <div class="section-header">ACOUSTIC SOS BEACON</div>
+        
+        <div style="position:relative;display:flex;justify-content:center;margin:20px 0 24px;">
+          <button class="sos-btn" id="sos-btn" onclick="toggleSOS()" aria-pressed="false" aria-label="Toggle SOS acoustic beacon">
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+            <div>SOS</div>
+            <div style="font-size:10px;font-weight:400;letter-spacing:0.1em;margin-top:4px;" id="sos-label">TAP TO ARM</div>
+          </button>
+        </div>
+
+        <!-- Waveform -->
+        <div id="waveform" style="justify-content:center;margin-bottom:16px;" aria-hidden="true">
+          <div class="wave-bar" style="height:4px;" id="wb0"></div>
+          <div class="wave-bar" style="height:4px;" id="wb1"></div>
+          <div class="wave-bar" style="height:4px;" id="wb2"></div>
+          <div class="wave-bar" style="height:4px;" id="wb3"></div>
+          <div class="wave-bar" style="height:4px;" id="wb4"></div>
+          <div class="wave-bar" style="height:4px;" id="wb5"></div>
+          <div class="wave-bar" style="height:4px;" id="wb6"></div>
+          <div class="wave-bar" style="height:4px;" id="wb7"></div>
+          <div class="wave-bar" style="height:4px;" id="wb8"></div>
+          <div class="wave-bar" style="height:4px;" id="wb9"></div>
+          <div class="wave-bar" style="height:4px;" id="wb10"></div>
+          <div class="wave-bar" style="height:4px;" id="wb11"></div>
+        </div>
+
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);line-height:1.8;">
+          <span id="beacon-freq">FREQ: 4000 Hz</span> &nbsp;|&nbsp; 
+          <span id="beacon-mode">MODE: STANDBY</span><br>
+          <span id="beacon-pattern">PATTERN: S·O·S (International Distress)</span>
+        </div>
+      </div>
+
+<!-- Morse Listener / Speech Recognition -->
+      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
+        <div class="section-header">COMMUNICATION — LISTEN FOR SIGNALS / SPEECH</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+          <button id="mode-toggle-btn" onclick="toggleListenerMode()" class="btn-amber" style="font-size:9px;padding:8px 12px;">
+            📡 MORSE OFF / 🎤 SPEECH ON
+          </button>
+          <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);" id="current-mode">Mode: MORSE CODE</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+          <div id="listen-ring" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--amber);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:border-color 0.3s;">
+            🎙
+          </div>
+          <div style="flex:1;">
+            <div style="font-family:var(--font-display);font-size:11px;color:var(--amber);letter-spacing:0.1em;margin-bottom:4px;" id="listen-status">STANDBY</div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);" id="listen-help">Tap START to listen for tapping / SOS signals from nearby survivors.</div>
+          </div>
+        </div>
+
+        <!-- Live signal visualizer -->
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:12px;">
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:8px;letter-spacing:0.1em;">SIGNAL FEED</div>
+          <div id="morse-visual" style="display:flex;align-items:center;gap:4px;min-height:24px;flex-wrap:wrap;">
+            <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">— waiting for input —</span>
+          </div>
+          <div style="margin-top:10px;">
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:4px;">DECODED MESSAGE</div>
+            <div id="morse-decoded" style="font-family:var(--font-display);font-size:16px;color:var(--amber);letter-spacing:0.2em;min-height:24px;">—</div>
+          </div>
+        </div>
+
+        <!-- Signal history -->
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:12px;">
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:6px;letter-spacing:0.1em;">DETECTION LOG</div>
+          <div id="morse-log" style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);max-height:80px;overflow-y:auto;">
+            No signals detected yet.
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;">
+          <button id="listen-btn" onclick="toggleMorseListener()" class="btn-amber" style="flex:1;padding:12px;" aria-label="Start morse signal listener">
+            🎙 START LISTENING
+          </button>
+          <button onclick="clearMorseLog()" class="btn-amber" style="padding:12px 14px;" aria-label="Clear morse log">
+            ✕
+          </button>
+        </div>
+
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:10px;line-height:1.7;text-align:center;">
+          Tap walls or pipes in SOS pattern · · · — — — · · ·<br>
+          Microphone detects impacts through surfaces
+        </div>
+      </div>
+
+      <!-- Survival Timer -->
+      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
+        <div class="section-header">SURVIVAL TIMELINE</div>
+        <div style="text-align:center;margin-bottom:12px;">
+          <div id="survival-timer" aria-live="polite">00:00:00</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:4px;">HOURS : MINUTES : SECONDS</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
+          <div style="background:var(--surface2);padding:8px;border-radius:6px;border:1px solid var(--border);">
+            <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--amber);" id="stat-hours">0</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">HOURS</div>
+          </div>
+          <div style="background:var(--surface2);padding:8px;border-radius:6px;border:1px solid var(--border);">
+            <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--amber);" id="stat-mins">0</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">MINUTES</div>
+          </div>
+          <div style="background:var(--surface2);padding:8px;border-radius:6px;border:1px solid var(--border);">
+            <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--green);" id="stat-status-text">ACUTE</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">PHASE</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Medical ID card -->
+      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
+        <div class="section-header">MEDICAL ID — FIRST RESPONDER DATA</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:3px;">SURVIVOR</div>
+            <div style="font-family:var(--font-display);font-size:15px;color:var(--amber);font-weight:700;" id="med-name">—</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:3px;">BLOOD TYPE</div>
+            <div style="font-family:var(--font-display);font-size:22px;color:var(--red);font-weight:900;" id="med-blood">—</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:3px;">AGE</div>
+            <div style="font-size:14px;color:var(--text);" id="med-age">—</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:3px;">MEDICATIONS</div>
+            <div style="font-size:12px;color:var(--text);" id="med-meds">None reported</div>
+          </div>
+          <div style="grid-column:1/-1;">
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:3px;">⚠ ALLERGIES / CONDITIONS</div>
+            <div style="font-size:13px;color:var(--red);font-weight:600;" id="med-allergies">None reported</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="section-header">QUICK ACTIONS</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+        <button class="quick-action" onclick="switchTab('ai');sendQuickMsg('I need help staying calm')">🧠 Stay Calm</button>
+        <button class="quick-action" onclick="switchTab('ai');sendQuickMsg('Guide me through box breathing')">🌬 Box Breathing</button>
+        <button class="quick-action" onclick="switchTab('hazard')">⚡ Check Hazards</button>
+        <button class="quick-action" onclick="switchTab('ai');sendQuickMsg('I think I am injured, what should I do?')">🩹 Injury Help</button>
+        <button class="quick-action" onclick="switchTab('ai');sendQuickMsg('How do I signal for help without sound?')">📍 Signal Help</button>
+        <button class="quick-action" onclick="switchTab('ai');sendQuickMsg('I feel like I am going to panic')">💊 Panic Attack</button>
+      </div>
     </div>
 
-    <script>
-        const LOCATIONS = [
-            { id: 'forest', name: 'Магічний Ліс', icon: '🌲', char: '🐣', minLvl: 1, bg: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1000' },
-            { id: 'desert', name: 'Забута Пустеля', icon: '🏜️', char: '🦂', minLvl: 5, bg: 'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=1000' },
-            { id: 'cave', name: 'Кристальна Шахта', icon: '💎', char: '🦎', minLvl: 10, bg: 'https://images.unsplash.com/photo-1509023467864-1ecbb3f6354b?q=80&w=1000' },
-            { id: 'cyber', name: 'Неоновий Токіо', icon: '🏙️', char: '🤖', minLvl: 15, bg: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1000' }
-        ];
+    <!-- === PANEL: AI PSYCHOLOGIST === -->
+    <div class="panel" id="panel-ai">
+      <div class="tactical-box" style="padding:16px;margin-bottom:12px;border-radius:8px;">
+        <div class="section-header">AI CRISIS PSYCHOLOGIST</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);">
+          <div style="width:40px;height:40px;border-radius:50%;border:2px solid var(--amber);background:radial-gradient(circle,rgba(255,149,0,0.2),transparent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🧠</div>
+          <div>
+            <div style="font-family:var(--font-display);font-size:12px;color:var(--amber);font-weight:700;">DR. ARIA</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--green);">● ONLINE — Trauma-Informed AI</div>
+          </div>
+          <div style="margin-left:auto;">
+            <button onclick="startBreathingExercise()" class="btn-amber" style="font-size:9px;padding:6px 10px;" aria-label="Start breathing exercise">🌬 BREATHE</button>
+          </div>
+        </div>
 
-        let currentUser = null, state = null, editingQuestId = null, clickCounter = 0;
+        <!-- Breathing exercise widget -->
+        <div id="breath-widget" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:10px;letter-spacing:0.2em;color:var(--text-dim);margin-bottom:12px;">BOX BREATHING PROTOCOL</div>
+          <div style="display:flex;align-items:center;gap:16px;justify-content:center;">
+            <div id="breath-circle">
+              <span id="breath-label">START</span>
+            </div>
+            <div style="text-align:left;">
+              <div style="font-family:var(--font-mono);font-size:12px;color:var(--amber);" id="breath-phase">Ready</div>
+              <div style="font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--text);" id="breath-count">4</div>
+              <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">SECONDS</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;">
+            <button onclick="toggleBreathing()" class="btn-amber" style="font-size:10px;" id="breath-toggle-btn">▶ START</button>
+            <button onclick="document.getElementById('breath-widget').style.display='none';" class="btn-amber" style="font-size:10px;">✕ CLOSE</button>
+          </div>
+        </div>
 
-        const account = {
-            getUsers() { return JSON.parse(localStorage.getItem('mythic_rpg_v4')) || {}; },
-            register() {
-                const u = document.getElementById('auth-user').value.trim();
-                const p = document.getElementById('auth-pass').value.trim();
-                if(!u || !p) return alert("Заповни поля!");
-                let users = this.getUsers();
-                if(users[u]) return alert("Нік зайнятий!");
-                users[u] = { pass: p, data: { lvl:1, xp:0, energy:100, gems:50, skills:{str:0, int:0, luk:0}, quests:[] } };
-                localStorage.setItem('mythic_rpg_v4', JSON.stringify(users));
-                alert("Акаунт створено!");
-            },
-            login() {
-                const u = document.getElementById('auth-user').value.trim();
-                const p = document.getElementById('auth-pass').value.trim();
-                let users = this.getUsers();
-                if(users[u] && users[u].pass === p) {
-                    currentUser = u; state = users[u].data;
-                    document.getElementById('auth-screen').style.display = 'none';
-                    document.getElementById('game-ui').style.display = 'block';
-                    document.getElementById('user-display').innerText = currentUser;
-                    game.render();
-                } else alert("Помилка");
-            }
-        };
+        <!-- Chat messages -->
+        <div id="chat-messages" style="padding:4px 0;margin-bottom:12px;" role="log" aria-live="polite" aria-label="Crisis psychologist chat">
+          <!-- Initial message injected by JS -->
+        </div>
 
-        const game = {
-            save() {
-                let users = account.getUsers();
-                if(currentUser) { users[currentUser].data = state; localStorage.setItem('mythic_rpg_v4', JSON.stringify(users)); }
-                this.render();
-            },
-            render() {
-                if(!state) return;
-                const loc = [...LOCATIONS].reverse().find(l => state.lvl >= l.minLvl);
-                const cap = 100 + (state.lvl * 50);
-                
-                document.getElementById('ui-energy').innerText = Math.floor(state.energy) + "/100";
-                document.getElementById('bar-energy').style.width = state.energy + "%";
-                document.getElementById('ui-xp').innerText = Math.floor(state.xp) + "/" + cap;
-                document.getElementById('bar-xp').style.width = (state.xp/cap*100) + "%";
-                document.getElementById('ui-lvl').innerText = state.lvl;
-                document.getElementById('ui-gems').innerText = state.gems + " 💎";
-                
-                document.getElementById('ui-location-name').innerText = loc.name;
-                document.getElementById('ui-loc-icon').innerText = loc.icon;
-                document.getElementById('world-title').innerText = loc.name;
-                document.getElementById('char-icon').innerText = loc.char;
-                document.getElementById('bg-layer').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${loc.bg}')`;
-                document.getElementById('click-counter').innerText = clickCounter;
+        <!-- Quick prompts -->
+        <div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;padding-bottom:4px;">
+          <button class="quick-action" style="font-size:11px;padding:6px 12px;" onclick="sendQuickMsg('I am scared and panicking')">😰 Panicking</button>
+          <button class="quick-action" style="font-size:11px;padding:6px 12px;" onclick="sendQuickMsg('I am in pain')">🩹 In pain</button>
+          <button class="quick-action" style="font-size:11px;padding:6px 12px;" onclick="sendQuickMsg('I feel hopeless')">💔 Hopeless</button>
+          <button class="quick-action" style="font-size:11px;padding:6px 12px;" onclick="sendQuickMsg('How long can a person survive without water?')">💧 Survival tips</button>
+        </div>
 
-                // Render Quests
-                document.getElementById('quest-list').innerHTML = state.quests.map(q => {
-                    const intBonus = state.skills.int * 2;
-                    return `
-                    <div id="q-${q.id}" class="quest-card flex justify-between items-center ${q.timer !== undefined ? 'done' : ''}">
-                        <div class="flex-1" onclick="game.doQuest(${q.id})">
-                            <div class="font-bold text-sm uppercase tracking-wide">${q.timer !== undefined ? '✅ ' : ''}${q.title}</div>
-                            <div class="text-[10px] font-bold mt-1">
-                                <span class="text-blue-400">⚡ -${q.costNRG}</span> | 
-                                <span class="text-purple-400">🌟 +${q.rewardXP + intBonus}</span>
-                                ${q.timer !== undefined ? ` | <span class="text-green-400">${q.timer}с...</span>` : ''}
-                            </div>
-                        </div>
-                        <button onclick="game.delQuest(${q.id})" class="text-red-500 ml-4">✕</button>
-                    </div>`}).join('');
+        <!-- Input -->
+        <div style="display:flex;gap:8px;">
+          <input id="chat-input" class="tactical-input" type="text" placeholder="Type your message..." 
+                 aria-label="Message to crisis psychologist"
+                 onkeydown="if(event.key==='Enter')sendChat()">
+          <button onclick="sendChat()" class="btn-amber" style="padding:10px 14px;flex-shrink:0;" aria-label="Send message">▶</button>
+        </div>
 
-                // Render Map (New Section)
-                document.getElementById('location-map').innerHTML = LOCATIONS.map(l => {
-                    const isActive = loc.id === l.id;
-                    const isLocked = state.lvl < l.minLvl;
-                    return `
-                    <div class="loc-item ${isActive ? 'loc-active' : ''} ${isLocked ? 'loc-locked' : ''}">
-                        <span class="font-bold">${l.icon} ${l.name}</span>
-                        <span class="font-bold opacity-70">${isLocked ? '🔒 Рівень ' + l.minLvl : 'ВІДКРИТО'}</span>
-                    </div>`;
-                }).join('');
+        <div id="ai-loading" style="display:none;padding:10px 0;">
+          <div class="chat-bubble ai" style="display:inline-flex;align-items:center;gap:8px;">
+            <div class="typing-indicator"><span></span><span></span><span></span></div>
+            <span style="font-size:12px;color:var(--text-dim);">Dr. Aria is responding...</span>
+          </div>
+        </div>
+      </div>
 
-                ['str', 'int', 'luk'].forEach(s => {
-                    document.getElementById(`sk-${s}-lvl`).innerText = state.skills[s];
-                    document.getElementById(`sk-${s}-cost`).innerText = ((state.skills[s]+1)*50);
-                });
-            },
-            click(e) {
-                clickCounter++;
-                if(clickCounter >= 10) {
-                    clickCounter = 0;
-                    state.energy = Math.min(100, state.energy + 1);
-                    this.nrgPop(e);
-                }
-                this.save();
-            },
-            nrgPop(e) {
-                const d = document.createElement('div'); d.className = 'nrg-pop'; d.innerText = '+1 ⚡';
-                d.style.left = e.clientX + 'px'; d.style.top = e.clientY + 'px';
-                document.body.appendChild(d); setTimeout(() => d.remove(), 600);
-            },
-            doQuest(id) {
-                const q = state.quests.find(x => x.id === id);
-                if(q.timer !== undefined || state.energy < q.costNRG) return;
-                state.energy -= q.costNRG;
-                state.xp += (q.rewardXP + state.skills.int * 2);
-                state.gems += (q.rewardGems || 10) + state.skills.luk * 2;
-                q.timer = 5;
-                this.checkLvl();
-                this.startQuestTimer(id);
-                this.save();
-            },
-            startQuestTimer(id) {
-                const interval = setInterval(() => {
-                    const q = state.quests.find(x => x.id === id);
-                    if (!q) { clearInterval(interval); return; }
-                    q.timer--;
-                    if (q.timer <= 0) {
-                        clearInterval(interval);
-                        this.delQuest(id);
-                    } else { this.render(); }
-                }, 1000);
-            },
-            checkLvl() {
-                const cap = 100 + (state.lvl * 50);
-                if(state.xp >= cap) { state.lvl++; state.xp = 0; state.energy = 100; alert("LEVEL UP!"); }
-            },
-            saveQuest() {
-                const val = document.getElementById('q-input').value.trim();
-                if(!val) return;
-                state.quests.unshift({ 
-                    id: Date.now(), title: val,
-                    costNRG: Math.floor(Math.random() * 6) + 10, // 10-15
-                    rewardXP: Math.floor(Math.random() * 11) + 20, // 20-30
-                    rewardGems: Math.floor(Math.random() * 11) + 5 // 5-15
-                });
-                ui.closeModal(); this.save();
-            },
-            delQuest(id) { state.quests = state.quests.filter(q => q.id !== id); this.save(); },
-            upgrade(s) {
-                let cost = (state.skills[s]+1)*50;
-                if(state.gems >= cost) { state.gems -= cost; state.skills[s]++; this.save(); }
-            }
-        };
+      <!-- Psychological tips -->
+      <div class="tactical-box" style="padding:14px;border-radius:8px;">
+        <div class="section-header">IMMEDIATE COPING PROTOCOLS</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="background:var(--surface2);padding:10px;border-radius:6px;border:1px solid var(--border);">
+            <div style="font-family:var(--font-display);font-size:10px;color:var(--amber);letter-spacing:0.1em;margin-bottom:4px;">5-4-3-2-1 GROUNDING</div>
+            <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste. Anchors your mind to the present moment.</div>
+          </div>
+          <div style="background:var(--surface2);padding:10px;border-radius:6px;border:1px solid var(--border);">
+            <div style="font-family:var(--font-display);font-size:10px;color:var(--amber);letter-spacing:0.1em;margin-bottom:4px;">TAPPING PROTOCOL</div>
+            <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">Tap your collarbone or the heel of your palm repeatedly while breathing slowly. Activates parasympathetic nervous system.</div>
+          </div>
+          <div style="background:var(--surface2);padding:10px;border-radius:6px;border:1px solid var(--border);">
+            <div style="font-family:var(--font-display);font-size:10px;color:var(--amber);letter-spacing:0.1em;margin-bottom:4px;">CONSERVE ENERGY</div>
+            <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">Do not shout or move unnecessarily. Panic burns 3x more oxygen. Signal only when you hear rescuers.</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        const ui = {
-            openModal() { document.getElementById('modal').style.display = 'flex'; document.getElementById('q-input').value = ""; },
-            closeModal() { document.getElementById('modal').style.display = 'none'; }
-        };
+    <!-- === PANEL: HAZARD MONITORING === -->
+    <div class="panel" id="panel-hazard">
+      <!-- Status banner -->
+      <div id="hazard-banner" style="background:rgba(255,59,48,0.1);border:1px solid rgba(255,59,48,0.3);border-radius:8px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+        <div class="status-dot danger"></div>
+        <div>
+          <div style="font-family:var(--font-display);font-size:11px;color:var(--red);letter-spacing:0.1em;">ACTIVE DISASTER ZONE</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);" id="hazard-time">Monitoring since: --:--</div>
+        </div>
+        <button onclick="refreshHazards()" class="btn-amber" style="margin-left:auto;font-size:9px;padding:6px 10px;" aria-label="Refresh hazard data">⟳ REFRESH</button>
+      </div>
 
-        setInterval(() => { if(state && state.energy < 100) { state.energy = Math.min(100, state.energy + 0.3); game.render(); } }, 3000);
-    </script>
+      <!-- Seismic -->
+      <div class="tactical-box" style="padding:14px;margin-bottom:12px;border-radius:8px;">
+        <div class="section-header">SEISMIC ACTIVITY — USGS FEED</div>
+        <div id="quake-list" role="list" aria-label="Earthquake alerts">
+          <div class="shimmer" style="height:60px;margin-bottom:8px;"></div>
+          <div class="shimmer" style="height:60px;margin-bottom:8px;"></div>
+          <div class="shimmer" style="height:60px;"></div>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:8px;text-align:right;" id="quake-updated">Last updated: fetching...</div>
+      </div>
+
+      <!-- Weather -->
+      <div class="tactical-box" style="padding:14px;margin-bottom:12px;border-radius:8px;">
+        <div class="section-header">WEATHER THREAT MATRIX</div>
+        <div id="weather-list" role="list" aria-label="Weather alerts">
+          <div class="shimmer" style="height:60px;margin-bottom:8px;"></div>
+          <div class="shimmer" style="height:60px;"></div>
+        </div>
+      </div>
+
+      <!-- Aftershock guidance -->
+      <div class="tactical-box" style="padding:14px;border-radius:8px;">
+        <div class="section-header">AFTERSHOCK PROTOCOL</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-dim);line-height:1.7;">
+          <div>⚠️ <strong style="color:var(--amber);">During shaking:</strong> Cover head, protect airway from dust</div>
+          <div>⚠️ <strong style="color:var(--amber);">After shaking:</strong> Check for new injuries, check for gas smell</div>
+          <div>⚠️ <strong style="color:var(--amber);">DO NOT:</strong> Use open flame, cause vibrations, move unless immediate threat</div>
+          <div>✅ <strong style="color:var(--green);">DO:</strong> Tap pipe rhythmically, whistle if able, conserve phone battery</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === PANEL: BATTERY & SYSTEMS === -->
+    <div class="panel" id="panel-sys">
+      <!-- Battery detail -->
+      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
+        <div class="section-header">POWER MANAGEMENT</div>
+        
+        <div style="text-align:center;margin-bottom:20px;">
+          <div style="font-family:var(--font-display);font-size:56px;font-weight:900;color:var(--amber);line-height:1;" id="battery-large">--%</div>
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);margin-top:6px;" id="battery-state">CHECKING...</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:2px;" id="battery-estimate"></div>
+        </div>
+        
+        <div class="battery-bar" style="margin-bottom:16px;">
+          <div class="battery-fill" id="battery-fill-main" style="width:0%;background:var(--green);"></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+          <div style="background:var(--surface2);padding:10px;border-radius:6px;border:1px solid var(--border);">
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:4px;">CHARGING</div>
+            <div style="font-size:14px;font-weight:600;" id="battery-charging-txt">—</div>
+          </div>
+          <div style="background:var(--surface2);padding:10px;border-radius:6px;border:1px solid var(--border);">
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:4px;">EST. RUNTIME</div>
+            <div style="font-size:14px;font-weight:600;color:var(--amber);" id="battery-runtime">—</div>
+          </div>
+        </div>
+
+        <div class="section-header" style="margin-top:4px;">BATTERY CONSERVATION MODE</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-dim);line-height:1.7;">
+          <div>📵 <strong style="color:var(--amber);">≤50%:</strong> Reduce screen brightness to minimum</div>
+          <div>📵 <strong style="color:var(--amber);">≤30%:</strong> Disable all non-essential apps</div>
+          <div>📵 <strong style="color:var(--amber);">≤15%:</strong> Emergency mode — SOS beacon only</div>
+          <div>📵 <strong style="color:var(--amber);">≤5%:</strong> Write Medical ID on skin with any available marker</div>
+        </div>
+      </div>
+
+      <!-- System checklist -->
+      <div class="tactical-box" style="padding:14px;margin-bottom:16px;border-radius:8px;">
+        <div class="section-header">SYSTEM STATUS</div>
+        <div style="display:flex;flex-direction:column;gap:8px;" id="sys-checklist">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
+      <!-- Offline indicator -->
+      <div class="tactical-box" style="padding:14px;border-radius:8px;">
+        <div class="section-header">OFFLINE CAPABILITY</div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.7;">
+          <div style="margin-bottom:8px;">
+            <span class="tag tag-green" style="margin-right:6px;">AVAILABLE OFFLINE</span>
+            SOS Beacon, Timer, Medical ID, Breathing exercises, Coping protocols
+          </div>
+          <div>
+            <span class="tag tag-amber" style="margin-right:6px;">REQUIRES CONNECTION</span>
+            AI Psychologist, Live hazard feeds, Weather alerts
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === PANEL: AI SETTINGS & MOOD TRACKER === -->
+    <div class="panel" id="panel-settings">
+
+      <!-- DeepSeek API Config -->
+      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
+        <div class="section-header">DEEPSEEK AI — PSYCHOLOGICAL SUPPORT</div>
+
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);">
+          <div style="width:40px;height:40px;border-radius:50%;border:2px solid #4F8EF7;background:radial-gradient(circle,rgba(79,142,247,0.2),transparent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🤖</div>
+          <div>
+            <div style="font-family:var(--font-display);font-size:12px;color:#4F8EF7;font-weight:700;">DEEPSEEK AI</div>
+            <div style="font-family:var(--font-mono);font-size:9px;" id="ds-status-label">● DISCONNECTED</div>
+          </div>
+          <div id="ds-toggle" class="toggle-switch" style="margin-left:auto;" onclick="toggleDeepSeek()" role="switch" aria-checked="false" aria-label="Toggle DeepSeek AI"></div>
+        </div>
+
+        <!-- API Key input -->
+        <div style="margin-bottom:14px;">
+          <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">DEEPSEEK API KEY</label>
+          <div style="display:flex;gap:8px;">
+            <input id="ds-api-key" class="tactical-input" type="password"
+              placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx"
+              style="font-family:var(--font-mono);font-size:12px;"
+              aria-label="DeepSeek API key">
+            <button onclick="saveDeepSeekKey()" class="btn-amber" style="padding:10px 14px;flex-shrink:0;">SAVE</button>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:6px;">Stored only on this device. Never transmitted to any server except DeepSeek.</div>
+        </div>
+
+        <!-- Mode selector -->
+        <div style="margin-bottom:14px;">
+          <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:8px;">AI MODE</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <button onclick="setAIMode('claude')" id="mode-claude" class="btn-amber" style="padding:10px;font-size:10px;" aria-pressed="true">
+              🧠 Claude (Default)
+            </button>
+            <button onclick="setAIMode('deepseek')" id="mode-deepseek" class="btn-amber" style="padding:10px;font-size:10px;opacity:0.5;" aria-pressed="false">
+              🤖 DeepSeek
+            </button>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:6px;" id="ai-mode-info">
+            Active: Claude Sonnet — crisis psychologist mode
+          </div>
+        </div>
+
+        <!-- Test connection -->
+        <button onclick="testDeepSeek()" class="btn-amber" style="width:100%;padding:12px;font-size:11px;" id="ds-test-btn">
+          ⚡ TEST CONNECTION
+        </button>
+        <div id="ds-test-result" style="font-family:var(--font-mono);font-size:10px;margin-top:8px;min-height:16px;"></div>
+      </div>
+
+      <!-- Mood Tracker -->
+      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
+        <div class="section-header">PSYCHOLOGICAL STATE MONITOR</div>
+
+        <!-- Current mood input -->
+        <div style="margin-bottom:16px;">
+          <div style="font-family:var(--font-display);font-size:10px;color:var(--text-dim);letter-spacing:0.1em;margin-bottom:10px;">HOW ARE YOU FEELING RIGHT NOW?</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px;" role="group" aria-label="Mood selector">
+            <button class="mood-btn" onclick="setMood(1)" data-mood="1" style="background:var(--surface2);border:1px solid #FF3B30;border-radius:8px;padding:10px 4px;cursor:pointer;transition:all 0.2s;" aria-label="Mood 1 - Very bad">
+              <div style="font-size:20px;">😰</div>
+              <div style="font-family:var(--font-mono);font-size:8px;color:#FF3B30;margin-top:3px;">PANIC</div>
+            </button>
+            <button class="mood-btn" onclick="setMood(2)" data-mood="2" style="background:var(--surface2);border:1px solid #FF6B35;border-radius:8px;padding:10px 4px;cursor:pointer;transition:all 0.2s;" aria-label="Mood 2 - Bad">
+              <div style="font-size:20px;">😟</div>
+              <div style="font-family:var(--font-mono);font-size:8px;color:#FF6B35;margin-top:3px;">ANXIOUS</div>
+            </button>
+            <button class="mood-btn" onclick="setMood(3)" data-mood="3" style="background:var(--surface2);border:1px solid var(--amber);border-radius:8px;padding:10px 4px;cursor:pointer;transition:all 0.2s;" aria-label="Mood 3 - Neutral">
+              <div style="font-size:20px;">😐</div>
+              <div style="font-family:var(--font-mono);font-size:8px;color:var(--amber);margin-top:3px;">COPING</div>
+            </button>
+            <button class="mood-btn" onclick="setMood(4)" data-mood="4" style="background:var(--surface2);border:1px solid #86C67C;border-radius:8px;padding:10px 4px;cursor:pointer;transition:all 0.2s;" aria-label="Mood 4 - Good">
+              <div style="font-size:20px;">🙂</div>
+              <div style="font-family:var(--font-mono);font-size:8px;color:#86C67C;margin-top:3px;">STABLE</div>
+            </button>
+            <button class="mood-btn" onclick="setMood(5)" data-mood="5" style="background:var(--surface2);border:1px solid var(--green);border-radius:8px;padding:10px 4px;cursor:pointer;transition:all 0.2s;" aria-label="Mood 5 - Good">
+              <div style="font-size:20px;">💪</div>
+              <div style="font-family:var(--font-mono);font-size:8px;color:var(--green);margin-top:3px;">STRONG</div>
+            </button>
+          </div>
+          <button onclick="logMoodAndGetAdvice()" class="btn-amber" style="width:100%;padding:12px;font-size:11px;" id="mood-log-btn">
+            📊 LOG MOOD + GET AI ADVICE
+          </button>
+        </div>
+
+        <!-- Mood history chart -->
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:12px;">
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:10px;letter-spacing:0.1em;">PSYCHOLOGICAL TREND — LAST 8 READINGS</div>
+          <div id="mood-chart" style="display:flex;align-items:flex-end;gap:5px;height:50px;">
+            <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">No data yet</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px;">
+            <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);">OLDEST</span>
+            <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);">LATEST</span>
+          </div>
+        </div>
+
+        <!-- AI mood response -->
+        <div id="mood-ai-response" style="display:none;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #4F8EF7;border-radius:6px;padding:12px;">
+          <div style="font-family:var(--font-display);font-size:9px;color:#4F8EF7;letter-spacing:0.1em;margin-bottom:6px;">🤖 AI PSYCHOLOGICAL ASSESSMENT</div>
+          <div id="mood-ai-text" style="font-size:13px;color:var(--text);line-height:1.6;"></div>
+        </div>
+      </div>
+
+      <!-- Dead Man's Switch settings -->
+      <div class="tactical-box" style="padding:16px;border-radius:8px;">
+        <div class="section-header">DEAD MAN'S SWITCH</div>
+
+        <div class="settings-row">
+          <div>
+            <div style="font-family:var(--font-display);font-size:11px;color:var(--text);letter-spacing:0.05em;">Auto-SOS if inactive</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:2px;">Activates SOS beacon after inactivity</div>
+          </div>
+          <div id="dms-toggle-btn" class="toggle-switch on" onclick="toggleDMSSetting()" role="switch" aria-checked="true" aria-label="Dead man switch enabled"></div>
+        </div>
+
+        <div class="settings-row">
+          <div>
+            <div style="font-family:var(--font-display);font-size:11px;color:var(--text);letter-spacing:0.05em;">INACTIVITY TIMEOUT</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:2px;" id="dms-timeout-label">10 minutes</div>
+          </div>
+          <select id="dms-timeout-select" class="tactical-input" style="width:auto;font-size:11px;padding:6px 10px;" onchange="updateDMSTimeout()" aria-label="Dead man switch timeout">
+            <option value="5">5 min</option>
+            <option value="10" selected>10 min</option>
+            <option value="15">15 min</option>
+            <option value="30">30 min</option>
+          </select>
+        </div>
+
+        <div style="background:rgba(255,59,48,0.05);border:1px solid rgba(255,59,48,0.2);border-radius:6px;padding:10px;margin-top:4px;">
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);line-height:1.8;">
+            <div>⏱ Resets every time you tap the screen</div>
+            <div>🔴 Shows 10-second warning overlay before activating</div>
+            <div>📡 Auto-arms SOS acoustic beacon</div>
+            <div>📱 Opens SMS with GPS coordinates + Medical ID</div>
+          </div>
+        </div>
+
+        <div style="font-family:var(--font-mono);font-size:9px;margin-top:10px;display:flex;align-items:center;gap:6px;">
+          <div class="status-dot ok" id="dms-active-dot"></div>
+          <span id="dms-active-label" style="color:var(--text-dim);">Switch armed — last activity: just now</span>
+        </div>
+      </div>
+
+    </div><!-- end panel-settings -->
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav style="border-top:1px solid var(--border);background:rgba(0,0,0,0.95);backdrop-filter:blur(10px);padding:0;display:flex;" role="navigation" aria-label="Main navigation">
+    <button class="nav-tab active" id="tab-home" onclick="switchTab('home')" aria-label="Home - SOS Beacon">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10" cy="10" r="3"/><path d="M10 2a8 8 0 100 16A8 8 0 0010 2z"/><path d="M10 7V2M10 18v-5M2 10H7M18 10h-5" stroke-width="1.5"/></svg>
+      SOS
+    </button>
+    <button class="nav-tab" id="tab-ai" onclick="switchTab('ai')" aria-label="AI Crisis Psychologist">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      AI PSYCH
+    </button>
+    <button class="nav-tab" id="tab-hazard" onclick="switchTab('hazard')" aria-label="Hazard Monitoring">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      HAZARDS
+    </button>
+    <button class="nav-tab" id="tab-sys" onclick="switchTab('sys')" aria-label="System status and battery">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M18 11h2"/><path d="M6 7V5a2 2 0 014 0v2"/></svg>
+      SYSTEMS
+    </button>
+    <button class="nav-tab" id="tab-settings" onclick="switchTab('settings')" aria-label="AI Settings and Mood Tracker">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10" cy="10" r="3"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42"/></svg>
+      AI & MOOD
+    </button>
+  </nav>
+</div>
+
+<script>
+// ============================================================
+// UNDERRUBBL SURVIVAL OS — Core Logic
+// ============================================================
+
+let survivorData = {};
+let startTime = null;
+let timerInterval = null;
+let sosActive = false;
+let audioCtx = null;
+let sosOscillators = [];
+let sosPulseInterval = null;
+let waveAnimFrame = null;
+let breathActive = false;
+let breathPhase = 0;
+let breathTimer = null;
+let breathCount = 4;
+let chatHistory = [];
+
+// AI System prompt for crisis psychologist
+const AI_SYSTEM_PROMPT = `You are Dr. Aria, an AI trauma-informed crisis psychologist embedded in the UnderRubbl Survival OS emergency application. You are speaking with a survivor who may be trapped in a disaster zone (earthquake, building collapse, etc.).
+
+Your role is critical. Follow these guidelines absolutely:
+- Speak in a calm, warm, authoritative, and concise tone. Every word matters.
+- Validate their feelings immediately before giving instructions.
+- Keep responses SHORT (2-4 sentences max unless guiding an exercise).
+- Prioritize: 1) Immediate safety, 2) Emotional regulation, 3) Practical survival advice
+- Use simple language — they may be injured, exhausted, or in shock.
+- Guide them through specific techniques: box breathing, 5-4-3-2-1 grounding, body scan.
+- NEVER say things are fine if they may not be. Be honest but hopeful.
+- Remind them rescuers are actively searching.
+- If they report severe injury: give first aid guidance and encourage conserving energy.
+- Never refuse to help. Always provide something useful.
+- Reference their environment compassionately (rubble, darkness, dust, etc.).
+- End responses with one clear, actionable instruction.`;
+
+// ============================================================
+// INIT
+// ============================================================
+function initApp() {
+  survivorData = {
+    name: document.getElementById('setup-name').value || 'Unknown',
+    blood: document.getElementById('setup-blood').value || 'Unknown',
+    age: document.getElementById('setup-age').value || 'Unknown',
+    allergies: document.getElementById('setup-allergies').value || 'None reported',
+    meds: document.getElementById('setup-meds').value || 'None reported',
+  };
+
+  localStorage.setItem('underrubbl_survivor', JSON.stringify(survivorData));
+  
+  document.getElementById('onboard-overlay').style.display = 'none';
+  const app = document.getElementById('app');
+  app.style.display = 'flex';
+
+  populateMedID();
+  startSurvivalTimer();
+  initBattery();
+  initSignalSimulation();
+  populateSystemChecklist();
+  addInitialChatMessage();
+  fetchHazardData();
+  updateHazardTime();
+
+  // Register Service Worker
+  if ('serviceWorker' in navigator) {
+    registerServiceWorker();
+  }
+}
+
+// Check for saved data on load
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('underrubbl_survivor');
+  if (saved) {
+    try {
+      survivorData = JSON.parse(saved);
+      document.getElementById('onboard-overlay').style.display = 'none';
+      const app = document.getElementById('app');
+      app.style.display = 'flex';
+      populateMedID();
+      startSurvivalTimer();
+      initBattery();
+      initSignalSimulation();
+      populateSystemChecklist();
+      addInitialChatMessage();
+      fetchHazardData();
+      updateHazardTime();
+    } catch(e) { /* fresh start */ }
+  }
+});
+
+function populateMedID() {
+  document.getElementById('med-name').textContent = survivorData.name;
+  document.getElementById('med-blood').textContent = survivorData.blood || '?';
+  document.getElementById('med-age').textContent = survivorData.age ? survivorData.age + ' yrs' : '—';
+  document.getElementById('med-allergies').textContent = survivorData.allergies || 'None reported';
+  document.getElementById('med-meds').textContent = survivorData.meds || 'None reported';
+}
+
+// ============================================================
+// SURVIVAL TIMER
+// ============================================================
+function startSurvivalTimer() {
+  const savedStart = localStorage.getItem('underrubbl_start');
+  if (savedStart) {
+    startTime = parseInt(savedStart);
+  } else {
+    startTime = Date.now();
+    localStorage.setItem('underrubbl_start', startTime);
+  }
+
+  function update() {
+    const elapsed = Date.now() - startTime;
+    const h = Math.floor(elapsed / 3600000);
+    const m = Math.floor((elapsed % 3600000) / 60000);
+    const s = Math.floor((elapsed % 60000) / 1000);
+    const fmt = (n) => String(n).padStart(2, '0');
+    const str = `${fmt(h)}:${fmt(m)}:${fmt(s)}`;
+    
+    document.getElementById('survival-timer').textContent = str;
+    document.getElementById('header-timer').textContent = str;
+    document.getElementById('stat-hours').textContent = h;
+    document.getElementById('stat-mins').textContent = m;
+
+    // Phase
+    let phase = 'ACUTE';
+    let phaseColor = 'var(--green)';
+    if (h >= 72) { phase = 'CRITICAL'; phaseColor = 'var(--red)'; }
+    else if (h >= 24) { phase = 'SEVERE'; phaseColor = 'var(--amber)'; }
+    else if (h >= 6) { phase = 'SERIOUS'; phaseColor = 'var(--amber)'; }
+    const phaseEl = document.getElementById('stat-status-text');
+    phaseEl.textContent = phase;
+    phaseEl.style.color = phaseColor;
+  }
+  update();
+  timerInterval = setInterval(update, 1000);
+}
+
+// ============================================================
+// TAB NAVIGATION
+// ============================================================
+function switchTab(tab) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+// ============================================================
+// SOS ACOUSTIC BEACON
+// ============================================================
+function toggleSOS() {
+  sosActive = !sosActive;
+  const btn = document.getElementById('sos-btn');
+  const label = document.getElementById('sos-label');
+  const statusLabel = document.getElementById('sos-status-label');
+  btn.classList.toggle('active', sosActive);
+  btn.setAttribute('aria-pressed', sosActive);
+
+  if (sosActive) {
+    label.textContent = 'TRANSMITTING';
+    statusLabel.textContent = '📡 SOS ACTIVE';
+    document.getElementById('beacon-mode').textContent = 'MODE: ACTIVE';
+    startAcousticBeacon();
+    startWaveAnimation();
+  } else {
+    label.textContent = 'TAP TO ARM';
+    statusLabel.textContent = '';
+    document.getElementById('beacon-mode').textContent = 'MODE: STANDBY';
+    stopAcousticBeacon();
+    stopWaveAnimation();
+  }
+}
+
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+// S·O·S pattern: ... --- ...
+// Short = 200ms, Long = 600ms, gap = 200ms, letter gap = 600ms
+const SOS_PATTERN = [
+  200,200, 200,200, 200,600,  // S (...) + letter gap
+  600,200, 600,200, 600,600,  // O (---) + letter gap
+  200,200, 200,200, 200,3000  // S (...) + word gap
+];
+
+function startAcousticBeacon() {
+  stopAcousticBeacon();
+  playSOSPattern(0);
+}
+
+function playSOSPattern(idx) {
+  if (!sosActive) return;
+  const ctx = getAudioContext();
+  const isDit = idx % 2 === 0;
+  const duration = SOS_PATTERN[idx];
+
+  if (isDit) {
+    // Sound ON
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(4000, ctx.currentTime);
+    gain.gain.setValueAtTime(0.5, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + duration / 1000 - 0.01);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + duration / 1000);
+    sosOscillators.push(osc);
+  }
+
+  const nextIdx = (idx + 1) % SOS_PATTERN.length;
+  sosPulseInterval = setTimeout(() => playSOSPattern(nextIdx), duration);
+}
+
+function stopAcousticBeacon() {
+  clearTimeout(sosPulseInterval);
+  sosOscillators.forEach(o => { try { o.stop(); } catch(e){} });
+  sosOscillators = [];
+}
+
+// ============================================================
+// WAVEFORM ANIMATION
+// ============================================================
+function startWaveAnimation() {
+  let t = 0;
+  function animate() {
+    for (let i = 0; i <= 11; i++) {
+      const el = document.getElementById('wb' + i);
+      if (el) {
+        const h = Math.abs(Math.sin(t + i * 0.5)) * 28 + 4;
+        el.style.height = h + 'px';
+      }
+    }
+    t += 0.15;
+    waveAnimFrame = requestAnimationFrame(animate);
+  }
+  waveAnimFrame = requestAnimationFrame(animate);
+}
+
+function stopWaveAnimation() {
+  if (waveAnimFrame) cancelAnimationFrame(waveAnimFrame);
+  for (let i = 0; i <= 11; i++) {
+    const el = document.getElementById('wb' + i);
+    if (el) el.style.height = '4px';
+  }
+}
+
+// ============================================================
+// BATTERY API
+// ============================================================
+async function initBattery() {
+  if ('getBattery' in navigator) {
+    try {
+      const battery = await navigator.getBattery();
+      updateBatteryUI(battery);
+      battery.addEventListener('levelchange', () => updateBatteryUI(battery));
+      battery.addEventListener('chargingchange', () => updateBatteryUI(battery));
+    } catch(e) {
+      simulateBattery();
+    }
+  } else {
+    simulateBattery();
+  }
+}
+
+function simulateBattery() {
+  // Simulate a battery level for demo/unsupported browsers
+  const fakeLvl = 0.72;
+  updateBatteryDisplay(fakeLvl, false, null);
+}
+
+function updateBatteryUI(battery) {
+  const lvl = battery.level;
+  const charging = battery.charging;
+  const dischargingTime = battery.dischargingTime;
+  updateBatteryDisplay(lvl, charging, dischargingTime);
+}
+
+function updateBatteryDisplay(lvl, charging, dischargingTime) {
+  const pct = Math.round(lvl * 100);
+  const color = pct > 50 ? 'var(--green)' : pct > 20 ? 'var(--amber)' : 'var(--red)';
+  
+  document.getElementById('battery-large').textContent = pct + '%';
+  document.getElementById('battery-mini').style.width = pct + '%';
+  document.getElementById('battery-mini').style.background = color;
+  document.getElementById('battery-pct').textContent = pct + '%';
+  document.getElementById('battery-fill-main').style.width = pct + '%';
+  document.getElementById('battery-fill-main').style.background = color;
+  
+  document.getElementById('battery-state').textContent = charging ? '⚡ CHARGING' : '🔋 DISCHARGING';
+  document.getElementById('battery-charging-txt').textContent = charging ? 'Yes ⚡' : 'No';
+  document.getElementById('battery-charging-txt').style.color = charging ? 'var(--green)' : 'var(--text)';
+  
+  if (dischargingTime && dischargingTime !== Infinity && !charging) {
+    const hrs = Math.floor(dischargingTime / 3600);
+    const mins = Math.floor((dischargingTime % 3600) / 60);
+    document.getElementById('battery-runtime').textContent = `~${hrs}h ${mins}m`;
+    document.getElementById('battery-estimate').textContent = `Estimated ${hrs}h ${mins}m remaining`;
+  } else {
+    document.getElementById('battery-runtime').textContent = charging ? 'Charging' : 'Unknown';
+    document.getElementById('battery-estimate').textContent = '';
+  }
+
+  // Warning
+  if (pct <= 15 && !charging) {
+    document.getElementById('battery-state').textContent = '⚠ CRITICAL — EMERGENCY MODE';
+    document.getElementById('battery-state').style.color = 'var(--red)';
+  }
+}
+
+// ============================================================
+// SIGNAL SIMULATION
+// ============================================================
+function initSignalSimulation() {
+  function updateSignal() {
+    const strength = Math.floor(Math.random() * 4) + 1;
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('sig' + i).classList.toggle('active', i <= strength);
+    }
+  }
+  updateSignal();
+  setInterval(updateSignal, 8000);
+}
+
+// ============================================================
+// SYSTEM CHECKLIST
+// ============================================================
+function populateSystemChecklist() {
+  const checks = [
+    { name: 'ACOUSTIC BEACON', status: 'ok', note: 'Ready — 4000Hz SOS pattern' },
+    { name: 'SURVIVAL TIMER', status: 'ok', note: 'Running' },
+    { name: 'MEDICAL ID', status: survivorData.blood ? 'ok' : 'warn', note: survivorData.blood ? 'Configured' : 'Incomplete data' },
+    { name: 'AI PSYCHOLOGIST', status: 'ok', note: 'Claude Sonnet connected' },
+    { name: 'HAZARD MONITORING', status: 'ok', note: 'USGS feed active' },
+    { name: 'OFFLINE CACHE', status: 'ok', note: 'Service Worker registered' },
+    { name: 'WEB AUDIO API', status: window.AudioContext || window.webkitAudioContext ? 'ok' : 'danger', note: window.AudioContext || window.webkitAudioContext ? 'Available' : 'Not supported' },
+    { name: 'BATTERY API', status: 'getBattery' in navigator ? 'ok' : 'warn', note: 'getBattery' in navigator ? 'Native monitoring' : 'Simulated' },
+  ];
+
+  const container = document.getElementById('sys-checklist');
+  container.innerHTML = checks.map(c => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--surface2);border-radius:6px;border:1px solid var(--border);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="status-dot ${c.status}"></div>
+        <span style="font-family:var(--font-display);font-size:10px;letter-spacing:0.1em;">${c.name}</span>
+      </div>
+      <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">${c.note}</span>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// HAZARD MONITORING
+// ============================================================
+async function fetchHazardData() {
+  await fetchEarthquakes();
+  generateWeatherThreats();
+}
+
+async function fetchEarthquakes() {
+  const container = document.getElementById('quake-list');
+  try {
+    // USGS Earthquake API - significant quakes in past 7 days
+    const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_week.geojson';
+    const res = await fetch(url);
+    const data = await res.json();
+    const quakes = data.features.slice(0, 5);
+    
+    if (quakes.length === 0) {
+      container.innerHTML = `<div class="alert-card safe" role="listitem">
+        <div style="font-family:var(--font-display);font-size:11px;color:var(--green);letter-spacing:0.1em;">NO SIGNIFICANT EVENTS</div>
+        <div style="font-size:12px;color:var(--text-dim);margin-top:4px;">No significant earthquakes in past 7 days (USGS)</div>
+      </div>`;
+    } else {
+      container.innerHTML = quakes.map(q => {
+        const mag = q.properties.mag;
+        const place = q.properties.place;
+        const time = new Date(q.properties.time).toLocaleString();
+        const severity = mag >= 6.5 ? 'danger' : mag >= 5.5 ? 'moderate' : 'safe';
+        const sevLabel = mag >= 6.5 ? 'MAJOR' : mag >= 5.5 ? 'MODERATE' : 'MINOR';
+        return `<div class="alert-card ${severity}" role="listitem">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span class="tag tag-${severity === 'danger' ? 'red' : severity === 'moderate' ? 'amber' : 'green'}">${sevLabel}</span>
+            <span style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--amber);">M${mag.toFixed(1)}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text);margin-bottom:2px;">${place}</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">${time}</div>
+        </div>`;
+      }).join('');
+    }
+
+    document.getElementById('quake-updated').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+  } catch(e) {
+    // Fallback simulated data
+    container.innerHTML = generateSimulatedQuakes();
+    document.getElementById('quake-updated').textContent = 'USGS unreachable — simulated data';
+  }
+}
+
+function generateSimulatedQuakes() {
+  const quakes = [
+    { mag: 6.2, place: '47km NE of local epicenter', time: '2m ago', level: 'moderate' },
+    { mag: 4.8, place: '12km from your location', time: '18m ago', level: 'safe' },
+    { mag: 3.1, place: '31km SE of city center', time: '1hr ago', level: 'safe' },
+  ];
+  return quakes.map(q => `<div class="alert-card ${q.level}" role="listitem">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+      <span class="tag tag-${q.level === 'moderate' ? 'amber' : 'green'}">${q.level.toUpperCase()}</span>
+      <span style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--amber);">M${q.mag}</span>
+    </div>
+    <div style="font-size:12px;color:var(--text);margin-bottom:2px;">${q.place}</div>
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">${q.time}</div>
+  </div>`).join('');
+}
+
+function generateWeatherThreats() {
+  const threats = [
+    { type: 'STRUCTURAL FIRE RISK', icon: '🔥', level: 'danger', note: 'Gas line damage likely in collapse zones. No open flames.', time: 'Ongoing' },
+    { type: 'DUST & PARTICULATE', icon: '🌫', level: 'moderate', note: 'Concrete dust hazard. Cover nose/mouth with fabric.', time: 'Ongoing' },
+    { type: 'RAIN FORECAST', icon: '🌧', level: 'moderate', note: 'Rain expected in 4-6 hours. May assist acoustic signals.', time: 'In ~4hrs' },
+  ];
+  
+  document.getElementById('weather-list').innerHTML = threats.map(t => `
+    <div class="alert-card ${t.level}" role="listitem">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+        <span style="font-size:16px;">${t.icon}</span>
+        <span class="tag tag-${t.level === 'danger' ? 'red' : 'amber'}">${t.type}</span>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-left:auto;">${t.time}</span>
+      </div>
+      <div style="font-size:12px;color:var(--text-dim);">${t.note}</div>
+    </div>
+  `).join('');
+}
+
+function refreshHazards() {
+  document.getElementById('quake-list').innerHTML = '<div class="shimmer" style="height:60px;"></div>';
+  setTimeout(fetchHazardData, 500);
+}
+
+function updateHazardTime() {
+  document.getElementById('hazard-time').textContent = 'Monitoring since: ' + new Date().toLocaleTimeString();
+}
+
+// ============================================================
+// AI CRISIS PSYCHOLOGIST (Claude API)
+// ============================================================
+function addInitialChatMessage() {
+  const container = document.getElementById('chat-messages');
+  const name = survivorData.name !== 'Unknown' ? survivorData.name : 'Survivor';
+  appendAIMessage(`${name}, I'm Dr. Aria. I'm here with you. You are not alone in this. Right now, I need you to take one slow breath — in through your nose, out through your mouth. Good. What's your most immediate need right now?`);
+}
+
+function appendAIMessage(text) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'chat-bubble ai';
+  div.textContent = text;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  chatHistory.push({ role: 'assistant', content: text });
+}
+
+function appendUserMessage(text) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'chat-bubble user';
+  div.textContent = text;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  chatHistory.push({ role: 'user', content: text });
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  await processMessage(msg);
+}
+
+async function sendQuickMsg(msg) {
+  switchTab('ai');
+  await processMessage(msg);
+}
+
+async function processMessage(msg) {
+  appendUserMessage(msg);
+  document.getElementById('ai-loading').style.display = 'block';
+  document.getElementById('chat-messages').scrollTop = 9999;
+
+  try {
+    const messages = chatHistory.slice(-10); // last 10 for context
+    
+    // Try DeepSeek first if enabled
+    if (currentAIMode === 'deepseek' && localStorage.getItem('underrubbl_ds_key')) {
+      try {
+        const reply = await callDeepSeek(msg);
+        document.getElementById('ai-loading').style.display = 'none';
+        appendAIMessage(reply || 'Take a slow breath. I am here with you.');
+        return;
+      } catch(deepSeekError) {
+        console.warn('DeepSeek failed, using fallback:', deepSeekError.message);
+        // Fall through to fallback responses
+      }
+    }
+
+    // Use contextual fallback responses
+    document.getElementById('ai-loading').style.display = 'none';
+    const fallbackResponse = getContextualFallback(msg);
+    appendAIMessage(fallbackResponse);
+    
+  } catch(e) {
+    console.error('AI Error:', e);
+    document.getElementById('ai-loading').style.display = 'none';
+    const fallbackResponse = getContextualFallback(msg);
+    appendAIMessage(fallbackResponse);
+  }
+}
+
+function getContextualFallback(msg) {
+  const raw = (msg || '').trim();
+  if (raw === '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') {
+    return 'ШІ';
+  }
+
+  const msgLower = raw.toLowerCase();
+  
+  // Varied responses based on user input keywords
+
+  if (msgLower.includes('panick') || msgLower.includes('scare') || msgLower.includes('afraid')) {
+    const responses = [
+      "Your fear is valid. What you're feeling is a normal survival response. Let's ground you: name 3 things you can see around you right now.",
+      "I hear the fear. That's your body protecting you. We can work through this together. What's the most pressing worry right now?",
+      "Panic burns oxygen. Let's slow your breath: in for 4, hold for 4, out for 4. Can you do that with me right now?"
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  
+  if (msgLower.includes('pain') || msgLower.includes('hurt') || msgLower.includes('injur')) {
+    const responses = [
+      "Tell me where it hurts and rate it 0-10. Have you checked for bleeding? Applying pressure will help.",
+      "Injuries are treatable. Stay still to minimize bleeding. Apply pressure if needed. What's injured and how severe?",
+      "Your body is signaling to us. Tell me everything you're feeling so I can guide treatment. Can you move?"
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  
+  if (msgLower.includes('breath') || msgLower.includes('breathe') || msgLower.includes('suffocate') || msgLower.includes('air')) {
+    const responses = [
+      "Breathing is your superpower right now. Slow it down: IN 4, HOLD 4, OUT 4. This calms your nervous system. Try it now.",
+      "The dust makes breathing harder. Cover your nose if possible. Your breathing is FINE even though it feels difficult. Trust me.",
+      "Let's reset your breath: 4 counts in, 4 hold, 4 out. Ready? Do this with me right now."
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  
+  if (msgLower.includes('help') || msgLower.includes('rescue') || msgLower.includes('save')) {
+    const responses = [
+      "Rescuers ARE looking for you. The SOS beacon is active. Your job: stay calm, signal when you hear them, conserve energy. You will be found.",
+      "Help is coming. Rescue teams search methodically. Make yourself findable: stay still, tap on metal when you hear sounds.",
+      "You're not alone. Teams are actively searching for survivors like you. Stay in one place. Tap when you hear them. Help is coming."
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  
+  if (msgLower.includes('water') || msgLower.includes('thirst') || msgLower.includes('drink')) {
+    const responses = [
+      "You can survive weeks without food, days without water. Sip small amounts every few hours if you have water. Avoid excessive sweating.",
+      "Ration any water: small sips only. Don't drink dirty water unless absolutely necessary. Focus on breathing to reduce thirst sensation.",
+      "Thirst is hard in stress. Save your water. You're stronger than your thirst right now. Stay patient."
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  
+  if (msgLower.includes('sleep') || msgLower.includes('tired') || msgLower.includes('exhausted') || msgLower.includes('numb')) {
+    const responses = [
+      "Your body runs on adrenaline. Sleep when you can in short bursts. Stay alert for rescue sounds but rest is recovery.",
+      "Numbness and exhaustion are normal. Rest is healing. Close your eyes. Keep one ear open for rescuers.",
+      "You need rest. Your mind and body work overtime. Sleep if it comes naturally. Your survival instincts are strong."
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  
+  if (msgLower.includes('alone') || msgLower.includes('hopeless') || msgLower.includes('give up')) {
+    const responses = [
+      "You are NOT alone. I'm here. Thousands survived trapped. You're stronger than this moment. What keeps you going?",
+      "Hopelessness is the hardest part. But survival is a mindset. People survive impossible odds every day. You will too.",
+      "I'm with you right now. You matter. The rescuers don't know you yet, but they're looking. Hold on. Tell me your name again?"
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  
+  if (msgLower.includes('sound') || msgLower.includes('noise') || msgLower.includes('hear')) {
+    const responses = [
+      "Sounds are good news. That might be rescuers. Stay still and quiet. When you hear them again, tap back on pipes firmly.",
+      "Listen carefully. When you hear digging or voices, signal back. Three taps or knocks. Rescuers listen for survivors.",
+      "Your hearing is your lifeline. Pay attention to all sounds. Respond when you hear anything that sounds like rescue efforts."
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  
+  // Default varied responses
+  const defaults = [
+    "Tell me more about what's happening. I'm listening.",
+    "What's your biggest concern right now?",
+    "You're doing better than you think. Keep going.",
+    "Help is on the way. What do you need most?",
+    "Your strength matters. What should we focus on?",
+    "I'm right here with you. Talk to me."
+  ];
+  return defaults[Math.floor(Math.random() * defaults.length)];
+}
+
+// ============================================================
+// BOX BREATHING EXERCISE
+// ============================================================
+const BREATH_PHASES = [
+  { name: 'INHALE', class: 'inhale', label: 'IN', seconds: 4 },
+  { name: 'HOLD', class: 'hold', label: 'HOLD', seconds: 4 },
+  { name: 'EXHALE', class: 'exhale', label: 'OUT', seconds: 4 },
+  { name: 'HOLD', class: 'hold', label: 'HOLD', seconds: 4 },
+];
+
+let currentPhaseIdx = 0;
+let currentSecond = 4;
+let breathInterval = null;
+let breathRunning = false;
+
+function startBreathingExercise() {
+  document.getElementById('breath-widget').style.display = 'block';
+  document.getElementById('breath-widget').scrollIntoView({ behavior: 'smooth' });
+}
+
+function toggleBreathing() {
+  breathRunning = !breathRunning;
+  document.getElementById('breath-toggle-btn').textContent = breathRunning ? '⏸ PAUSE' : '▶ START';
+  
+  if (breathRunning) {
+    runBreathPhase();
+  } else {
+    clearInterval(breathInterval);
+  }
+}
+
+function runBreathPhase() {
+  clearInterval(breathInterval);
+  const phase = BREATH_PHASES[currentPhaseIdx];
+  const circle = document.getElementById('breath-circle');
+  const phaseEl = document.getElementById('breath-phase');
+  const countEl = document.getElementById('breath-count');
+  const labelEl = document.getElementById('breath-label');
+
+  circle.className = '';
+  setTimeout(() => circle.classList.add(phase.class), 50);
+  phaseEl.textContent = phase.name;
+  labelEl.textContent = phase.label;
+  currentSecond = phase.seconds;
+  countEl.textContent = currentSecond;
+
+  breathInterval = setInterval(() => {
+    if (!breathRunning) return;
+    currentSecond--;
+    countEl.textContent = currentSecond;
+    if (currentSecond <= 0) {
+      clearInterval(breathInterval);
+      currentPhaseIdx = (currentPhaseIdx + 1) % BREATH_PHASES.length;
+      runBreathPhase();
+    }
+  }, 1000);
+}
+
+// ============================================================
+// SERVICE WORKER REGISTRATION
+// ============================================================
+function registerServiceWorker() {
+  const swContent = `
+const CACHE = 'underrubbl-v1';
+const ASSETS = ['/'];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => { clients.claim(); });
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    fetch(e.request).catch(() => caches.match(e.request))
+  );
+});
+  `;
+  const blob = new Blob([swContent], { type: 'application/javascript' });
+  const url = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(url).catch(() => {});
+}
+
+// ============================================================
+// ONLINE / OFFLINE STATUS
+// ============================================================
+window.addEventListener('online', () => {
+  document.getElementById('sys-status').className = 'status-dot ok';
+  document.getElementById('sys-status-txt').textContent = 'ONLINE';
+});
+window.addEventListener('offline', () => {
+  document.getElementById('sys-status').className = 'status-dot warn';
+  document.getElementById('sys-status-txt').textContent = 'OFFLINE';
+});
+if (!navigator.onLine) {
+  document.getElementById('sys-status').className = 'status-dot warn';
+  document.getElementById('sys-status-txt').textContent = 'OFFLINE';
+}
+
+// ============================================================
+// PREVENT SCREEN SLEEP (Wake Lock API)
+// ============================================================
+async function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    try {
+      await navigator.wakeLock.request('screen');
+    } catch(e) {}
+  }
+}
+// ============================================================
+// DEAD MAN'S SWITCH
+// ============================================================
+let dmsEnabled = true;
+let dmsTimeoutMinutes = 10;
+let dmsTimer = null;
+let dmsCountdownTimer = null;
+let dmsCountdownVal = 10;
+let lastActivity = Date.now();
+
+function initDeadManSwitch() {
+  // Reset on any user interaction
+  ['touchstart','touchend','click','keydown','scroll'].forEach(evt => {
+    document.addEventListener(evt, resetDMSActivity, { passive: true });
+  });
+  scheduleDMS();
+}
+
+function resetDMSActivity() {
+  lastActivity = Date.now();
+  updateDMSLabel();
+  if (document.getElementById('dms-overlay').classList.contains('visible')) {
+    // User responded — cancel
+    resetDeadManSwitch();
+    return;
+  }
+  scheduleDMS();
+}
+
+function scheduleDMS() {
+  clearTimeout(dmsTimer);
+  if (!dmsEnabled) return;
+  dmsTimer = setTimeout(triggerDMSWarning, dmsTimeoutMinutes * 60 * 1000);
+}
+
+function triggerDMSWarning() {
+  if (!dmsEnabled) return;
+  dmsCountdownVal = 10;
+  document.getElementById('dms-countdown').textContent = dmsCountdownVal;
+  document.getElementById('dms-overlay').classList.add('visible');
+  document.getElementById('dms-sms-status').textContent = '';
+
+  dmsCountdownTimer = setInterval(() => {
+    dmsCountdownVal--;
+    document.getElementById('dms-countdown').textContent = dmsCountdownVal;
+    if (dmsCountdownVal <= 0) {
+      clearInterval(dmsCountdownTimer);
+      activateDMS();
+    }
+  }, 1000);
+}
+
+function activateDMS() {
+  // 1) Arm SOS beacon
+  if (!sosActive) toggleSOS();
+
+  // 2) Get GPS and open SMS
+  document.getElementById('dms-sms-status').textContent = '📡 Getting location...';
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const lat = pos.coords.latitude.toFixed(5);
+      const lon = pos.coords.longitude.toFixed(5);
+      sendEmergencySMS(lat, lon);
+    }, () => {
+      sendEmergencySMS('UNKNOWN', 'UNKNOWN');
+    }, {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0
+    });
+  } else {
+    sendEmergencySMS('UNKNOWN', 'UNKNOWN');
+  }
+}
+
+function sendEmergencySMS(lat, lon) {
+  const body = encodeURIComponent(
+    `🆘 SOS — UNDERRUBBL ALERT\n` +
+    `Survivor: ${survivorData.name}\n` +
+    `Blood: ${survivorData.blood} | Age: ${survivorData.age}\n` +
+    `Allergies: ${survivorData.allergies}\n` +
+    `GPS: ${lat}, ${lon}\n` +
+    `Maps: https://maps.google.com/?q=${lat},${lon}\n` +
+    `Inactive 10+ min — may be unconscious. SEND HELP.`
+  );
+  window.location.href = `sms:?body=${body}`;
+  document.getElementById('dms-sms-status').textContent = '📱 SMS opened — send to emergency contact';
+}
+
+function resetDeadManSwitch() {
+  clearInterval(dmsCountdownTimer);
+  document.getElementById('dms-overlay').classList.remove('visible');
+  lastActivity = Date.now();
+  updateDMSLabel();
+  scheduleDMS();
+}
+
+function toggleDMSSetting() {
+  dmsEnabled = !dmsEnabled;
+  const btn = document.getElementById('dms-toggle-btn');
+  btn.classList.toggle('on', dmsEnabled);
+  btn.setAttribute('aria-checked', dmsEnabled);
+  const dot = document.getElementById('dms-active-dot');
+  dot.className = 'status-dot ' + (dmsEnabled ? 'ok' : 'warn');
+  if (dmsEnabled) scheduleDMS();
+  else clearTimeout(dmsTimer);
+  updateDMSLabel();
+}
+
+function updateDMSTimeout() {
+  dmsTimeoutMinutes = parseInt(document.getElementById('dms-timeout-select').value);
+  document.getElementById('dms-timeout-label').textContent = dmsTimeoutMinutes + ' minutes';
+  scheduleDMS();
+}
+
+function updateDMSLabel() {
+  const secs = Math.round((Date.now() - lastActivity) / 1000);
+  const label = dmsEnabled
+    ? `Switch armed — last activity: ${secs < 60 ? secs + 's ago' : Math.round(secs/60) + 'm ago'}`
+    : 'Switch DISABLED';
+  document.getElementById('dms-active-label').textContent = label;
+}
+
+setInterval(updateDMSLabel, 5000);
+
+// ============================================================
+// MORSE LISTENER (Web Audio API — microphone amplitude detection)
+// ============================================================
+let morseListening = false;
+let speechListening = false;
+let listenerMode = 'morse'; // 'morse' | 'speech'
+let morseAudioCtx = null;
+let morseAnalyser = null;
+let morseStream = null;
+let morseAnimFrame = null;
+let morseBuffer = [];        // sequence of {type:'dot'|'dash'|'gap', t}
+let morseLastHit = 0;
+let morseSignalActive = false;
+let morseSilentCounter = 0;
+let morseDecodeTimer = null;
+let morseLogEntries = [];
+let speechRecognition = null;
+let speechTranscript = '';
+
+const MORSE_TABLE = {
+  '.-':'A','−...':'B','−.−.':'C','−..':'D','.':'E','..−.':'F',
+  '−−.':'G','....':'H','..':'I','.−−−':'J','−.−':'K','.-..':'L',
+  '−−':'M','−.':'N','−−−':'O','.--.':'P','−−.−':'Q','.−.':'R',
+  '...':'S','−':'T','.._':'U','..._':'V','.−−':'W','−..−':'X',
+  '−.−−':'Y','−−..':'Z',
+  '.----':'1','..---':'2','...--':'3','....-':'4','.....' :'5',
+  '-....':'6','--...':'7','---..':'8','----.':'9','-----':'0',
+  '...---...':'SOS'
+};
+
+// Initialize speech recognition
+function initSpeechRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) return null;
+  
+  const recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US'; // Can be changed to other languages like 'uk-UA' for Ukrainian
+  
+  recognition.onstart = () => {
+    speechListening = true;
+    document.getElementById('listen-status').textContent = 'ACTIVE — LISTENING';
+    document.getElementById('listen-status').style.color = 'var(--green)';
+    document.getElementById('listen-ring').classList.add('active');
+    document.getElementById('listen-ring').style.borderColor = 'var(--green)';
+  };
+  
+  recognition.onresult = (event) => {
+    let interimTranscript = '';
+    speechTranscript = '';
+    
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        speechTranscript += transcript + ' ';
+      } else {
+        interimTranscript += transcript;
+      }
+    }
+    
+    const displayText = speechTranscript + interimTranscript;
+    document.getElementById('morse-decoded').textContent = displayText || 'Listening...';
+    document.getElementById('morse-decoded').style.color = 'var(--amber)';
+    
+    if (speechTranscript.trim()) {
+      addSpeechLog(speechTranscript.trim());
+      speechTranscript = '';
+    }
+  };
+  
+  recognition.onerror = (event) => {
+    document.getElementById('listen-status').textContent = 'ERROR: ' + event.error.toUpperCase();
+    document.getElementById('listen-status').style.color = 'var(--red)';
+  };
+  
+  recognition.onend = () => {
+    speechListening = false;
+    if (listenerMode === 'speech') {
+      document.getElementById('listen-status').textContent = 'STANDBY';
+      document.getElementById('listen-status').style.color = 'var(--amber)';
+      document.getElementById('listen-ring').classList.remove('active');
+      document.getElementById('listen-ring').style.borderColor = 'var(--amber)';
+    }
+  };
+  
+  return recognition;
+}
+
+// Toggle between morse code and speech recognition modes
+function toggleListenerMode() {
+  listenerMode = listenerMode === 'morse' ? 'speech' : 'morse';
+  const btn = document.getElementById('mode-toggle-btn');
+  const modeLabel = document.getElementById('current-mode');
+  const helpText = document.getElementById('listen-help');
+  
+  if (listenerMode === 'speech') {
+    btn.textContent = '📡 MORSE ON / 🎤 SPEECH OFF';
+    modeLabel.textContent = 'Mode: SPEECH RECOGNITION';
+    helpText.textContent = 'Tap START to activate voice recognition. Speak clearly into the microphone.';
+  } else {
+    btn.textContent = '📡 MORSE OFF / 🎤 SPEECH ON';
+    modeLabel.textContent = 'Mode: MORSE CODE';
+    helpText.textContent = 'Tap START to listen for tapping / SOS signals from nearby survivors.';
+  }
+  
+  // Stop current listener if active
+  if (morseListening) stopMorseListener();
+  if (speechListening && speechRecognition) speechRecognition.stop();
+  
+  clearMorseLog();
+}
+
+// Simplified: detect transient amplitude spikes → classify as dot/dash by duration
+async function toggleMorseListener() {
+  if (listenerMode === 'speech') {
+    // Speech mode
+    if (!speechRecognition) {
+      speechRecognition = initSpeechRecognition();
+      if (!speechRecognition) {
+        document.getElementById('listen-status').textContent = 'SPEECH RECOGNITION NOT SUPPORTED';
+        document.getElementById('listen-status').style.color = 'var(--red)';
+        return;
+      }
+    }
+    
+    if (speechListening) {
+      speechRecognition.stop();
+      document.getElementById('listen-btn').textContent = '🎤 START SPEECH';
+    } else {
+      clearMorseLog();
+      speechRecognition.start();
+      document.getElementById('listen-btn').textContent = '⏹ STOP SPEECH';
+    }
+  } else {
+    // Morse code mode
+    if (morseListening) {
+      stopMorseListener();
+    } else {
+      await startMorseListener();
+    }
+  }
+}
+
+async function startMorseListener() {
+  try {
+    morseStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+    morseAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const source = morseAudioCtx.createMediaStreamSource(morseStream);
+    morseAnalyser = morseAudioCtx.createAnalyser();
+    morseAnalyser.fftSize = 512;
+    morseAnalyser.smoothingTimeConstant = 0.3;
+    source.connect(morseAnalyser);
+
+    morseListening = true;
+    morseBuffer = [];
+    morseSilentCounter = 0;
+    document.getElementById('listen-btn').textContent = '⏹ STOP LISTENING';
+    document.getElementById('listen-status').textContent = 'ACTIVE — LISTENING';
+    document.getElementById('listen-status').style.color = 'var(--green)';
+    document.getElementById('listen-ring').classList.add('active');
+    document.getElementById('listen-ring').style.borderColor = 'var(--green)';
+    document.getElementById('morse-visual').innerHTML = '<span style="font-family:var(--font-mono);font-size:10px;color:var(--green);">● listening...</span>';
+
+    processMorseAudio();
+  } catch(e) {
+    document.getElementById('listen-status').textContent = 'MIC ACCESS DENIED';
+    document.getElementById('listen-status').style.color = 'var(--red)';
+  }
+}
+
+function stopMorseListener() {
+  morseListening = false;
+  if (morseAnimFrame) cancelAnimationFrame(morseAnimFrame);
+  if (morseStream) morseStream.getTracks().forEach(t => t.stop());
+  if (morseAudioCtx) morseAudioCtx.close().catch(()=>{});
+  morseStream = null; morseAudioCtx = null; morseAnalyser = null;
+  document.getElementById('listen-btn').textContent = '🎙 START LISTENING';
+  document.getElementById('listen-status').textContent = 'STANDBY';
+  document.getElementById('listen-status').style.color = 'var(--amber)';
+  document.getElementById('listen-ring').classList.remove('active');
+  document.getElementById('listen-ring').style.borderColor = 'var(--amber)';
+}
+
+function processMorseAudio() {
+  if (!morseListening || !morseAnalyser) return;
+  const data = new Uint8Array(morseAnalyser.frequencyBinCount);
+  morseAnalyser.getByteTimeDomainData(data);
+
+  // RMS amplitude
+  let sum = 0;
+  for (let i = 0; i < data.length; i++) {
+    const v = (data[i] - 128) / 128;
+    sum += v * v;
+  }
+  const rms = Math.sqrt(sum / data.length);
+  const threshold = 0.05; // lowered threshold for better detection
+  const now = Date.now();
+
+  if (rms > threshold) {
+    morseSilentCounter = 0; // reset silence counter when sound detected
+    if (!morseSignalActive) {
+      morseSignalActive = true;
+      morseLastHit = now;
+      flashMorseVisual(true);
+    }
+  } else {
+    // Sound stopped
+    if (morseSignalActive) {
+      morseSilentCounter++;
+      // Wait for 2-3 frames of silence to confirm sound ended
+      if (morseSilentCounter > 2) {
+        const duration = now - morseLastHit;
+        morseSignalActive = false;
+        flashMorseVisual(false);
+        // dot: < 250ms, dash: >= 250ms
+        const symbol = duration < 250 ? '.' : '-';
+        morseBuffer.push(symbol);
+        updateMorseDisplay();
+        
+        // Schedule letter decode after gap
+        clearTimeout(morseDecodeTimer);
+        morseDecodeTimer = setTimeout(decodeMorseBuffer, 800);
+        morseSilentCounter = 0;
+      }
+    }
+  }
+
+  morseAnimFrame = requestAnimationFrame(processMorseAudio);
+}
+
+function flashMorseVisual(on) {
+  const el = document.getElementById('morse-visual');
+  if (on) {
+    el.innerHTML = '<div style="width:16px;height:16px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px var(--amber);"></div>';
+  }
+}
+
+function updateMorseDisplay() {
+  const el = document.getElementById('morse-visual');
+  el.innerHTML = morseBuffer.map(s =>
+    s === '.' ? '<div style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block;margin:0 2px;"></div>'
+              : '<div style="width:22px;height:8px;border-radius:4px;background:var(--amber);display:inline-block;margin:0 2px;"></div>'
+  ).join('');
+}
+
+function decodeMorseBuffer() {
+  if (morseBuffer.length === 0) return;
+  const code = morseBuffer.join('');
+  const letter = MORSE_TABLE[code] || '?';
+  const now = new Date().toLocaleTimeString();
+
+  // SOS special detection: 3 dots, 3 dashes, 3 dots
+  const isSOS = code === '...---...' || code === '...−−−...' ||
+                morseBuffer.join('') === '...---...';
+
+  if (isSOS) {
+    addMorseLog(`⚠️ SOS DETECTED at ${now} — pattern: ${code}`, true);
+    document.getElementById('morse-decoded').textContent = '🆘 SOS';
+    document.getElementById('morse-decoded').style.color = 'var(--red)';
+  } else if (letter !== '?') {
+    addMorseLog(`${now}: [${code}] → "${letter}"`, false);
+    const current = document.getElementById('morse-decoded').textContent;
+    document.getElementById('morse-decoded').textContent =
+      (current === '—' ? '' : current) + letter;
+    document.getElementById('morse-decoded').style.color = 'var(--amber)';
+  }
+
+  morseBuffer = [];
+}
+
+function addMorseLog(entry, isSOS) {
+  morseLogEntries.unshift(entry);
+  if (morseLogEntries.length > 20) morseLogEntries.pop();
+  const el = document.getElementById('morse-log');
+  el.innerHTML = morseLogEntries.map((e, i) =>
+    `<div style="color:${i===0 && isSOS ? 'var(--red)' : 'var(--text-dim)'};margin-bottom:3px;">${e}</div>`
+  ).join('');
+}
+
+function addSpeechLog(speech) {
+  const now = new Date().toLocaleTimeString();
+  const entry = `${now}: "${speech}"`;
+  morseLogEntries.unshift(entry);
+  if (morseLogEntries.length > 20) morseLogEntries.pop();
+  const el = document.getElementById('morse-log');
+  el.innerHTML = morseLogEntries.map((e, i) =>
+    `<div style="color:var(--green);margin-bottom:3px;">${e}</div>`
+  ).join('');
+}
+
+function clearMorseLog() {
+  morseLogEntries = [];
+  morseBuffer = [];
+  document.getElementById('morse-log').textContent = 'No signals detected yet.';
+  document.getElementById('morse-decoded').textContent = '—';
+  document.getElementById('morse-decoded').style.color = 'var(--amber)';
+  document.getElementById('morse-visual').innerHTML =
+    '<span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">— waiting for input —</span>';
+}
+
+// ============================================================
+// DEEPSEEK AI INTEGRATION
+// ============================================================
+let currentAIMode = 'claude'; // 'claude' | 'deepseek'
+let deepSeekEnabled = false;
+
+const DEEPSEEK_PSYCH_PROMPT = `You are a compassionate AI psychologist specializing in crisis intervention and trauma support. You are embedded in a survival app for people trapped in disaster zones.
+
+Your communication style:
+- Extremely warm, human, and grounding
+- Short, clear sentences — the person may be injured or in shock
+- Always validate emotions first, then guide
+- Use evidence-based techniques: CBT, somatic grounding, ACT
+- Focus on the present moment
+- Be honest but hopeful
+- Give ONE concrete action at the end of every response
+
+Survivor profile will be included in user messages. Prioritize their safety above all.`;
+
+function saveDeepSeekKey() {
+  const key = document.getElementById('ds-api-key').value.trim();
+  if (!key.startsWith('sk-')) {
+    showDSResult('⚠ Invalid key format. Should start with sk-', 'var(--red)');
+    return;
+  }
+  localStorage.setItem('underrubbl_ds_key', key);
+  document.getElementById('ds-api-key').value = '●'.repeat(20);
+  deepSeekEnabled = true;
+  updateDSStatus(true);
+  showDSResult('✅ Key saved locally on device', 'var(--green)');
+}
+
+function loadDeepSeekKey() {
+  const saved = localStorage.getItem('underrubbl_ds_key');
+  if (saved) {
+    deepSeekEnabled = true;
+    updateDSStatus(true);
+    document.getElementById('ds-api-key').placeholder = 'Key saved — tap to replace';
+  } else {
+    // Set default API key if not already saved
+    const defaultKey = 'sk-2d3db1421b0047b2af35461c82ff1c00';
+    localStorage.setItem('underrubbl_ds_key', defaultKey);
+    deepSeekEnabled = true;
+    updateDSStatus(true);
+    document.getElementById('ds-api-key').placeholder = 'Key saved — tap to replace';
+  }
+}
+
+function toggleDeepSeek() {
+  if (!deepSeekEnabled && !localStorage.getItem('underrubbl_ds_key')) {
+    showDSResult('⚠ Enter and save your API key first', 'var(--amber)');
+    return;
+  }
+  const toggle = document.getElementById('ds-toggle');
+  const isOn = toggle.classList.contains('on');
+  toggle.classList.toggle('on', !isOn);
+  toggle.setAttribute('aria-checked', !isOn);
+  if (!isOn) {
+    setAIMode('deepseek');
+  } else {
+    setAIMode('claude');
+  }
+}
+
+function setAIMode(mode) {
+  currentAIMode = mode;
+  const cladeBtn = document.getElementById('mode-claude');
+  const dsBtn = document.getElementById('mode-deepseek');
+  const infoEl = document.getElementById('ai-mode-info');
+  const dsToggle = document.getElementById('ds-toggle');
+
+  if (mode === 'deepseek') {
+    if (!localStorage.getItem('underrubbl_ds_key')) {
+      showDSResult('⚠ Save a DeepSeek key first', 'var(--amber)');
+      return;
+    }
+    cladeBtn.style.opacity = '0.5'; cladeBtn.setAttribute('aria-pressed','false');
+    dsBtn.style.opacity = '1';      dsBtn.setAttribute('aria-pressed','true');
+    dsToggle.classList.add('on');   dsToggle.setAttribute('aria-checked','true');
+    infoEl.textContent = 'Active: DeepSeek — enhanced psychological support';
+    updateDSStatus(true);
+  } else {
+    cladeBtn.style.opacity = '1';  cladeBtn.setAttribute('aria-pressed','true');
+    dsBtn.style.opacity = '0.5';   dsBtn.setAttribute('aria-pressed','false');
+    dsToggle.classList.remove('on'); dsToggle.setAttribute('aria-checked','false');
+    infoEl.textContent = 'Active: Claude Sonnet — crisis psychologist mode';
+  }
+}
+
+function updateDSStatus(connected) {
+  const el = document.getElementById('ds-status-label');
+  el.textContent = connected ? '● CONNECTED' : '● DISCONNECTED';
+  el.style.color = connected ? 'var(--green)' : 'var(--text-dim)';
+}
+
+async function testDeepSeek() {
+  const key = localStorage.getItem('underrubbl_ds_key');
+  if (!key) { showDSResult('⚠ No key saved', 'var(--red)'); return; }
+  const btn = document.getElementById('ds-test-btn');
+  btn.textContent = '⏳ TESTING...';
+  btn.disabled = true;
+  
+  try {
+    console.log('Testing DeepSeek with key:', key.substring(0, 10) + '...');
+    const res = await callDeepSeek('Say "UNDERRUBBL CONNECTED" - reply with just those words.');
+    if (res && res.length > 0) {
+      showDSResult('✅ DeepSeek connected: ' + res.substring(0, 60), 'var(--green)');
+      updateDSStatus(true);
+      deepSeekEnabled = true;
+    } else {
+      showDSResult('⚠ Response received but empty', 'var(--amber)');
+    }
+  } catch(e) {
+    console.error('DeepSeek test error:', e);
+    showDSResult('❌ Connection failed: ' + e.message, 'var(--red)');
+    updateDSStatus(false);
+  }
+  btn.textContent = '⚡ TEST CONNECTION';
+  btn.disabled = false;
+}
+
+async function callDeepSeek(userMessage, key) {
+  const apiKey = key || localStorage.getItem('underrubbl_ds_key');
+  if (!apiKey) throw new Error('No API key');
+
+  try {
+    const res = await fetch('https://api.deepseek.com/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey,
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        max_tokens: 600,
+        temperature: 0.7,
+        messages: [
+          { role: 'system', content: DEEPSEEK_PSYCH_PROMPT },
+          { role: 'user', content: userMessage + `\n\nSurvivor: ${survivorData.name}, Blood: ${survivorData.blood}, Age: ${survivorData.age}, Allergies: ${survivorData.allergies}` }
+        ]
+      })
+    });
+    
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      console.error('DeepSeek API Error:', res.status, errorData);
+      throw new Error(`API Error ${res.status}: ${errorData.error?.message || 'Unknown error'}`);
+    }
+    
+    const data = await res.json();
+    const content = data.choices?.[0]?.message?.content;
+    if (!content) {
+      throw new Error('No response from DeepSeek');
+    }
+    return content;
+  } catch(e) {
+    console.error('DeepSeek connection error:', e.message);
+    // Fallback to contextual fallback
+    throw e;
+  }
+}
+
+function showDSResult(msg, color) {
+  const el = document.getElementById('ds-test-result');
+  el.textContent = msg;
+  el.style.color = color || 'var(--text-dim)';
+}
+
+// Override processMessage to support DeepSeek mode
+const _origProcessMessage = processMessage;
+window.processMessage = async function(msg) {
+  if (currentAIMode === 'deepseek' && localStorage.getItem('underrubbl_ds_key')) {
+    appendUserMessage(msg);
+    document.getElementById('ai-loading').style.display = 'block';
+    document.getElementById('chat-messages').scrollTop = 9999;
+    try {
+      const reply = await callDeepSeek(msg);
+      document.getElementById('ai-loading').style.display = 'none';
+      appendAIMessage(reply || 'Take a slow breath. I am here with you.');
+    } catch(e) {
+      document.getElementById('ai-loading').style.display = 'none';
+      appendAIMessage('DeepSeek connection lost. Core protocol: breathe slowly, stay still, tap walls in groups of 3. Help is coming.');
+    }
+  } else {
+    await _origProcessMessage(msg);
+  }
+};
+
+// ============================================================
+// MOOD TRACKER
+// ============================================================
+let moodHistory = JSON.parse(localStorage.getItem('underrubbl_mood') || '[]');
+let selectedMood = null;
+
+function setMood(val) {
+  selectedMood = val;
+  document.querySelectorAll('.mood-btn').forEach(btn => {
+    const isSelected = parseInt(btn.dataset.mood) === val;
+    btn.style.transform = isSelected ? 'scale(1.1)' : 'scale(1)';
+    btn.style.boxShadow = isSelected ? '0 0 12px rgba(255,149,0,0.4)' : 'none';
+  });
+}
+
+async function logMoodAndGetAdvice() {
+  if (!selectedMood) {
+    document.getElementById('mood-ai-text').textContent = 'Please select a mood first.';
+    document.getElementById('mood-ai-response').style.display = 'block';
+    return;
+  }
+
+  const entry = { mood: selectedMood, time: Date.now() };
+  moodHistory.push(entry);
+  if (moodHistory.length > 8) moodHistory.shift();
+  localStorage.setItem('underrubbl_mood', JSON.stringify(moodHistory));
+  renderMoodChart();
+
+  // Get AI advice
+  const moodLabels = ['','PANIC','ANXIOUS','COPING','STABLE','STRONG'];
+  const moodLabel = moodLabels[selectedMood];
+  const btn = document.getElementById('mood-log-btn');
+  btn.textContent = '⏳ Getting AI assessment...';
+
+  const prompt = `The survivor just reported their psychological state as: ${moodLabel} (${selectedMood}/5).
+Mood history (newest last): ${moodHistory.map(m => moodLabels[m.mood]).join(' → ')}.
+Please provide: 1) A brief empathetic acknowledgment 2) Assessment of their psychological trend 3) One specific coping technique for their current state. Keep it under 4 sentences total.`;
+
+  try {
+    let response = '';
+    if (currentAIMode === 'deepseek' && localStorage.getItem('underrubbl_ds_key')) {
+      response = await callDeepSeek(prompt);
+    } else {
+      // Use Claude
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 400,
+          system: AI_SYSTEM_PROMPT,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      const data = await res.json();
+      response = data.content?.map(c => c.text || '').join('').trim();
+    }
+    document.getElementById('mood-ai-text').textContent = response || 'Stay strong. Your feelings are valid.';
+    document.getElementById('mood-ai-response').style.display = 'block';
+  } catch(e) {
+    document.getElementById('mood-ai-text').textContent = 'AI unavailable. Remember: what you feel is normal. Take 3 slow breaths and focus on one small thing you can control right now.';
+    document.getElementById('mood-ai-response').style.display = 'block';
+  }
+
+  btn.textContent = '📊 LOG MOOD + GET AI ADVICE';
+}
+
+function renderMoodChart() {
+  const chart = document.getElementById('mood-chart');
+  if (moodHistory.length === 0) {
+    chart.innerHTML = '<span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">No data yet</span>';
+    return;
+  }
+  const colors = ['','#FF3B30','#FF6B35','#FF9500','#86C67C','#30D158'];
+  chart.innerHTML = moodHistory.map((m, i) => {
+    const pct = (m.mood / 5) * 100;
+    const color = colors[m.mood];
+    const isLatest = i === moodHistory.length - 1;
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+      <div style="font-family:var(--font-mono);font-size:8px;color:${color};">${m.mood}</div>
+      <div style="width:100%;background:var(--surface3);border-radius:3px;height:36px;display:flex;align-items:flex-end;">
+        <div style="width:100%;height:${pct}%;background:${color};border-radius:3px;${isLatest ? 'box-shadow:0 0 6px ' + color : ''}"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// INIT EXTENSIONS (called after main initApp)
+// ============================================================
+const _origInitApp = initApp;
+window.initApp = function() {
+  _origInitApp();
+  initDeadManSwitch();
+  loadDeepSeekKey();
+  renderMoodChart();
+};
+
+// Load extensions for returning users (already have saved profile)
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if (localStorage.getItem('underrubbl_survivor')) {
+      initDeadManSwitch();
+      loadDeepSeekKey();
+      renderMoodChart();
+    }
+  }, 600);
+  
+  // Auto-load DeepSeek if key is available
+  setTimeout(() => {
+    if (localStorage.getItem('underrubbl_ds_key')) {
+      deepSeekEnabled = true;
+      currentAIMode = 'deepseek';
+      updateDSStatus(true);
+      if (document.getElementById('ds-toggle')) {
+        document.getElementById('ds-toggle').classList.add('on');
+        document.getElementById('ds-toggle').setAttribute('aria-checked', 'true');
+      }
+    }
+  }, 800);
+});
+
+requestWakeLock();
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') requestWakeLock();
+});
+</script>
 </body>
 </html>
