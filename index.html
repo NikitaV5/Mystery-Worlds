@@ -1412,6 +1412,33 @@ function addInitialChatMessage() {
   appendAIMessage(`${name}, I'm Dr. Aria. I'm here with you right now. Take one slow breath — in through your nose, out through your mouth. What's your most immediate need right now?`);
 }
 
+function speakText(text) {
+  try {
+    if (!('speechSynthesis' in window)) return;
+    if (!text) return;
+
+    // Cancel previous speech to avoid overlap
+    window.speechSynthesis.cancel();
+
+    const utter = new SpeechSynthesisUtterance(text);
+
+    // Ukrainian-ish defaults; browser will pick closest voice
+    const lang = (document.documentElement.lang || 'en').toLowerCase();
+    // Map common spellings a bit
+    if (lang.startsWith('uk')) utter.lang = 'uk-UA';
+    else if (lang.startsWith('ru')) utter.lang = 'ru-RU';
+    else utter.lang = 'en-US';
+
+    // Slightly slower for clarity
+    utter.rate = 0.95;
+    utter.pitch = 1.0;
+
+    window.speechSynthesis.speak(utter);
+  } catch (e) {
+    // ignore
+  }
+}
+
 function appendAIMessage(text) {
   const container = document.getElementById('chat-messages');
   const div = document.createElement('div');
@@ -1420,6 +1447,7 @@ function appendAIMessage(text) {
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
   chatHistory.push({ role: 'assistant', content: text });
+  speakText(text);
 }
 
 function appendUserMessage(text) {
