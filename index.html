@@ -1,4 +1,4 @@
-да
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1045,10 +1045,15 @@ function initApp() {
   startSurvivalTimer();
   initBattery();
   initSignalSimulation();
+  // ініціалізація автососу
+  if (!window.dmsTimeoutMinutes) window.dmsTimeoutMinutes = 10;
+  if (typeof window.dmsEnabled === 'undefined') window.dmsEnabled = true;
   populateSystemChecklist();
   addInitialChatMessage();
   fetchHazardData();
   updateHazardTime();
+  // ініціалізація автососу
+  setTimeout(initDeadManSwitch, 500);
 
   // Register Service Worker
   if ('serviceWorker' in navigator) {
@@ -1065,6 +1070,9 @@ window.addEventListener('load', () => {
       document.getElementById('onboard-overlay').style.display = 'none';
       const app = document.getElementById('app');
       app.style.display = 'flex';
+      // ініціалізація автососу
+      if (!window.dmsTimeoutMinutes) window.dmsTimeoutMinutes = 10;
+      if (typeof window.dmsEnabled === 'undefined') window.dmsEnabled = true;
       populateMedID();
       startSurvivalTimer();
       initBattery();
@@ -1073,6 +1081,7 @@ window.addEventListener('load', () => {
       addInitialChatMessage();
       fetchHazardData();
       updateHazardTime();
+      setTimeout(initDeadManSwitch, 500);
     } catch(e) { /* fresh start */ }
   }
 });
@@ -1334,7 +1343,22 @@ function populateSystemChecklist() {
   ];
 
   const container = document.getElementById('sys-checklist');
-  container.innerHTML = checks.map(c => `
+  container.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--surface2);border-radius:6px;border:1px solid var(--border);margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="status-dot ${dmsEnabled ? 'ok' : 'warn'}" id="dms-active-dot"></div>
+        <span style="font-family:var(--font-display);font-size:10px;letter-spacing:0.1em;">АВТОСОС</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div id="dms-toggle-btn" class="toggle-switch${dmsEnabled ? ' on' : ''}" tabindex="0" role="switch" aria-checked="${dmsEnabled}" onclick="toggleDMSSetting()" style="margin-right:8px;"></div>
+        <select id="dms-timeout-select" class="tactical-input" style="width:70px;font-size:11px;padding:4px 8px;" onchange="updateDMSTimeout()">
+          <option value="5" ${dmsTimeoutMinutes==5?'selected':''}>5 хв</option>
+          <option value="10" ${dmsTimeoutMinutes==10?'selected':''}>10 хв</option>
+          <option value="15" ${dmsTimeoutMinutes==15?'selected':''}>15 хв</option>
+        </select>
+      </div>
+    </div>
+    ` + checks.map(c => `
     <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--surface2);border-radius:6px;border:1px solid var(--border);">
       <div style="display:flex;align-items:center;gap:8px;">
         <div class="status-dot ${c.status}"></div>
@@ -1767,41 +1791,16 @@ function triggerDMSWarning() {
   }, 1000);
 }
 
+
 function activateDMS() {
   // 1) Arm SOS beacon
   if (!sosActive) toggleSOS();
 
-  // 2) Get GPS and open SMS
-  document.getElementById('dms-sms-status').textContent = '📡 Getting location...';
-  if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition(pos => {
-      const lat = pos.coords.latitude.toFixed(5);
-      const lon = pos.coords.longitude.toFixed(5);
-      sendEmergencySMS(lat, lon);
-    }, () => {
-      sendEmergencySMS('UNKNOWN', 'UNKNOWN');
-    }, {
-      enableHighAccuracy: true,
-      timeout: 15000,
-      maximumAge: 0
-    });
-  } else {
-    sendEmergencySMS('UNKNOWN', 'UNKNOWN');
-  }
-}
-
-function sendEmergencySMS(lat, lon) {
-  const body = encodeURIComponent(
-    `🆘 SOS — UNDERRUBBL ALERT\n` +
-    `Survivor: ${survivorData.name}\n` +
-    `Blood: ${survivorData.blood} | Age: ${survivorData.age}\n` +
-    `Allergies: ${survivorData.allergies}\n` +
-    `GPS: ${lat}, ${lon}\n` +
-    `Maps: https://maps.google.com/?q=${lat},${lon}\n` +
-    `Inactive 10+ min — may be unconscious. SEND HELP.`
-  );
-  window.location.href = `sms:?body=${body}`;
-  document.getElementById('dms-sms-status').textContent = '📱 SMS opened — send to emergency contact';
+  // 2) Дзвінок у 102 (поліція)
+  document.getElementById('dms-sms-status').textContent = '📞 Відкривається дзвінок у поліцію (102)...';
+  setTimeout(() => {
+    window.location.href = 'tel:102';
+  }, 1200);
 }
 
 function resetDeadManSwitch() {
@@ -1835,8 +1834,8 @@ function toggleDMSSetting() {
 
 function updateDMSTimeout() {
   dmsTimeoutMinutes = parseInt(document.getElementById('dms-timeout-select').value);
-  document.getElementById('dms-timeout-label').textContent = dmsTimeoutMinutes + ' minutes';
   scheduleDMS();
+  populateSystemChecklist();
 }
 
 function updateDMSLabel() {
