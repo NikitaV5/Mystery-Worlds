@@ -1,3 +1,4 @@
+да
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -599,7 +600,7 @@
 </div>
 
 <!-- Main App -->
-<div id="app" style="display:none;max-width:440px;margin:0 auto;min-height:100dvh;display:none;flex-direction:column;">
+<div id="app" style="display:none;max-width:1120px;margin:0 auto;min-height:100dvh;display:none;flex-direction:column;">
 
   <!-- Header -->
   <header style="padding:12px 16px 8px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(0,0,0,0.95);backdrop-filter:blur(10px);z-index:100;">
@@ -640,7 +641,7 @@
   </header>
 
   <!-- Tab Content -->
-  <main style="flex:1;overflow-y:auto;padding:16px;" id="main-content">
+<main style="flex:1;overflow-y:auto;padding:28px;max-width:1120px;margin:0 auto;" id="main-content">
 
     <!-- === PANEL: HOME / SOS === -->
     <div class="panel active" id="panel-home">
@@ -736,28 +737,7 @@
         </div>
       </div>
 
-      <!-- Survival Timer -->
-      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
-        <div class="section-header">SURVIVAL TIMELINE</div>
-        <div style="text-align:center;margin-bottom:12px;">
-          <div id="survival-timer" aria-live="polite">00:00:00</div>
-          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:4px;">HOURS : MINUTES : SECONDS</div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
-          <div style="background:var(--surface2);padding:8px;border-radius:6px;border:1px solid var(--border);">
-            <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--amber);" id="stat-hours">0</div>
-            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">HOURS</div>
-          </div>
-          <div style="background:var(--surface2);padding:8px;border-radius:6px;border:1px solid var(--border);">
-            <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--amber);" id="stat-mins">0</div>
-            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">MINUTES</div>
-          </div>
-          <div style="background:var(--surface2);padding:8px;border-radius:6px;border:1px solid var(--border);">
-            <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--green);" id="stat-status-text">ACUTE</div>
-            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">PHASE</div>
-          </div>
-        </div>
-      </div>
+
 
       <!-- Medical ID card -->
       <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
@@ -985,154 +965,11 @@
       </div>
     </div>
 
-    <!-- === PANEL: AI SETTINGS & MOOD TRACKER === -->
-    <div class="panel" id="panel-settings">
-
-      <!-- DeepSeek API Config -->
-      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
-        <div class="section-header">DEEPSEEK AI — PSYCHOLOGICAL SUPPORT</div>
-
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);">
-          <div style="width:40px;height:40px;border-radius:50%;border:2px solid #4F8EF7;background:radial-gradient(circle,rgba(79,142,247,0.2),transparent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🤖</div>
-          <div>
-            <div style="font-family:var(--font-display);font-size:12px;color:#4F8EF7;font-weight:700;">DEEPSEEK AI</div>
-            <div style="font-family:var(--font-mono);font-size:9px;" id="ds-status-label">● DISCONNECTED</div>
-          </div>
-          <div id="ds-toggle" class="toggle-switch" style="margin-left:auto;" onclick="toggleDeepSeek()" role="switch" aria-checked="false" aria-label="Toggle DeepSeek AI"></div>
-        </div>
-
-        <!-- API Key input -->
-        <div style="margin-bottom:14px;">
-          <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">DEEPSEEK API KEY</label>
-          <div style="display:flex;gap:8px;">
-            <input id="ds-api-key" class="tactical-input" type="password"
-              placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx"
-              style="font-family:var(--font-mono);font-size:12px;"
-              aria-label="DeepSeek API key">
-            <button onclick="saveDeepSeekKey()" class="btn-amber" style="padding:10px 14px;flex-shrink:0;">SAVE</button>
-          </div>
-          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:6px;">Stored only on this device. Never transmitted to any server except DeepSeek.</div>
-        </div>
-
-        <!-- Mode selector -->
-        <div style="margin-bottom:14px;">
-          <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:8px;">AI MODE</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <button onclick="setAIMode('claude')" id="mode-claude" class="btn-amber" style="padding:10px;font-size:10px;" aria-pressed="true">
-              🧠 Claude (Default)
-            </button>
-            <button onclick="setAIMode('deepseek')" id="mode-deepseek" class="btn-amber" style="padding:10px;font-size:10px;opacity:0.5;" aria-pressed="false">
-              🤖 DeepSeek
-            </button>
-          </div>
-          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:6px;" id="ai-mode-info">
-            Active: Claude Sonnet — crisis psychologist mode
-          </div>
-        </div>
-
-        <!-- Test connection -->
-        <button onclick="testDeepSeek()" class="btn-amber" style="width:100%;padding:12px;font-size:11px;" id="ds-test-btn">
-          ⚡ TEST CONNECTION
-        </button>
-        <div id="ds-test-result" style="font-family:var(--font-mono);font-size:10px;margin-top:8px;min-height:16px;"></div>
-      </div>
-
-      <!-- Mood Tracker -->
-      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
-        <div class="section-header">PSYCHOLOGICAL STATE MONITOR</div>
-
-        <!-- Current mood input -->
-        <div style="margin-bottom:16px;">
-          <div style="font-family:var(--font-display);font-size:10px;color:var(--text-dim);letter-spacing:0.1em;margin-bottom:10px;">HOW ARE YOU FEELING RIGHT NOW?</div>
-          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px;" role="group" aria-label="Mood selector">
-            <button class="mood-btn" onclick="setMood(1)" data-mood="1" style="background:var(--surface2);border:1px solid #FF3B30;border-radius:8px;padding:10px 4px;cursor:pointer;transition:all 0.2s;" aria-label="Mood 1 - Very bad">
-              <div style="font-size:20px;">😰</div>
-              <div style="font-family:var(--font-mono);font-size:8px;color:#FF3B30;margin-top:3px;">PANIC</div>
-            </button>
-            <button class="mood-btn" onclick="setMood(2)" data-mood="2" style="background:var(--surface2);border:1px solid #FF6B35;border-radius:8px;padding:10px 4px;cursor:pointer;transition:all 0.2s;" aria-label="Mood 2 - Bad">
-              <div style="font-size:20px;">😟</div>
-              <div style="font-family:var(--font-mono);font-size:8px;color:#FF6B35;margin-top:3px;">ANXIOUS</div>
-            </button>
-            <button class="mood-btn" onclick="setMood(3)" data-mood="3" style="background:var(--surface2);border:1px solid var(--amber);border-radius:8px;padding:10px 4px;cursor:pointer;transition:all 0.2s;" aria-label="Mood 3 - Neutral">
-              <div style="font-size:20px;">😐</div>
-              <div style="font-family:var(--font-mono);font-size:8px;color:var(--amber);margin-top:3px;">COPING</div>
-            </button>
-            <button class="mood-btn" onclick="setMood(4)" data-mood="4" style="background:var(--surface2);border:1px solid #86C67C;border-radius:8px;padding:10px 4px;cursor:pointer;transition:all 0.2s;" aria-label="Mood 4 - Good">
-              <div style="font-size:20px;">🙂</div>
-              <div style="font-family:var(--font-mono);font-size:8px;color:#86C67C;margin-top:3px;">STABLE</div>
-            </button>
-            <button class="mood-btn" onclick="setMood(5)" data-mood="5" style="background:var(--surface2);border:1px solid var(--green);border-radius:8px;padding:10px 4px;cursor:pointer;transition:all 0.2s;" aria-label="Mood 5 - Good">
-              <div style="font-size:20px;">💪</div>
-              <div style="font-family:var(--font-mono);font-size:8px;color:var(--green);margin-top:3px;">STRONG</div>
-            </button>
-          </div>
-          <button onclick="logMoodAndGetAdvice()" class="btn-amber" style="width:100%;padding:12px;font-size:11px;" id="mood-log-btn">
-            📊 LOG MOOD + GET AI ADVICE
-          </button>
-        </div>
-
-        <!-- Mood history chart -->
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:12px;">
-          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:10px;letter-spacing:0.1em;">PSYCHOLOGICAL TREND — LAST 8 READINGS</div>
-          <div id="mood-chart" style="display:flex;align-items:flex-end;gap:5px;height:50px;">
-            <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">No data yet</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;margin-top:6px;">
-            <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);">OLDEST</span>
-            <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-dim);">LATEST</span>
-          </div>
-        </div>
-
-        <!-- AI mood response -->
-        <div id="mood-ai-response" style="display:none;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #4F8EF7;border-radius:6px;padding:12px;">
-          <div style="font-family:var(--font-display);font-size:9px;color:#4F8EF7;letter-spacing:0.1em;margin-bottom:6px;">🤖 AI PSYCHOLOGICAL ASSESSMENT</div>
-          <div id="mood-ai-text" style="font-size:13px;color:var(--text);line-height:1.6;"></div>
-        </div>
-      </div>
-
-      <!-- Dead Man's Switch settings -->
-      <div class="tactical-box" style="padding:16px;border-radius:8px;">
-        <div class="section-header">DEAD MAN'S SWITCH</div>
-
-        <div class="settings-row">
-          <div>
-            <div style="font-family:var(--font-display);font-size:11px;color:var(--text);letter-spacing:0.05em;">Auto-SOS if inactive</div>
-            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:2px;">Activates SOS beacon after inactivity</div>
-          </div>
-          <div id="dms-toggle-btn" class="toggle-switch on" onclick="toggleDMSSetting()" role="switch" aria-checked="true" aria-label="Dead man switch enabled"></div>
-        </div>
-
-        <div class="settings-row">
-          <div>
-            <div style="font-family:var(--font-display);font-size:11px;color:var(--text);letter-spacing:0.05em;">INACTIVITY TIMEOUT</div>
-            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:2px;" id="dms-timeout-label">10 minutes</div>
-          </div>
-          <select id="dms-timeout-select" class="tactical-input" style="width:auto;font-size:11px;padding:6px 10px;" onchange="updateDMSTimeout()" aria-label="Dead man switch timeout">
-            <option value="5">5 min</option>
-            <option value="10" selected>10 min</option>
-            <option value="15">15 min</option>
-            <option value="30">30 min</option>
-          </select>
-        </div>
-
-        <div style="background:rgba(255,59,48,0.05);border:1px solid rgba(255,59,48,0.2);border-radius:6px;padding:10px;margin-top:4px;">
-          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);line-height:1.8;">
-            <div>⏱ Resets every time you tap the screen</div>
-            <div>🔴 Shows 10-second warning overlay before activating</div>
-            <div>📡 Auto-arms SOS acoustic beacon</div>
-            <div>📱 Opens SMS with GPS coordinates + Medical ID</div>
-          </div>
-        </div>
-
-        <div style="font-family:var(--font-mono);font-size:9px;margin-top:10px;display:flex;align-items:center;gap:6px;">
-          <div class="status-dot ok" id="dms-active-dot"></div>
-          <span id="dms-active-label" style="color:var(--text-dim);">Switch armed — last activity: just now</span>
-        </div>
-      </div>
-
-    </div><!-- end panel-settings -->
+<!-- === PANEL: AI SETTINGS & MOOD TRACKER === -->
+    <!-- Panel removed per requirements: settings/keys navigation is no longer available -->
 
   </main>
+
 
   <!-- Bottom Navigation -->
   <nav style="border-top:1px solid var(--border);background:rgba(0,0,0,0.95);backdrop-filter:blur(10px);padding:0;display:flex;" role="navigation" aria-label="Main navigation">
@@ -1152,10 +989,7 @@
       <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M18 11h2"/><path d="M6 7V5a2 2 0 014 0v2"/></svg>
       SYSTEMS
     </button>
-    <button class="nav-tab" id="tab-settings" onclick="switchTab('settings')" aria-label="AI Settings and Mood Tracker">
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10" cy="10" r="3"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42"/></svg>
-      AI & MOOD
-    </button>
+
   </nav>
 </div>
 
@@ -1659,10 +1493,11 @@ async function processMessage(msg) {
   try {
     const messages = chatHistory.slice(-10); // last 10 for context
     
-    // Try DeepSeek first if enabled
-    if (currentAIMode === 'deepseek' && localStorage.getItem('underrubbl_ds_key')) {
-      try {
-        const reply = await callDeepSeek(msg);
+    // OpenRouter LLM call
+    if (localStorage.getItem('underrubbl_ds_key')) {
+    try {
+      const reply = await callOpenRouter(msg);
+
         document.getElementById('ai-loading').style.display = 'none';
         appendAIMessage(reply || 'Take a slow breath. I am here with you.');
         return;
@@ -1986,14 +1821,23 @@ function resetDeadManSwitch() {
 function toggleDMSSetting() {
   dmsEnabled = !dmsEnabled;
   const btn = document.getElementById('dms-toggle-btn');
-  btn.classList.toggle('on', dmsEnabled);
-  btn.setAttribute('aria-checked', dmsEnabled);
   const dot = document.getElementById('dms-active-dot');
-  dot.className = 'status-dot ' + (dmsEnabled ? 'ok' : 'warn');
+
+  if (btn) {
+    btn.classList.toggle('on', dmsEnabled);
+    btn.setAttribute('aria-checked', dmsEnabled);
+  }
+
+  if (dot) {
+    dot.className = 'status-dot ' + (dmsEnabled ? 'ok' : 'warn');
+  }
+
   if (dmsEnabled) scheduleDMS();
   else clearTimeout(dmsTimer);
+
   updateDMSLabel();
 }
+
 
 function updateDMSTimeout() {
   dmsTimeoutMinutes = parseInt(document.getElementById('dms-timeout-select').value);
@@ -2002,11 +1846,15 @@ function updateDMSTimeout() {
 }
 
 function updateDMSLabel() {
+  const labelEl = document.getElementById('dms-active-label');
+  if (!labelEl) return; // UI element removed in this version
+
   const secs = Math.round((Date.now() - lastActivity) / 1000);
   const label = dmsEnabled
     ? `Switch armed — last activity: ${secs < 60 ? secs + 's ago' : Math.round(secs/60) + 'm ago'}`
     : 'Switch DISABLED';
-  document.getElementById('dms-active-label').textContent = label;
+
+  labelEl.textContent = label;
 }
 
 setInterval(updateDMSLabel, 5000);
@@ -2315,8 +2163,8 @@ function clearMorseLog() {
 // ============================================================
 // DEEPSEEK AI INTEGRATION
 // ============================================================
-let currentAIMode = 'claude'; // 'claude' | 'deepseek'
 let deepSeekEnabled = false;
+
 
 const DEEPSEEK_PSYCH_PROMPT = `You are a compassionate AI psychologist specializing in crisis intervention and trauma support. You are embedded in a survival app for people trapped in disaster zones.
 
@@ -2352,7 +2200,7 @@ function loadDeepSeekKey() {
     document.getElementById('ds-api-key').placeholder = 'Key saved — tap to replace';
   } else {
     // Set default API key if not already saved
-    const defaultKey = 'sk-2d3db1421b0047b2af35461c82ff1c00';
+    const defaultKey = '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';
     localStorage.setItem('underrubbl_ds_key', defaultKey);
     deepSeekEnabled = true;
     updateDSStatus(true);
@@ -2407,6 +2255,7 @@ function updateDSStatus(connected) {
   el.style.color = connected ? 'var(--green)' : 'var(--text-dim)';
 }
 
+// legacy (ui): OpenRouter-only call
 async function testDeepSeek() {
   const key = localStorage.getItem('underrubbl_ds_key');
   if (!key) { showDSResult('⚠ No key saved', 'var(--red)'); return; }
@@ -2433,19 +2282,36 @@ async function testDeepSeek() {
   btn.disabled = false;
 }
 
-async function callDeepSeek(userMessage, key) {
+async function callOpenRouter(userMessage, key) {
   const apiKey = key || localStorage.getItem('underrubbl_ds_key');
   if (!apiKey) throw new Error('No API key');
 
   try {
-    const res = await fetch('https://api.deepseek.com/chat/completions', {
+function sanitizeMessagesForProvider(messages) {
+  const allowedRoles = new Set(['system', 'user', 'assistant']);
+  return Array.isArray(messages)
+    ? messages
+        .filter(m => m && allowedRoles.has(m.role))
+        .map(m => ({ role: m.role, content: String(m.content ?? '') }))
+    : [];
+}
+
+  const baseMessages = [
+          { role: 'system', content: DEEPSEEK_PSYCH_PROMPT },
+          { role: 'user', content: userMessage + `\n\nSurvivor: ${survivorData.name}, Blood: ${survivorData.blood}, Age: ${survivorData.age}, Allergies: ${survivorData.allergies}` }
+        ];
+
+        const messages = sanitizeMessagesForProvider(baseMessages);
+
+const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + apiKey,
       },
+
       body: JSON.stringify({
-        model: 'deepseek-chat',
+        model: 'openai/gpt-4o-mini',
         max_tokens: 600,
         temperature: 0.7,
         messages: [
@@ -2480,15 +2346,16 @@ function showDSResult(msg, color) {
   el.style.color = color || 'var(--text-dim)';
 }
 
-// Override processMessage to support DeepSeek mode
+// AI routing is now OpenRouter-only
 const _origProcessMessage = processMessage;
 window.processMessage = async function(msg) {
-  if (currentAIMode === 'deepseek' && localStorage.getItem('underrubbl_ds_key')) {
+  if (localStorage.getItem('underrubbl_ds_key')) {
+
     appendUserMessage(msg);
     document.getElementById('ai-loading').style.display = 'block';
     document.getElementById('chat-messages').scrollTop = 9999;
     try {
-      const reply = await callDeepSeek(msg);
+      const reply = await callOpenRouter(msg);
       document.getElementById('ai-loading').style.display = 'none';
       appendAIMessage(reply || 'Take a slow breath. I am here with you.');
     } catch(e) {
@@ -2540,9 +2407,10 @@ Please provide: 1) A brief empathetic acknowledgment 2) Assessment of their psyc
 
   try {
     let response = '';
-    if (currentAIMode === 'deepseek' && localStorage.getItem('underrubbl_ds_key')) {
-      response = await callDeepSeek(prompt);
-    } else {
+  if (localStorage.getItem('underrubbl_ds_key')) {
+response = await callOpenRouter(prompt);
+  } else {
+
       // Use Claude
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
