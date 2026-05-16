@@ -640,10 +640,10 @@
     <!-- === PANEL: HOME / SOS === -->
     <div class="panel active" id="panel-home">
       
+
       <!-- SOS Beacon -->
       <div class="tactical-box" style="padding:24px 16px;margin-bottom:16px;text-align:center;border-radius:8px;">
         <div class="section-header">ACOUSTIC SOS BEACON</div>
-        
         <div style="position:relative;display:flex;justify-content:center;margin:20px 0 24px;">
           <button class="sos-btn" id="sos-btn" onclick="toggleSOS()" aria-pressed="false" aria-label="Toggle SOS acoustic beacon">
             <div class="pulse-ring"></div>
@@ -653,8 +653,6 @@
             <div style="font-size:10px;font-weight:400;letter-spacing:0.1em;margin-top:4px;" id="sos-label">TAP TO ARM</div>
           </button>
         </div>
-
-        <!-- Waveform -->
         <div id="waveform" style="justify-content:center;margin-bottom:16px;" aria-hidden="true">
           <div class="wave-bar" style="height:4px;" id="wb0"></div>
           <div class="wave-bar" style="height:4px;" id="wb1"></div>
@@ -669,65 +667,10 @@
           <div class="wave-bar" style="height:4px;" id="wb10"></div>
           <div class="wave-bar" style="height:4px;" id="wb11"></div>
         </div>
-
         <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);line-height:1.8;">
           <span id="beacon-freq">FREQ: 4000 Hz</span> &nbsp;|&nbsp; 
           <span id="beacon-mode">MODE: STANDBY</span><br>
           <span id="beacon-pattern">PATTERN: S·O·S (International Distress)</span>
-        </div>
-      </div>
-
-<!-- Morse Listener / Speech Recognition -->
-      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
-        <div class="section-header">COMMUNICATION — LISTEN FOR SIGNALS / SPEECH</div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-          <button id="mode-toggle-btn" onclick="toggleListenerMode()" class="btn-amber" style="font-size:9px;padding:8px 12px;">
-            📡 MORSE OFF / 🎤 SPEECH ON
-          </button>
-          <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);" id="current-mode">Mode: MORSE CODE</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
-          <div id="listen-ring" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--amber);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:border-color 0.3s;">
-            🎙
-          </div>
-          <div style="flex:1;">
-            <div style="font-family:var(--font-display);font-size:11px;color:var(--amber);letter-spacing:0.1em;margin-bottom:4px;" id="listen-status">STANDBY</div>
-            <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);" id="listen-help">Tap START to listen for tapping / SOS signals from nearby survivors.</div>
-          </div>
-        </div>
-
-        <!-- Live signal visualizer -->
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:12px;">
-          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:8px;letter-spacing:0.1em;">SIGNAL FEED</div>
-          <div id="morse-visual" style="display:flex;align-items:center;gap:4px;min-height:24px;flex-wrap:wrap;">
-            <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">— waiting for input —</span>
-          </div>
-          <div style="margin-top:10px;">
-            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:4px;">DECODED MESSAGE</div>
-            <div id="morse-decoded" style="font-family:var(--font-display);font-size:16px;color:var(--amber);letter-spacing:0.2em;min-height:24px;">—</div>
-          </div>
-        </div>
-
-        <!-- Signal history -->
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:12px;">
-          <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:6px;letter-spacing:0.1em;">DETECTION LOG</div>
-          <div id="morse-log" style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);max-height:80px;overflow-y:auto;">
-            No signals detected yet.
-          </div>
-        </div>
-
-        <div style="display:flex;gap:8px;">
-          <button id="listen-btn" onclick="toggleMorseListener()" class="btn-amber" style="flex:1;padding:12px;" aria-label="Start morse signal listener">
-            🎙 START LISTENING
-          </button>
-          <button onclick="clearMorseLog()" class="btn-amber" style="padding:12px 14px;" aria-label="Clear morse log">
-            ✕
-          </button>
-        </div>
-
-        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:10px;line-height:1.7;text-align:center;">
-          Tap walls or pipes in SOS pattern · · · — — — · · ·<br>
-          Microphone detects impacts through surfaces
         </div>
       </div>
 
@@ -821,12 +764,124 @@
 
         <!-- Input -->
         <div style="display:flex;gap:8px;">
-          <input id="chat-input" class="tactical-input" type="text" placeholder="Type your message..." 
-                 aria-label="Message to crisis psychologist"
-                 onkeydown="if(event.key==='Enter')sendChat()">
-          <button onclick="sendChat()" class="btn-amber" style="padding:10px 14px;flex-shrink:0;" aria-label="Send message">▶</button>
+             <input id="chat-input" class="tactical-input" type="text" placeholder="Type your message..." 
+               aria-label="Message to crisis psychologist"
+               onkeydown="if(event.key==='Enter')sendChat()">
+             <button onclick="startVoiceInput()" class="btn-amber" style="padding:10px 14px;flex-shrink:0;" aria-label="Voice input" id="voice-btn">🎤</button>
+             <button onclick="sendChat()" class="btn-amber" style="padding:10px 14px;flex-shrink:0;" aria-label="Send message">▶</button>
         </div>
 
+        <!-- Голосовий ввід для чату -->
+        <script>
+        let voiceRecognition = null;
+        let voiceRetryCount = 0;
+        const VOICE_MAX_RETRIES = 2;
+
+        function setVoiceBtnState(listening) {
+          const btn = document.getElementById('voice-btn');
+          if (!btn) return;
+          if (listening) {
+            btn.textContent = '🎙';
+            btn.disabled = true;
+          } else {
+            btn.textContent = '🎤';
+            btn.disabled = false;
+          }
+        }
+
+        function setChatInputStatus(text) {
+          const input = document.getElementById('chat-input');
+          if (!input) return;
+          // For browsers that don't return speech results reliably,
+          // show a placeholder-like status while listening.
+          if (input.value.trim().length === 0) {
+            input.value = text;
+            input.setSelectionRange(input.value.length, input.value.length);
+          }
+        }
+
+        function clearChatInputStatus() {
+          const input = document.getElementById('chat-input');
+          if (!input) return;
+          if (input.value === 'Listening...') input.value = '';
+        }
+
+        function startVoiceInput() {
+          if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert('Speech recognition not supported in this browser.');
+            return;
+          }
+
+          const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (!voiceRecognition) {
+            voiceRecognition = new SpeechRecognition();
+            voiceRecognition.lang = 'uk-UA';
+            voiceRecognition.interimResults = true; // more reliable capture
+            voiceRecognition.maxAlternatives = 1;
+            voiceRecognition.continuous = false;
+          }
+
+          voiceRetryCount = 0;
+
+          voiceRecognition.onstart = function() {
+            voiceRetryCount = 0;
+            setVoiceBtnState(true);
+            setChatInputStatus('Listening...');
+          };
+
+          voiceRecognition.onspeechend = function() {
+            // keep UI consistent; engines may still call onerror(no-speech)
+            setVoiceBtnState(false);
+          };
+
+          voiceRecognition.onresult = function(event) {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              transcript += event.results[i][0].transcript;
+            }
+            transcript = (transcript || '').trim();
+            if (!transcript) return;
+
+            clearChatInputStatus();
+
+            const input = document.getElementById('chat-input');
+            if (!input) return;
+            input.value = transcript;
+            input.focus();
+            input.setSelectionRange(input.value.length, input.value.length);
+          };
+
+          voiceRecognition.onerror = function(e) {
+            const err = (e && e.error) ? e.error : 'unknown';
+            setVoiceBtnState(false);
+
+            // no-speech is common on mobile (quiet/too short utterance). Retry silently.
+            if (err === 'no-speech' && voiceRetryCount < VOICE_MAX_RETRIES) {
+              voiceRetryCount++;
+              setTimeout(() => {
+                try { voiceRecognition.start(); } catch(_e) {}
+              }, 300);
+              return;
+            }
+
+            if (err !== 'no-speech') {
+              alert('Voice input error: ' + err);
+            }
+          };
+
+          voiceRecognition.onend = function() {
+            setVoiceBtnState(false);
+          };
+
+          try {
+            voiceRecognition.start();
+          } catch(_e) {
+            setVoiceBtnState(false);
+          }
+        }
+        </script>
+        </div>
+        
         <div id="ai-loading" style="display:none;padding:10px 0;">
           <div class="chat-bubble ai" style="display:inline-flex;align-items:center;gap:8px;">
             <div class="typing-indicator"><span></span><span></span><span></span></div>
