@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,11 +6,8 @@
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="description" content="UnderRubbl Survival OS - Emergency survival system for disaster zones">
 <title>UnderRubbl Survival OS</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
 <style>
   :root {
     --amber: #FF9500;
@@ -33,11 +29,8 @@
     --font-display: 'Orbitron', sans-serif;
     --font-body: 'Exo 2', sans-serif;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  
   html { scroll-behavior: smooth; }
-
   body {
     background: var(--bg);
     color: var(--text);
@@ -45,10 +38,7 @@
     min-height: 100vh;
     min-height: 100dvh;
     overflow-x: hidden;
-    position: relative;
   }
-
-  /* Scanline overlay */
   body::before {
     content: '';
     position: fixed;
@@ -57,29 +47,22 @@
     pointer-events: none;
     z-index: 9999;
   }
-
-  /* Corner brackets UI element */
   .tactical-box {
     position: relative;
     border: 1px solid var(--border);
     background: var(--surface);
   }
-  .tactical-box::before,
-  .tactical-box::after {
+  .tactical-box::before, .tactical-box::after {
     content: '';
     position: absolute;
-    width: 12px;
-    height: 12px;
+    width: 12px; height: 12px;
     border-color: var(--amber);
     border-style: solid;
   }
   .tactical-box::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
   .tactical-box::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
-
   .font-mono { font-family: var(--font-mono); }
   .font-display { font-family: var(--font-display); }
-
-  /* Nav tabs */
   .nav-tab {
     font-family: var(--font-display);
     font-size: 10px;
@@ -92,6 +75,8 @@
     flex: 1;
     text-align: center;
     user-select: none;
+    background: none;
+    border-left: none; border-right: none; border-bottom: none;
   }
   .nav-tab.active {
     color: var(--amber);
@@ -99,15 +84,10 @@
     background: rgba(255,149,0,0.05);
   }
   .nav-tab svg { margin: 0 auto 4px; display: block; }
-
-  /* Panels */
   .panel { display: none; }
   .panel.active { display: block; }
-
-  /* SOS Button */
   .sos-btn {
-    width: 160px;
-    height: 160px;
+    width: 160px; height: 160px;
     border-radius: 50%;
     border: 3px solid var(--red);
     background: radial-gradient(circle, rgba(255,59,48,0.15) 0%, rgba(255,59,48,0.03) 70%);
@@ -130,8 +110,6 @@
     background: radial-gradient(circle, rgba(255,59,48,0.3) 0%, rgba(255,59,48,0.1) 70%);
     box-shadow: 0 0 40px rgba(255,59,48,0.5), 0 0 80px rgba(255,59,48,0.2), inset 0 0 30px rgba(255,59,48,0.1);
   }
-
-  /* Pulse rings */
   .pulse-ring {
     position: absolute;
     border-radius: 50%;
@@ -142,36 +120,23 @@
   .sos-btn.active .pulse-ring:nth-child(1) { width: 180px; height: 180px; animation: pulseOut 2s ease-out infinite 0s; }
   .sos-btn.active .pulse-ring:nth-child(2) { width: 210px; height: 210px; animation: pulseOut 2s ease-out infinite 0.5s; }
   .sos-btn.active .pulse-ring:nth-child(3) { width: 240px; height: 240px; animation: pulseOut 2s ease-out infinite 1s; }
-
-  @keyframes pulseOut {
-    0% { transform: scale(0.85); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 0; }
-  }
-
-  /* Blink */
+  @keyframes pulseOut { 0% { transform: scale(0.85); opacity: 0.8; } 100% { transform: scale(1); opacity: 0; } }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
   .blink { animation: blink 1s step-end infinite; }
-
-  /* Amber glow text */
   .text-amber { color: var(--amber); }
   .text-red { color: var(--red); }
   .text-green { color: var(--green); }
-
-  /* Battery bar */
   .battery-bar {
     height: 8px;
     background: var(--surface3);
     border-radius: 4px;
     overflow: hidden;
-    position: relative;
   }
   .battery-fill {
     height: 100%;
     border-radius: 4px;
     transition: width 1s ease, background 0.5s;
   }
-
-  /* Chat */
   #chat-messages {
     height: 280px;
     overflow-y: auto;
@@ -181,7 +146,6 @@
   }
   #chat-messages::-webkit-scrollbar { width: 4px; }
   #chat-messages::-webkit-scrollbar-thumb { background: var(--amber-dim); border-radius: 2px; }
-
   .chat-bubble {
     max-width: 85%;
     padding: 10px 14px;
@@ -214,14 +178,10 @@
   }
   .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
   .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-
   @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
   @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-
-  /* Breathing circle */
   #breath-circle {
-    width: 100px;
-    height: 100px;
+    width: 100px; height: 100px;
     border-radius: 50%;
     border: 2px solid var(--amber);
     background: radial-gradient(circle, rgba(255,149,0,0.1), transparent);
@@ -237,10 +197,8 @@
     flex-shrink: 0;
   }
   #breath-circle.inhale { transform: scale(1.4); }
-  #breath-circle.hold { transform: scale(1.4); }
+  #breath-circle.hold   { transform: scale(1.4); }
   #breath-circle.exhale { transform: scale(1); }
-
-  /* Hazard alerts */
   .alert-card {
     border-left: 3px solid var(--red);
     background: rgba(255,59,48,0.05);
@@ -251,8 +209,6 @@
   }
   .alert-card.moderate { border-left-color: var(--amber); background: rgba(255,149,0,0.05); }
   .alert-card.safe { border-left-color: var(--green); background: rgba(48,209,88,0.05); }
-
-  /* Input */
   .tactical-input {
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -267,10 +223,7 @@
   }
   .tactical-input:focus { border-color: var(--amber); box-shadow: 0 0 0 2px var(--amber-glow); }
   .tactical-input::placeholder { color: var(--text-dim); }
-
   select.tactical-input option { background: #111; }
-
-  /* Button */
   .btn-amber {
     background: transparent;
     border: 1px solid var(--amber);
@@ -285,7 +238,6 @@
     text-transform: uppercase;
   }
   .btn-amber:hover, .btn-amber:active { background: rgba(255,149,0,0.1); }
-
   .btn-red {
     background: rgba(255,59,48,0.1);
     border: 1px solid var(--red);
@@ -300,56 +252,17 @@
     text-transform: uppercase;
   }
   .btn-red:active { background: rgba(255,59,48,0.25); }
-
-  /* Timer */
-  #survival-timer {
-    font-family: var(--font-display);
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--amber);
-    letter-spacing: 0.05em;
-    text-shadow: 0 0 20px var(--amber-glow);
-  }
-
-  /* Signal strength */
-  .signal-bar {
-    width: 6px;
-    background: var(--surface3);
-    border-radius: 2px;
-    transition: background 0.5s;
-  }
+  .signal-bar { width: 6px; background: var(--surface3); border-radius: 2px; transition: background 0.5s; }
   .signal-bar.active { background: var(--green); }
-
-  /* Waveform visualizer */
-  #waveform {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    height: 40px;
-  }
-  .wave-bar {
-    width: 4px;
-    background: var(--amber);
-    border-radius: 2px;
-    transition: height 0.1s;
-  }
-
-  /* Status indicator */
-  .status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-  .status-dot.ok { background: var(--green); box-shadow: 0 0 6px var(--green); }
-  .status-dot.warn { background: var(--amber); box-shadow: 0 0 6px var(--amber); animation: blink 1s infinite; }
-  .status-dot.danger { background: var(--red); box-shadow: 0 0 6px var(--red); animation: blink 0.5s infinite; }
-
-  /* Scrollbar global */
+  #waveform { display: flex; align-items: center; gap: 3px; height: 40px; }
+  .wave-bar { width: 4px; background: var(--amber); border-radius: 2px; transition: height 0.1s; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .status-dot.ok     { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .status-dot.warn   { background: var(--amber); box-shadow: 0 0 6px var(--amber); animation: blink 1s infinite; }
+  .status-dot.danger { background: var(--red);   box-shadow: 0 0 6px var(--red);   animation: blink 0.5s infinite; }
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--amber-dim); border-radius: 2px; }
-
-  /* Section header */
   .section-header {
     font-family: var(--font-display);
     font-size: 10px;
@@ -362,20 +275,12 @@
     gap: 8px;
   }
   .section-header::after { content:''; flex:1; height:1px; background: var(--border); }
-
-  /* Map grid decorative */
   .grid-bg {
-    background-image: 
+    background-image:
       linear-gradient(rgba(255,149,0,0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,149,0,0.03) 1px, transparent 1px);
     background-size: 30px 30px;
   }
-
-  /* Morse pattern */
-  @keyframes morseShort { 0%,100%{opacity:0} 10%,30%{opacity:1} }
-  @keyframes morseLong  { 0%,100%{opacity:0} 10%,50%{opacity:1} }
-
-  /* Quick action pill */
   .quick-action {
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -388,13 +293,7 @@
     white-space: nowrap;
     font-family: var(--font-body);
   }
-  .quick-action:hover, .quick-action:active {
-    border-color: var(--amber);
-    color: var(--amber);
-    background: rgba(255,149,0,0.05);
-  }
-
-  /* Overlay modal */
+  .quick-action:hover, .quick-action:active { border-color: var(--amber); color: var(--amber); background: rgba(255,149,0,0.05); }
   #onboard-overlay {
     position: fixed; inset: 0; z-index: 10000;
     background: rgba(0,0,0,0.97);
@@ -402,7 +301,6 @@
     align-items: center; justify-content: center;
     padding: 24px;
   }
-
   @keyframes glitch {
     0%,100% { text-shadow: 2px 0 var(--red), -2px 0 var(--blue); }
     25% { text-shadow: -2px 0 var(--red), 2px 0 var(--blue); }
@@ -410,20 +308,10 @@
     75% { text-shadow: -2px 2px var(--amber), 2px -2px var(--blue); }
   }
   .glitch { animation: glitch 3s infinite; }
-
-  /* Tag */
-  .tag {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 3px;
-    letter-spacing: 0.05em;
-  }
-  .tag-red { background: rgba(255,59,48,0.15); color: var(--red); border: 1px solid rgba(255,59,48,0.3); }
+  .tag { font-family: var(--font-mono); font-size: 10px; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.05em; }
+  .tag-red   { background: rgba(255,59,48,0.15); color: var(--red);   border: 1px solid rgba(255,59,48,0.3); }
   .tag-amber { background: rgba(255,149,0,0.15); color: var(--amber); border: 1px solid rgba(255,149,0,0.3); }
   .tag-green { background: rgba(48,209,88,0.15); color: var(--green); border: 1px solid rgba(48,209,88,0.3); }
-
-  /* Shimmer for loading */
   @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
   .shimmer {
     background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
@@ -431,9 +319,6 @@
     animation: shimmer 1.5s infinite;
     border-radius: 4px;
   }
-
-  /* Accessibility */
-  .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
   *:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; border-radius: 4px; }
 
   /* ── DEAD MAN'S SWITCH overlay ── */
@@ -448,10 +333,9 @@
     text-align: center;
   }
   #dms-overlay.visible { display: flex; }
-
   @keyframes dmsPulse {
     0%,100% { box-shadow: 0 0 0 0 rgba(255,59,48,0.7); }
-    50% { box-shadow: 0 0 0 30px rgba(255,59,48,0); }
+    50%      { box-shadow: 0 0 0 30px rgba(255,59,48,0); }
   }
   .dms-ring {
     width: 140px; height: 140px;
@@ -469,33 +353,7 @@
     line-height: 1;
   }
 
-  /* ── MORSE LISTENER ── */
-  .morse-dot {
-    display: inline-block;
-    border-radius: 50%;
-    background: var(--amber);
-    margin: 0 3px;
-    vertical-align: middle;
-    transition: opacity 0.1s;
-  }
-  .morse-dot.off { opacity: 0.15; }
-  .morse-dot.on  { opacity: 1; box-shadow: 0 0 8px var(--amber); }
-
-  @keyframes listenPulse {
-    0%,100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.08); opacity: 0.7; }
-  }
-  #listen-ring.active { animation: listenPulse 1.2s ease infinite; }
-
-  /* ── DEEPSEEK SETTINGS ── */
-  .settings-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 12px;
-    background: var(--surface2);
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    margin-bottom: 8px;
-  }
+  /* Toggle switch */
   .toggle-switch {
     width: 44px; height: 24px;
     background: var(--surface3);
@@ -518,12 +376,57 @@
   }
   .toggle-switch.on::after { left: 22px; }
 
-  /* Mood chart bars */
-  .mood-bar {
+  /* Big battery display */
+  .battery-big-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    height: 180px;
+  }
+  .battery-big-wrap svg { transform: rotate(-90deg); }
+  .battery-ring-bg { fill: none; stroke: var(--surface3); stroke-width: 10; }
+  .battery-ring-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1s ease, stroke 0.5s; }
+  .battery-big-text {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--amber);
+    text-align: center;
+    line-height: 1;
+  }
+  .battery-big-sub {
+    position: absolute;
+    bottom: 42px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* DMS row in systems */
+  .dms-sys-row {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .dms-sys-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--surface3);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  .dms-sys-fill {
     height: 100%;
     border-radius: 3px;
     background: var(--amber);
-    transition: width 0.6s ease;
+    transition: width 1s linear;
   }
 </style>
 </head>
@@ -535,31 +438,28 @@
     <div id="dms-countdown">10</div>
   </div>
   <h2 id="dms-title" style="font-family:var(--font-display);font-size:18px;color:var(--red);letter-spacing:0.15em;margin-bottom:12px;">⚠ DEAD MAN'S SWITCH</h2>
-  <p style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);margin-bottom:8px;">No activity detected for 10 minutes.</p>
-  <p style="font-family:var(--font-mono);font-size:11px;color:#555;margin-bottom:28px;">SOS beacon + SMS will activate automatically.</p>
+  <p style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);margin-bottom:8px;">No activity detected for <span id="dms-timeout-display">10</span> minutes.</p>
+  <p style="font-family:var(--font-mono);font-size:11px;color:#555;margin-bottom:28px;">SOS beacon + emergency call will activate automatically.</p>
   <button onclick="resetDeadManSwitch()" style="
     background:var(--red);border:none;color:#fff;
     font-family:var(--font-display);font-size:14px;
     letter-spacing:0.1em;padding:18px 40px;
     border-radius:8px;cursor:pointer;width:100%;max-width:320px;
     box-shadow:0 0 30px rgba(255,59,48,0.4);
-  " aria-label="I am alive - cancel dead man switch">
-    ✋ I'M ALIVE — CANCEL
-  </button>
+  ">✋ I'M ALIVE — CANCEL</button>
   <p style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:16px;" id="dms-sms-status"></p>
 </div>
 
-<!-- Onboarding / Medical ID Setup Overlay -->
-<div id="onboard-overlay" role="dialog" aria-modal="true" aria-labelledby="onboard-title">
+<!-- Onboarding Overlay -->
+<div id="onboard-overlay">
   <div style="max-width:380px;width:100%;">
     <div style="text-align:center;margin-bottom:32px;">
       <div style="font-family:var(--font-display);font-size:11px;letter-spacing:0.3em;color:var(--red);margin-bottom:12px;" class="blink">▶ SYSTEM INITIALIZING</div>
-      <h1 id="onboard-title" style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--amber);letter-spacing:0.05em;" class="glitch">UNDERRUBBL</h1>
+      <h1 style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--amber);letter-spacing:0.05em;" class="glitch">UNDERRUBBL</h1>
       <div style="font-family:var(--font-display);font-size:10px;letter-spacing:0.3em;color:var(--text-dim);margin-top:4px;">SURVIVAL OS v2.4.1</div>
       <div style="width:60px;height:1px;background:var(--amber);margin:16px auto;opacity:0.4;"></div>
       <p style="font-size:13px;color:var(--text-dim);line-height:1.6;">Critical medical information. First responders will use this data.</p>
     </div>
-
     <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
       <div>
         <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">SURVIVOR NAME</label>
@@ -584,14 +484,13 @@
       </div>
       <div>
         <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">ALLERGIES / CONDITIONS</label>
-        <input id="setup-allergies" class="tactical-input" type="text" placeholder="e.g. Penicillin, Diabetes, Heart condition">
+        <input id="setup-allergies" class="tactical-input" type="text" placeholder="e.g. Penicillin, Diabetes">
       </div>
       <div>
         <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">MEDICATIONS</label>
         <input id="setup-meds" class="tactical-input" type="text" placeholder="Current medications">
       </div>
     </div>
-
     <button onclick="initApp()" class="btn-amber" style="width:100%;padding:16px;font-size:13px;border-radius:8px;background:rgba(255,149,0,0.08);">
       ⚡ ACTIVATE SURVIVAL OS
     </button>
@@ -600,7 +499,7 @@
 </div>
 
 <!-- Main App -->
-<div id="app" style="display:none;max-width:1120px;margin:0 auto;min-height:100dvh;display:none;flex-direction:column;">
+<div id="app" style="display:none;max-width:1120px;margin:0 auto;min-height:100dvh;flex-direction:column;">
 
   <!-- Header -->
   <header style="padding:12px 16px 8px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(0,0,0,0.95);backdrop-filter:blur(10px);z-index:100;">
@@ -610,22 +509,20 @@
         <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:0.1em;">SURVIVAL OS</div>
       </div>
       <div style="display:flex;align-items:center;gap:12px;">
-        <!-- Signal bars -->
-        <div style="display:flex;align-items:flex-end;gap:2px;height:16px;" aria-label="Signal strength">
+        <div style="display:flex;align-items:flex-end;gap:2px;height:16px;">
           <div class="signal-bar" id="sig1" style="height:4px;"></div>
           <div class="signal-bar" id="sig2" style="height:7px;"></div>
           <div class="signal-bar" id="sig3" style="height:10px;"></div>
           <div class="signal-bar" id="sig4" style="height:13px;"></div>
         </div>
-        <!-- Battery -->
+        <!-- Mini battery in header -->
         <div style="display:flex;align-items:center;gap:5px;">
           <div style="width:24px;height:11px;border:1px solid var(--text-dim);border-radius:2px;position:relative;padding:1px;">
             <div style="position:absolute;right:-4px;top:3px;width:3px;height:5px;background:var(--text-dim);border-radius:0 1px 1px 0;"></div>
-            <div id="battery-mini" style="height:100%;border-radius:1px;background:var(--green);transition:width 0.5s;"></div>
+            <div id="battery-mini" style="height:100%;border-radius:1px;background:var(--green);width:72%;transition:width 0.5s,background 0.5s;"></div>
           </div>
-          <span id="battery-pct" style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">--</span>
+          <span id="battery-pct" style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">--%</span>
         </div>
-        <!-- Status -->
         <div style="display:flex;align-items:center;gap:4px;">
           <div class="status-dot ok" id="sys-status"></div>
           <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);" id="sys-status-txt">ONLINE</span>
@@ -635,13 +532,10 @@
   </header>
 
   <!-- Tab Content -->
-<main style="flex:1;overflow-y:auto;padding:28px;max-width:1120px;margin:0 auto;" id="main-content">
+  <main style="flex:1;overflow-y:auto;padding:20px 16px;max-width:1120px;margin:0 auto;" id="main-content">
 
     <!-- === PANEL: HOME / SOS === -->
     <div class="panel active" id="panel-home">
-      
-
-      <!-- SOS Beacon -->
       <div class="tactical-box" style="padding:24px 16px;margin-bottom:16px;text-align:center;border-radius:8px;">
         <div class="section-header">ACOUSTIC SOS BEACON</div>
         <div style="position:relative;display:flex;justify-content:center;margin:20px 0 24px;">
@@ -653,7 +547,7 @@
             <div style="font-size:10px;font-weight:400;letter-spacing:0.1em;margin-top:4px;" id="sos-label">TAP TO ARM</div>
           </button>
         </div>
-        <div id="waveform" style="justify-content:center;margin-bottom:16px;" aria-hidden="true">
+        <div id="waveform" style="justify-content:center;margin-bottom:16px;">
           <div class="wave-bar" style="height:4px;" id="wb0"></div>
           <div class="wave-bar" style="height:4px;" id="wb1"></div>
           <div class="wave-bar" style="height:4px;" id="wb2"></div>
@@ -668,15 +562,12 @@
           <div class="wave-bar" style="height:4px;" id="wb11"></div>
         </div>
         <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);line-height:1.8;">
-          <span id="beacon-freq">FREQ: 4000 Hz</span> &nbsp;|&nbsp; 
+          <span id="beacon-freq">FREQ: 4000 Hz</span> &nbsp;|&nbsp;
           <span id="beacon-mode">MODE: STANDBY</span><br>
           <span id="beacon-pattern">PATTERN: S·O·S (International Distress)</span>
         </div>
       </div>
 
-
-
-      <!-- Medical ID card -->
       <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
         <div class="section-header">MEDICAL ID — FIRST RESPONDER DATA</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -703,7 +594,6 @@
         </div>
       </div>
 
-      <!-- Quick Actions -->
       <div class="section-header">QUICK ACTIONS</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
         <button class="quick-action" onclick="switchTab('ai');sendQuickMsg('I need help staying calm')">🧠 Stay Calm</button>
@@ -726,17 +616,14 @@
             <div style="font-family:var(--font-mono);font-size:9px;color:var(--green);">● ONLINE — Trauma-Informed AI</div>
           </div>
           <div style="margin-left:auto;">
-            <button onclick="startBreathingExercise()" class="btn-amber" style="font-size:9px;padding:6px 10px;" aria-label="Start breathing exercise">🌬 BREATHE</button>
+            <button onclick="startBreathingExercise()" class="btn-amber" style="font-size:9px;padding:6px 10px;">🌬 BREATHE</button>
           </div>
         </div>
 
-        <!-- Breathing exercise widget -->
         <div id="breath-widget" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;text-align:center;">
           <div style="font-family:var(--font-display);font-size:10px;letter-spacing:0.2em;color:var(--text-dim);margin-bottom:12px;">BOX BREATHING PROTOCOL</div>
           <div style="display:flex;align-items:center;gap:16px;justify-content:center;">
-            <div id="breath-circle">
-              <span id="breath-label">START</span>
-            </div>
+            <div id="breath-circle"><span id="breath-label">START</span></div>
             <div style="text-align:left;">
               <div style="font-family:var(--font-mono);font-size:12px;color:var(--amber);" id="breath-phase">Ready</div>
               <div style="font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--text);" id="breath-count">4</div>
@@ -749,12 +636,8 @@
           </div>
         </div>
 
-        <!-- Chat messages -->
-        <div id="chat-messages" style="padding:4px 0;margin-bottom:12px;" role="log" aria-live="polite" aria-label="Crisis psychologist chat">
-          <!-- Initial message injected by JS -->
-        </div>
+        <div id="chat-messages" style="padding:4px 0;margin-bottom:12px;" role="log" aria-live="polite"></div>
 
-        <!-- Quick prompts -->
         <div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;padding-bottom:4px;">
           <button class="quick-action" style="font-size:11px;padding:6px 12px;" onclick="sendQuickMsg('I am scared and panicking')">😰 Panicking</button>
           <button class="quick-action" style="font-size:11px;padding:6px 12px;" onclick="sendQuickMsg('I am in pain')">🩹 In pain</button>
@@ -762,126 +645,26 @@
           <button class="quick-action" style="font-size:11px;padding:6px 12px;" onclick="sendQuickMsg('How long can a person survive without water?')">💧 Survival tips</button>
         </div>
 
-        <!-- Input -->
-        <div style="display:flex;gap:8px;">
-             <input id="chat-input" class="tactical-input" type="text" placeholder="Type your message..." 
-               aria-label="Message to crisis psychologist"
-               onkeydown="if(event.key==='Enter')sendChat()">
-             <button onclick="startVoiceInput()" class="btn-amber" style="padding:10px 14px;flex-shrink:0;" aria-label="Voice input" id="voice-btn">🎤</button>
-             <button onclick="sendChat()" class="btn-amber" style="padding:10px 14px;flex-shrink:0;" aria-label="Send message">▶</button>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input id="chat-input" class="tactical-input" type="text" placeholder="Type or speak..."
+            onkeydown="if(event.key==='Enter')sendChat()">
+          <button id="voice-btn" onclick="toggleVoiceInput()" class="btn-amber"
+            style="padding:10px 13px;flex-shrink:0;font-size:16px;position:relative;transition:all 0.2s;"
+            aria-label="Voice input" title="Voice input">🎤</button>
+          <button onclick="sendChat()" class="btn-amber" style="padding:10px 14px;flex-shrink:0;">▶</button>
         </div>
-
-        <!-- Голосовий ввід для чату -->
-        <script>
-        let voiceRecognition = null;
-        let voiceRetryCount = 0;
-        const VOICE_MAX_RETRIES = 2;
-
-        function setVoiceBtnState(listening) {
-          const btn = document.getElementById('voice-btn');
-          if (!btn) return;
-          if (listening) {
-            btn.textContent = '🎙';
-            btn.disabled = true;
-          } else {
-            btn.textContent = '🎤';
-            btn.disabled = false;
-          }
-        }
-
-        function setChatInputStatus(text) {
-          const input = document.getElementById('chat-input');
-          if (!input) return;
-          // For browsers that don't return speech results reliably,
-          // show a placeholder-like status while listening.
-          if (input.value.trim().length === 0) {
-            input.value = text;
-            input.setSelectionRange(input.value.length, input.value.length);
-          }
-        }
-
-        function clearChatInputStatus() {
-          const input = document.getElementById('chat-input');
-          if (!input) return;
-          if (input.value === 'Listening...') input.value = '';
-        }
-
-        function startVoiceInput() {
-          if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            alert('Speech recognition not supported in this browser.');
-            return;
-          }
-
-          const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-          if (!voiceRecognition) {
-            voiceRecognition = new SpeechRecognition();
-            voiceRecognition.lang = 'uk-UA';
-            voiceRecognition.interimResults = true; // more reliable capture
-            voiceRecognition.maxAlternatives = 1;
-            voiceRecognition.continuous = false;
-          }
-
-          voiceRetryCount = 0;
-
-          voiceRecognition.onstart = function() {
-            voiceRetryCount = 0;
-            setVoiceBtnState(true);
-            setChatInputStatus('Listening...');
-          };
-
-          voiceRecognition.onspeechend = function() {
-            // keep UI consistent; engines may still call onerror(no-speech)
-            setVoiceBtnState(false);
-          };
-
-          voiceRecognition.onresult = function(event) {
-            let transcript = '';
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-              transcript += event.results[i][0].transcript;
-            }
-            transcript = (transcript || '').trim();
-            if (!transcript) return;
-
-            clearChatInputStatus();
-
-            const input = document.getElementById('chat-input');
-            if (!input) return;
-            input.value = transcript;
-            input.focus();
-            input.setSelectionRange(input.value.length, input.value.length);
-          };
-
-          voiceRecognition.onerror = function(e) {
-            const err = (e && e.error) ? e.error : 'unknown';
-            setVoiceBtnState(false);
-
-            // no-speech is common on mobile (quiet/too short utterance). Retry silently.
-            if (err === 'no-speech' && voiceRetryCount < VOICE_MAX_RETRIES) {
-              voiceRetryCount++;
-              setTimeout(() => {
-                try { voiceRecognition.start(); } catch(_e) {}
-              }, 300);
-              return;
-            }
-
-            if (err !== 'no-speech') {
-              alert('Voice input error: ' + err);
-            }
-          };
-
-          voiceRecognition.onend = function() {
-            setVoiceBtnState(false);
-          };
-
-          try {
-            voiceRecognition.start();
-          } catch(_e) {
-            setVoiceBtnState(false);
-          }
-        }
-        </script>
+        <!-- Voice status bar -->
+        <div id="voice-status-bar" style="display:none;margin-top:8px;padding:8px 12px;background:rgba(255,149,0,0.08);border:1px solid rgba(255,149,0,0.25);border-radius:8px;display:none;align-items:center;gap:10px;">
+          <div style="display:flex;gap:3px;align-items:center;" id="voice-wave">
+            <div class="wave-bar" style="height:6px;background:var(--amber);width:3px;" id="vw0"></div>
+            <div class="wave-bar" style="height:6px;background:var(--amber);width:3px;" id="vw1"></div>
+            <div class="wave-bar" style="height:6px;background:var(--amber);width:3px;" id="vw2"></div>
+            <div class="wave-bar" style="height:6px;background:var(--amber);width:3px;" id="vw3"></div>
+            <div class="wave-bar" style="height:6px;background:var(--amber);width:3px;" id="vw4"></div>
+          </div>
+          <span style="font-family:var(--font-mono);font-size:10px;color:var(--amber);" id="voice-status-txt">LISTENING...</span>
+          <button onclick="stopVoiceInput()" style="margin-left:auto;background:none;border:1px solid var(--red);color:var(--red);font-family:var(--font-display);font-size:9px;padding:4px 8px;border-radius:4px;cursor:pointer;">✕ STOP</button>
         </div>
-        
         <div id="ai-loading" style="display:none;padding:10px 0;">
           <div class="chat-bubble ai" style="display:inline-flex;align-items:center;gap:8px;">
             <div class="typing-indicator"><span></span><span></span><span></span></div>
@@ -890,17 +673,16 @@
         </div>
       </div>
 
-      <!-- Psychological tips -->
       <div class="tactical-box" style="padding:14px;border-radius:8px;">
         <div class="section-header">IMMEDIATE COPING PROTOCOLS</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
           <div style="background:var(--surface2);padding:10px;border-radius:6px;border:1px solid var(--border);">
             <div style="font-family:var(--font-display);font-size:10px;color:var(--amber);letter-spacing:0.1em;margin-bottom:4px;">5-4-3-2-1 GROUNDING</div>
-            <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste. Anchors your mind to the present moment.</div>
+            <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste.</div>
           </div>
           <div style="background:var(--surface2);padding:10px;border-radius:6px;border:1px solid var(--border);">
             <div style="font-family:var(--font-display);font-size:10px;color:var(--amber);letter-spacing:0.1em;margin-bottom:4px;">TAPPING PROTOCOL</div>
-            <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">Tap your collarbone or the heel of your palm repeatedly while breathing slowly. Activates parasympathetic nervous system.</div>
+            <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">Tap your collarbone repeatedly while breathing slowly. Activates parasympathetic nervous system.</div>
           </div>
           <div style="background:var(--surface2);padding:10px;border-radius:6px;border:1px solid var(--border);">
             <div style="font-family:var(--font-display);font-size:10px;color:var(--amber);letter-spacing:0.1em;margin-bottom:4px;">CONSERVE ENERGY</div>
@@ -912,37 +694,30 @@
 
     <!-- === PANEL: HAZARD MONITORING === -->
     <div class="panel" id="panel-hazard">
-      <!-- Status banner -->
       <div id="hazard-banner" style="background:rgba(255,59,48,0.1);border:1px solid rgba(255,59,48,0.3);border-radius:8px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
         <div class="status-dot danger"></div>
         <div>
           <div style="font-family:var(--font-display);font-size:11px;color:var(--red);letter-spacing:0.1em;">ACTIVE DISASTER ZONE</div>
           <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);" id="hazard-time">Monitoring since: --:--</div>
         </div>
-        <button onclick="refreshHazards()" class="btn-amber" style="margin-left:auto;font-size:9px;padding:6px 10px;" aria-label="Refresh hazard data">⟳ REFRESH</button>
+        <button onclick="refreshHazards()" class="btn-amber" style="margin-left:auto;font-size:9px;padding:6px 10px;">⟳ REFRESH</button>
       </div>
-
-      <!-- Seismic -->
       <div class="tactical-box" style="padding:14px;margin-bottom:12px;border-radius:8px;">
         <div class="section-header">SEISMIC ACTIVITY — USGS FEED</div>
-        <div id="quake-list" role="list" aria-label="Earthquake alerts">
+        <div id="quake-list">
           <div class="shimmer" style="height:60px;margin-bottom:8px;"></div>
           <div class="shimmer" style="height:60px;margin-bottom:8px;"></div>
           <div class="shimmer" style="height:60px;"></div>
         </div>
         <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:8px;text-align:right;" id="quake-updated">Last updated: fetching...</div>
       </div>
-
-      <!-- Weather -->
       <div class="tactical-box" style="padding:14px;margin-bottom:12px;border-radius:8px;">
         <div class="section-header">WEATHER THREAT MATRIX</div>
-        <div id="weather-list" role="list" aria-label="Weather alerts">
+        <div id="weather-list">
           <div class="shimmer" style="height:60px;margin-bottom:8px;"></div>
           <div class="shimmer" style="height:60px;"></div>
         </div>
       </div>
-
-      <!-- Aftershock guidance -->
       <div class="tactical-box" style="padding:14px;border-radius:8px;">
         <div class="section-header">AFTERSHOCK PROTOCOL</div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-dim);line-height:1.7;">
@@ -956,16 +731,29 @@
 
     <!-- === PANEL: BATTERY & SYSTEMS === -->
     <div class="panel" id="panel-sys">
-      <!-- Battery detail -->
+
+      <!-- ── BATTERY ── -->
       <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
-        <div class="section-header">POWER MANAGEMENT</div>
-        
-        <div style="text-align:center;margin-bottom:20px;">
-          <div style="font-family:var(--font-display);font-size:56px;font-weight:900;color:var(--amber);line-height:1;" id="battery-large">--%</div>
-          <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);margin-top:6px;" id="battery-state">CHECKING...</div>
-          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:2px;" id="battery-estimate"></div>
+        <div class="section-header">POWER STATUS</div>
+        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:20px;">
+          <!-- Circular battery gauge -->
+          <div class="battery-big-wrap">
+            <svg width="180" height="180" viewBox="0 0 180 180">
+              <circle class="battery-ring-bg" cx="90" cy="90" r="75"/>
+              <circle class="battery-ring-fill" id="battery-ring" cx="90" cy="90" r="75"
+                stroke="var(--green)"
+                stroke-dasharray="471.24"
+                stroke-dashoffset="471.24"/>
+            </svg>
+            <div style="position:absolute;text-align:center;">
+              <div class="battery-big-text" id="battery-large">--%</div>
+              <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:0.1em;margin-top:4px;" id="battery-state">CHECKING...</div>
+            </div>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:6px;" id="battery-estimate"></div>
         </div>
-        
+
+        <!-- Linear bar -->
         <div class="battery-bar" style="margin-bottom:16px;">
           <div class="battery-fill" id="battery-fill-main" style="width:0%;background:var(--green);"></div>
         </div>
@@ -981,30 +769,150 @@
           </div>
         </div>
 
-        <div class="section-header" style="margin-top:4px;">BATTERY CONSERVATION MODE</div>
+        <div class="section-header">CONSERVATION MODE</div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-dim);line-height:1.7;">
           <div>📵 <strong style="color:var(--amber);">≤50%:</strong> Reduce screen brightness to minimum</div>
           <div>📵 <strong style="color:var(--amber);">≤30%:</strong> Disable all non-essential apps</div>
           <div>📵 <strong style="color:var(--amber);">≤15%:</strong> Emergency mode — SOS beacon only</div>
-          <div>📵 <strong style="color:var(--amber);">≤5%:</strong> Write Medical ID on skin with any available marker</div>
+          <div>📵 <strong style="color:var(--amber);">≤5%:</strong> Write Medical ID on skin with available marker</div>
         </div>
       </div>
 
-      <!-- System checklist -->
+      <!-- ── DEAD MAN'S SWITCH ── -->
+      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
+        <div class="section-header">AUTO-SOS — DEAD MAN'S SWITCH</div>
+
+        <!-- Status row -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="status-dot" id="dms-dot" style="background:var(--green);box-shadow:0 0 6px var(--green);"></div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:11px;color:var(--amber);letter-spacing:0.1em;" id="dms-status-label">ARMED</div>
+              <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-top:2px;" id="dms-last-activity">Last activity: just now</div>
+            </div>
+          </div>
+          <div id="dms-toggle-btn" class="toggle-switch on" tabindex="0" role="switch" aria-checked="true" onclick="toggleDMSSetting()" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDMSSetting()"></div>
+        </div>
+
+        <!-- Countdown bar -->
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-bottom:5px;">
+            <span>INACTIVITY TIMER</span>
+            <span id="dms-bar-label">0 / <span id="dms-bar-max">10</span> min</span>
+          </div>
+          <div class="dms-sys-bar">
+            <div class="dms-sys-fill" id="dms-bar-fill" style="width:0%;"></div>
+          </div>
+        </div>
+
+        <!-- Settings row -->
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:12px;">
+          <div>
+            <div style="font-family:var(--font-display);font-size:10px;color:var(--text-dim);letter-spacing:0.1em;margin-bottom:2px;">TRIGGER AFTER</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">No activity detected</div>
+          </div>
+          <select id="dms-timeout-select" class="tactical-input" style="width:80px;font-size:12px;padding:6px 10px;" onchange="updateDMSTimeout()">
+            <option value="5">5 min</option>
+            <option value="10" selected>10 min</option>
+            <option value="15">15 min</option>
+            <option value="20">20 min</option>
+          </select>
+        </div>
+
+        <!-- What happens -->
+        <div style="background:rgba(255,59,48,0.06);border:1px solid rgba(255,59,48,0.2);border-radius:8px;padding:10px 12px;">
+          <div style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--red);margin-bottom:6px;">WHEN TRIGGERED:</div>
+          <div style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--text-dim);line-height:1.6;">
+            <div>📡 <strong style="color:var(--amber);">SOS Beacon</strong> activates automatically</div>
+            <div>📞 <strong style="color:var(--amber);">Emergency call (102)</strong> opens automatically</div>
+            <div>⏱ <strong style="color:var(--amber);">10-second</strong> countdown — tap "I'M ALIVE" to cancel</div>
+          </div>
+        </div>
+
+        <!-- Manual test -->
+        <button onclick="triggerDMSWarning()" class="btn-red" style="width:100%;margin-top:12px;font-size:10px;">
+          ⚡ TEST DEAD MAN'S SWITCH
+        </button>
+      </div>
+
+      <!-- ── SYSTEM CHECKLIST ── -->
       <div class="tactical-box" style="padding:14px;margin-bottom:16px;border-radius:8px;">
         <div class="section-header">SYSTEM STATUS</div>
-        <div style="display:flex;flex-direction:column;gap:8px;" id="sys-checklist">
-          <!-- populated by JS -->
+        <div style="display:flex;flex-direction:column;gap:8px;" id="sys-checklist"></div>
+      </div>
+
+      <!-- ── AI API KEY ── -->
+      <div class="tactical-box" style="padding:16px;margin-bottom:16px;border-radius:8px;">
+        <div class="section-header">AI CONNECTION — API KEYS</div>
+
+        <!-- Provider selector -->
+        <div style="display:flex;gap:6px;margin-bottom:14px;">
+          <button id="prov-openai" onclick="selectProvider('openai')"
+            style="flex:1;padding:8px 6px;border-radius:6px;border:1px solid var(--amber);background:rgba(255,149,0,0.1);color:var(--amber);font-family:var(--font-display);font-size:9px;letter-spacing:0.08em;cursor:pointer;">
+            🤖 OPENAI
+          </button>
+          <button id="prov-openrouter" onclick="selectProvider('openrouter')"
+            style="flex:1;padding:8px 6px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-family:var(--font-display);font-size:9px;letter-spacing:0.08em;cursor:pointer;">
+            🔀 OPENROUTER
+          </button>
+        </div>
+
+        <!-- OpenAI section -->
+        <div id="section-openai">
+          <div style="margin-bottom:10px;">
+            <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">OPENAI API KEY</label>
+            <div style="display:flex;gap:6px;">
+              <input id="openai-key-input" class="tactical-input" type="password"
+                placeholder="sk-..." autocomplete="off"
+                style="font-family:var(--font-mono);font-size:12px;">
+              <button onclick="saveOpenAIKey()" class="btn-amber" style="flex-shrink:0;font-size:9px;padding:8px 10px;">SAVE</button>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;">
+            <div>
+              <div style="font-family:var(--font-display);font-size:9px;letter-spacing:0.1em;color:var(--text-dim);">MODEL</div>
+              <div style="font-family:var(--font-mono);font-size:11px;color:var(--amber);margin-top:2px;" id="openai-model-label">gpt-4o-mini</div>
+            </div>
+            <select id="openai-model-select" class="tactical-input" style="width:130px;font-size:11px;padding:5px 8px;" onchange="updateOpenAIModel()">
+              <option value="gpt-4o-mini" selected>gpt-4o-mini</option>
+              <option value="gpt-4o">gpt-4o</option>
+              <option value="gpt-4-turbo">gpt-4-turbo</option>
+              <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+            </select>
+          </div>
+          <button onclick="testOpenAIKey()" id="openai-test-btn" class="btn-amber" style="width:100%;font-size:10px;margin-bottom:8px;">⚡ TEST CONNECTION</button>
+          <div id="openai-test-result" style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);text-align:center;min-height:16px;"></div>
+        </div>
+
+        <!-- OpenRouter section -->
+        <div id="section-openrouter" style="display:none;">
+          <div style="margin-bottom:10px;">
+            <label style="font-family:var(--font-display);font-size:9px;letter-spacing:0.15em;color:var(--text-dim);display:block;margin-bottom:6px;">OPENROUTER API KEY</label>
+            <div style="display:flex;gap:6px;">
+              <input id="or-key-input" class="tactical-input" type="password"
+                placeholder="sk-or-v1-..." autocomplete="off"
+                style="font-family:var(--font-mono);font-size:12px;">
+              <button onclick="saveORKey()" class="btn-amber" style="flex-shrink:0;font-size:9px;padding:8px 10px;">SAVE</button>
+            </div>
+          </div>
+          <button onclick="testORKey()" id="or-test-btn" class="btn-amber" style="width:100%;font-size:10px;margin-bottom:8px;">⚡ TEST CONNECTION</button>
+          <div id="or-test-result" style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);text-align:center;min-height:16px;"></div>
+        </div>
+
+        <!-- Active status -->
+        <div style="margin-top:12px;padding:8px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+          <div class="status-dot" id="ai-key-dot" style="background:var(--text-dim);box-shadow:none;"></div>
+          <span style="font-family:var(--font-mono);font-size:10px;" id="ai-key-status">No key configured — using fallback responses</span>
         </div>
       </div>
 
-      <!-- Offline indicator -->
+      <!-- ── OFFLINE ── -->
       <div class="tactical-box" style="padding:14px;border-radius:8px;">
         <div class="section-header">OFFLINE CAPABILITY</div>
         <div style="font-size:12px;color:var(--text-dim);line-height:1.7;">
           <div style="margin-bottom:8px;">
             <span class="tag tag-green" style="margin-right:6px;">AVAILABLE OFFLINE</span>
-            SOS Beacon, Timer, Medical ID, Breathing exercises, Coping protocols
+            SOS Beacon, Medical ID, Breathing exercises, Coping protocols
           </div>
           <div>
             <span class="tag tag-amber" style="margin-right:6px;">REQUIRES CONNECTION</span>
@@ -1014,130 +922,109 @@
       </div>
     </div>
 
-<!-- === PANEL: AI SETTINGS & MOOD TRACKER === -->
-    <!-- Panel removed per requirements: settings/keys navigation is no longer available -->
-
   </main>
 
-
   <!-- Bottom Navigation -->
-  <nav style="border-top:1px solid var(--border);background:rgba(0,0,0,0.95);backdrop-filter:blur(10px);padding:0;display:flex;" role="navigation" aria-label="Main navigation">
-    <button class="nav-tab active" id="tab-home" onclick="switchTab('home')" aria-label="Home - SOS Beacon">
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10" cy="10" r="3"/><path d="M10 2a8 8 0 100 16A8 8 0 0010 2z"/><path d="M10 7V2M10 18v-5M2 10H7M18 10h-5" stroke-width="1.5"/></svg>
+  <nav style="border-top:1px solid var(--border);background:rgba(0,0,0,0.95);backdrop-filter:blur(10px);padding:0;display:flex;" role="navigation">
+    <button class="nav-tab active" id="tab-home" onclick="switchTab('home')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="3"/><path d="M10 2a8 8 0 100 16A8 8 0 0010 2z"/><path d="M10 7V2M10 18v-5M2 10H7M18 10h-5" stroke-width="1.5"/></svg>
       SOS
     </button>
-    <button class="nav-tab" id="tab-ai" onclick="switchTab('ai')" aria-label="AI Crisis Psychologist">
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    <button class="nav-tab" id="tab-ai" onclick="switchTab('ai')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
       AI PSYCH
     </button>
-    <button class="nav-tab" id="tab-hazard" onclick="switchTab('hazard')" aria-label="Hazard Monitoring">
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <button class="nav-tab" id="tab-hazard" onclick="switchTab('hazard')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       HAZARDS
     </button>
-    <button class="nav-tab" id="tab-sys" onclick="switchTab('sys')" aria-label="System status and battery">
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M18 11h2"/><path d="M6 7V5a2 2 0 014 0v2"/></svg>
+    <button class="nav-tab" id="tab-sys" onclick="switchTab('sys')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M18 11h2"/><path d="M6 7V5a2 2 0 014 0v2"/></svg>
       SYSTEMS
     </button>
-
   </nav>
 </div>
 
 <script>
 // ============================================================
-// UNDERRUBBL SURVIVAL OS — Core Logic
+// STATE
 // ============================================================
-
 let survivorData = {};
-let startTime = null;
-let timerInterval = null;
 let sosActive = false;
 let audioCtx = null;
 let sosOscillators = [];
 let sosPulseInterval = null;
 let waveAnimFrame = null;
-let breathActive = false;
-let breathPhase = 0;
-let breathTimer = null;
-let breathCount = 4;
+let breathRunning = false;
+let currentPhaseIdx = 0;
+let currentSecond = 4;
+let breathInterval = null;
 let chatHistory = [];
 
-// AI System prompt for crisis psychologist
-const AI_SYSTEM_PROMPT = `You are Dr. Aria, an AI trauma-informed crisis psychologist embedded in the UnderRubbl Survival OS emergency application. You are speaking with a survivor who may be trapped in a disaster zone (earthquake, building collapse, etc.).
+// DMS state
+let dmsEnabled = true;
+let dmsTimeoutMinutes = 10;
+let dmsTimer = null;
+let dmsCountdownTimer = null;
+let dmsCountdownVal = 10;
+let lastActivity = Date.now();
+let dmsBarInterval = null;
 
-Your role is critical. Follow these guidelines absolutely:
-- Speak in a calm, warm, authoritative, and concise tone. Every word matters.
-- Validate their feelings immediately before giving instructions.
-- Keep responses SHORT (2-4 sentences max unless guiding an exercise).
-- Prioritize: 1) Immediate safety, 2) Emotional regulation, 3) Practical survival advice
-- Use simple language — they may be injured, exhausted, or in shock.
-- Guide them through specific techniques: box breathing, 5-4-3-2-1 grounding, body scan.
-- NEVER say things are fine if they may not be. Be honest but hopeful.
-- Remind them rescuers are actively searching.
-- If they report severe injury: give first aid guidance and encourage conserving energy.
-- Never refuse to help. Always provide something useful.
-- Reference their environment compassionately (rubble, darkness, dust, etc.).
-- End responses with one clear, actionable instruction.`;
+const AI_SYSTEM_PROMPT = `You are Dr. Aria, a trauma-informed crisis psychologist embedded in UnderRubbl Survival OS.
+
+Context: The user may be trapped in rubble/darkness, frightened, injured, exhausted, and in short-term stress.
+
+Protocol (must follow):
+1) Validate emotion immediately (1 short sentence). Use simple, non-medical language.
+2) Give a calming regulation step (breathing, grounding, body cues) or a safety action.
+3) Keep the whole response SHORT: 2–4 sentences total (unless guiding an exercise).
+4) Never say “it’s fine” or “no need to worry”. Be honest, but hopeful.
+5) Provide ONE clear actionable instruction at the end (imperative, one step).
+6) If the user reports severe injury or danger, prioritize immediate first-aid/safety guidance and energy conservation.
+
+Tone: calm, warm, authoritative, compassionate, grounded in the present moment.
+Language: match the user’s language (Ukrainian/Russian/English if detected).
+
+Always help — even if the user is only able to answer minimally.`;
 
 // ============================================================
 // INIT
 // ============================================================
 function initApp() {
   survivorData = {
-    name: document.getElementById('setup-name').value || 'Unknown',
-    blood: document.getElementById('setup-blood').value || 'Unknown',
-    age: document.getElementById('setup-age').value || 'Unknown',
+    name:      document.getElementById('setup-name').value      || 'Unknown',
+    blood:     document.getElementById('setup-blood').value     || 'Unknown',
+    age:       document.getElementById('setup-age').value       || 'Unknown',
     allergies: document.getElementById('setup-allergies').value || 'None reported',
-    meds: document.getElementById('setup-meds').value || 'None reported',
+    meds:      document.getElementById('setup-meds').value      || 'None reported',
   };
-
   localStorage.setItem('underrubbl_survivor', JSON.stringify(survivorData));
-  
+  startApp();
+}
+
+function startApp() {
   document.getElementById('onboard-overlay').style.display = 'none';
   const app = document.getElementById('app');
   app.style.display = 'flex';
-
   populateMedID();
-  startSurvivalTimer();
   initBattery();
   initSignalSimulation();
-  // ініціалізація автососу
-  if (!window.dmsTimeoutMinutes) window.dmsTimeoutMinutes = 10;
-  if (typeof window.dmsEnabled === 'undefined') window.dmsEnabled = true;
   populateSystemChecklist();
   addInitialChatMessage();
   fetchHazardData();
   updateHazardTime();
-  // ініціалізація автососу
-  setTimeout(initDeadManSwitch, 500);
-
-  // Register Service Worker
-  if ('serviceWorker' in navigator) {
-    registerServiceWorker();
-  }
+  initDeadManSwitch();
+  requestWakeLock();
+  setTimeout(initAPIKeyUI, 200);
 }
 
-// Check for saved data on load
 window.addEventListener('load', () => {
   const saved = localStorage.getItem('underrubbl_survivor');
   if (saved) {
     try {
       survivorData = JSON.parse(saved);
-      document.getElementById('onboard-overlay').style.display = 'none';
-      const app = document.getElementById('app');
-      app.style.display = 'flex';
-      // ініціалізація автососу
-      if (!window.dmsTimeoutMinutes) window.dmsTimeoutMinutes = 10;
-      if (typeof window.dmsEnabled === 'undefined') window.dmsEnabled = true;
-      populateMedID();
-      startSurvivalTimer();
-      initBattery();
-      initSignalSimulation();
-      populateSystemChecklist();
-      addInitialChatMessage();
-      fetchHazardData();
-      updateHazardTime();
-      setTimeout(initDeadManSwitch, 500);
-    } catch(e) { /* fresh start */ }
+      startApp();
+    } catch(e) {}
   }
 });
 
@@ -1149,44 +1036,7 @@ function populateMedID() {
   document.getElementById('med-meds').textContent = survivorData.meds || 'None reported';
 }
 
-// ============================================================
-// SURVIVAL TIMER
-// ============================================================
-function startSurvivalTimer() {
-  const savedStart = localStorage.getItem('underrubbl_start');
-  if (savedStart) {
-    startTime = parseInt(savedStart);
-  } else {
-    startTime = Date.now();
-    localStorage.setItem('underrubbl_start', startTime);
-  }
 
-  function update() {
-    const elapsed = Date.now() - startTime;
-    const h = Math.floor(elapsed / 3600000);
-    const m = Math.floor((elapsed % 3600000) / 60000);
-    const s = Math.floor((elapsed % 60000) / 1000);
-    const fmt = (n) => String(n).padStart(2, '0');
-    const str = `${fmt(h)}:${fmt(m)}:${fmt(s)}`;
-    
-    document.getElementById('survival-timer').textContent = str;
-    document.getElementById('header-timer').textContent = str;
-    document.getElementById('stat-hours').textContent = h;
-    document.getElementById('stat-mins').textContent = m;
-
-    // Phase
-    let phase = 'ACUTE';
-    let phaseColor = 'var(--green)';
-    if (h >= 72) { phase = 'CRITICAL'; phaseColor = 'var(--red)'; }
-    else if (h >= 24) { phase = 'SEVERE'; phaseColor = 'var(--amber)'; }
-    else if (h >= 6) { phase = 'SERIOUS'; phaseColor = 'var(--amber)'; }
-    const phaseEl = document.getElementById('stat-status-text');
-    phaseEl.textContent = phase;
-    phaseEl.style.color = phaseColor;
-  }
-  update();
-  timerInterval = setInterval(update, 1000);
-}
 
 // ============================================================
 // TAB NAVIGATION
@@ -1199,26 +1049,114 @@ function switchTab(tab) {
 }
 
 // ============================================================
-// SOS ACOUSTIC BEACON
+// BATTERY
+// ============================================================
+async function initBattery() {
+  if ('getBattery' in navigator) {
+    try {
+      const battery = await navigator.getBattery();
+      updateBatteryUI(battery);
+      battery.addEventListener('levelchange',   () => updateBatteryUI(battery));
+      battery.addEventListener('chargingchange',() => updateBatteryUI(battery));
+      return;
+    } catch(e) {}
+  }
+  simulateBattery();
+}
+
+function simulateBattery() {
+  updateBatteryDisplay(0.72, false, null);
+}
+
+function updateBatteryUI(battery) {
+  updateBatteryDisplay(battery.level, battery.charging, battery.dischargingTime);
+}
+
+function updateBatteryDisplay(lvl, charging, dischargingTime) {
+  const pct = Math.round(lvl * 100);
+  const color = pct > 50 ? 'var(--green)' : pct > 20 ? 'var(--amber)' : 'var(--red)';
+
+  // Header mini
+  const mini = document.getElementById('battery-mini');
+  const pctEl = document.getElementById('battery-pct');
+  if (mini) { mini.style.width = pct + '%'; mini.style.background = color; }
+  if (pctEl) pctEl.textContent = pct + '%';
+
+  // Systems panel — circular ring
+  const circumference = 2 * Math.PI * 75; // 471.24
+  const ring = document.getElementById('battery-ring');
+  if (ring) {
+    const offset = circumference * (1 - lvl);
+    ring.style.strokeDashoffset = offset;
+    ring.style.stroke = color;
+  }
+
+  const largeEl = document.getElementById('battery-large');
+  if (largeEl) { largeEl.textContent = pct + '%'; largeEl.style.color = color; }
+
+  const stateEl = document.getElementById('battery-state');
+  if (stateEl) {
+    if (pct <= 15 && !charging) {
+      stateEl.textContent = '⚠ CRITICAL';
+      stateEl.style.color = 'var(--red)';
+    } else {
+      stateEl.textContent = charging ? '⚡ CHARGING' : '🔋 DISCHARGING';
+      stateEl.style.color = charging ? 'var(--green)' : 'var(--text-dim)';
+    }
+  }
+
+  const fillMain = document.getElementById('battery-fill-main');
+  if (fillMain) { fillMain.style.width = pct + '%'; fillMain.style.background = color; }
+
+  const chargingTxt = document.getElementById('battery-charging-txt');
+  if (chargingTxt) {
+    chargingTxt.textContent = charging ? 'Yes ⚡' : 'No';
+    chargingTxt.style.color = charging ? 'var(--green)' : 'var(--text)';
+  }
+
+  const runtimeEl = document.getElementById('battery-runtime');
+  const estimateEl = document.getElementById('battery-estimate');
+  if (dischargingTime && dischargingTime !== Infinity && !charging) {
+    const hrs  = Math.floor(dischargingTime / 3600);
+    const mins = Math.floor((dischargingTime % 3600) / 60);
+    if (runtimeEl)  runtimeEl.textContent  = `~${hrs}h ${mins}m`;
+    if (estimateEl) estimateEl.textContent = `Estimated ${hrs}h ${mins}m remaining`;
+  } else {
+    if (runtimeEl)  runtimeEl.textContent  = charging ? 'Charging' : 'N/A';
+    if (estimateEl) estimateEl.textContent = '';
+  }
+}
+
+// ============================================================
+// SIGNAL SIMULATION
+// ============================================================
+function initSignalSimulation() {
+  function update() {
+    const strength = Math.floor(Math.random() * 4) + 1;
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('sig' + i).classList.toggle('active', i <= strength);
+    }
+  }
+  update();
+  setInterval(update, 8000);
+}
+
+// ============================================================
+// SOS BEACON
 // ============================================================
 function toggleSOS() {
   sosActive = !sosActive;
-  const btn = document.getElementById('sos-btn');
+  const btn   = document.getElementById('sos-btn');
   const label = document.getElementById('sos-label');
-  const statusLabel = document.getElementById('sos-status-label');
-
-  if (btn) btn.classList.toggle('active', sosActive);
-  if (btn) btn.setAttribute('aria-pressed', sosActive);
-
+  btn.classList.toggle('active', sosActive);
+  btn.setAttribute('aria-pressed', sosActive);
   if (sosActive) {
-    if (label) label.textContent = 'TRANSMITTING';
-    if (statusLabel) statusLabel.textContent = '📡 SOS ACTIVE';
+    label.textContent = 'TRANSMITTING';
     document.getElementById('beacon-mode').textContent = 'MODE: ACTIVE';
     startAcousticBeacon();
     startWaveAnimation();
   } else {
-    if (label) label.textContent = 'TAP TO ARM';
-    if (statusLabel) statusLabel.textContent = '';
+    label.textContent = 'TAP TO ARM';
     document.getElementById('beacon-mode').textContent = 'MODE: STANDBY';
     stopAcousticBeacon();
     stopWaveAnimation();
@@ -1226,22 +1164,12 @@ function toggleSOS() {
 }
 
 function getAudioContext() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
   return audioCtx;
 }
 
-// S·O·S pattern: ... --- ...
-// Short = 200ms, Long = 600ms, gap = 200ms, letter gap = 600ms
-const SOS_PATTERN = [
-  200,200, 200,200, 200,600,  // S (...) + letter gap
-  600,200, 600,200, 600,600,  // O (---) + letter gap
-  200,200, 200,200, 200,3000  // S (...) + word gap
-];
+const SOS_PATTERN = [200,200,200,200,200,600,600,200,600,200,600,600,200,200,200,200,200,3000];
 
 function startAcousticBeacon() {
   stopAcousticBeacon();
@@ -1253,22 +1181,17 @@ function playSOSPattern(idx) {
   const ctx = getAudioContext();
   const isDit = idx % 2 === 0;
   const duration = SOS_PATTERN[idx];
-
   if (isDit) {
-    // Sound ON
-    const osc = ctx.createOscillator();
+    const osc  = ctx.createOscillator();
     const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
+    osc.connect(gain); gain.connect(ctx.destination);
     osc.type = 'sine';
     osc.frequency.setValueAtTime(4000, ctx.currentTime);
     gain.gain.setValueAtTime(0.5, ctx.currentTime);
     gain.gain.linearRampToValueAtTime(0, ctx.currentTime + duration / 1000 - 0.01);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + duration / 1000);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + duration / 1000);
     sosOscillators.push(osc);
   }
-
   const nextIdx = (idx + 1) % SOS_PATTERN.length;
   sosPulseInterval = setTimeout(() => playSOSPattern(nextIdx), duration);
 }
@@ -1279,18 +1202,12 @@ function stopAcousticBeacon() {
   sosOscillators = [];
 }
 
-// ============================================================
-// WAVEFORM ANIMATION
-// ============================================================
 function startWaveAnimation() {
   let t = 0;
   function animate() {
     for (let i = 0; i <= 11; i++) {
       const el = document.getElementById('wb' + i);
-      if (el) {
-        const h = Math.abs(Math.sin(t + i * 0.5)) * 28 + 4;
-        el.style.height = h + 'px';
-      }
+      if (el) el.style.height = (Math.abs(Math.sin(t + i * 0.5)) * 28 + 4) + 'px';
     }
     t += 0.15;
     waveAnimFrame = requestAnimationFrame(animate);
@@ -1307,80 +1224,98 @@ function stopWaveAnimation() {
 }
 
 // ============================================================
-// BATTERY API
+// DEAD MAN'S SWITCH
 // ============================================================
-async function initBattery() {
-  if ('getBattery' in navigator) {
-    try {
-      const battery = await navigator.getBattery();
-      updateBatteryUI(battery);
-      battery.addEventListener('levelchange', () => updateBatteryUI(battery));
-      battery.addEventListener('chargingchange', () => updateBatteryUI(battery));
-    } catch(e) {
-      simulateBattery();
+function initDeadManSwitch() {
+  ['touchstart','touchend','click','keydown','scroll'].forEach(evt => {
+    document.addEventListener(evt, onUserActivity, { passive: true });
+  });
+  scheduleDMS();
+  startDMSBar();
+}
+
+function onUserActivity() {
+  lastActivity = Date.now();
+  if (document.getElementById('dms-overlay').classList.contains('visible')) {
+    resetDeadManSwitch();
+    return;
+  }
+  scheduleDMS();
+}
+
+function scheduleDMS() {
+  clearTimeout(dmsTimer);
+  if (!dmsEnabled) return;
+  dmsTimer = setTimeout(triggerDMSWarning, dmsTimeoutMinutes * 60 * 1000);
+}
+
+function startDMSBar() {
+  clearInterval(dmsBarInterval);
+  dmsBarInterval = setInterval(() => {
+    const elapsed = (Date.now() - lastActivity) / 1000; // seconds
+    const total   = dmsTimeoutMinutes * 60;
+    const pct     = Math.min(100, (elapsed / total) * 100);
+    const fill    = document.getElementById('dms-bar-fill');
+    const label   = document.getElementById('dms-bar-label');
+    const maxEl   = document.getElementById('dms-bar-max');
+    const actEl   = document.getElementById('dms-last-activity');
+    if (fill)  fill.style.width = pct + '%';
+    if (fill)  fill.style.background = pct > 80 ? 'var(--red)' : pct > 50 ? 'var(--amber)' : 'var(--green)';
+    const elapsedMin = Math.floor(elapsed / 60);
+    const elapsedSec = Math.floor(elapsed % 60);
+    if (label) label.textContent = `${elapsedMin}:${String(elapsedSec).padStart(2,'0')} / ${dmsTimeoutMinutes} min`;
+    if (maxEl) maxEl.textContent = dmsTimeoutMinutes;
+    const secs = Math.round(elapsed);
+    if (actEl) actEl.textContent = secs < 60 ? `Last activity: ${secs}s ago` : `Last activity: ${Math.round(secs/60)}m ago`;
+  }, 1000);
+}
+
+function triggerDMSWarning() {
+  if (!dmsEnabled) return;
+  dmsCountdownVal = 10;
+  document.getElementById('dms-countdown').textContent = dmsCountdownVal;
+  document.getElementById('dms-timeout-display').textContent = dmsTimeoutMinutes;
+  document.getElementById('dms-overlay').classList.add('visible');
+  document.getElementById('dms-sms-status').textContent = '';
+  dmsCountdownTimer = setInterval(() => {
+    dmsCountdownVal--;
+    document.getElementById('dms-countdown').textContent = dmsCountdownVal;
+    if (dmsCountdownVal <= 0) {
+      clearInterval(dmsCountdownTimer);
+      activateDMS();
     }
-  } else {
-    simulateBattery();
-  }
+  }, 1000);
 }
 
-function simulateBattery() {
-  // Simulate a battery level for demo/unsupported browsers
-  const fakeLvl = 0.72;
-  updateBatteryDisplay(fakeLvl, false, null);
+function activateDMS() {
+  if (!sosActive) toggleSOS();
+  document.getElementById('dms-sms-status').textContent = '📞 Opening emergency call (102)...';
+  setTimeout(() => { window.location.href = 'tel:102'; }, 1200);
 }
 
-function updateBatteryUI(battery) {
-  const lvl = battery.level;
-  const charging = battery.charging;
-  const dischargingTime = battery.dischargingTime;
-  updateBatteryDisplay(lvl, charging, dischargingTime);
+function resetDeadManSwitch() {
+  clearInterval(dmsCountdownTimer);
+  document.getElementById('dms-overlay').classList.remove('visible');
+  lastActivity = Date.now();
+  scheduleDMS();
 }
 
-function updateBatteryDisplay(lvl, charging, dischargingTime) {
-  const pct = Math.round(lvl * 100);
-  const color = pct > 50 ? 'var(--green)' : pct > 20 ? 'var(--amber)' : 'var(--red)';
-  
-  document.getElementById('battery-large').textContent = pct + '%';
-  document.getElementById('battery-mini').style.width = pct + '%';
-  document.getElementById('battery-mini').style.background = color;
-  document.getElementById('battery-pct').textContent = pct + '%';
-  document.getElementById('battery-fill-main').style.width = pct + '%';
-  document.getElementById('battery-fill-main').style.background = color;
-  
-  document.getElementById('battery-state').textContent = charging ? '⚡ CHARGING' : '🔋 DISCHARGING';
-  document.getElementById('battery-charging-txt').textContent = charging ? 'Yes ⚡' : 'No';
-  document.getElementById('battery-charging-txt').style.color = charging ? 'var(--green)' : 'var(--text)';
-  
-  if (dischargingTime && dischargingTime !== Infinity && !charging) {
-    const hrs = Math.floor(dischargingTime / 3600);
-    const mins = Math.floor((dischargingTime % 3600) / 60);
-    document.getElementById('battery-runtime').textContent = `~${hrs}h ${mins}m`;
-    document.getElementById('battery-estimate').textContent = `Estimated ${hrs}h ${mins}m remaining`;
-  } else {
-    document.getElementById('battery-runtime').textContent = charging ? 'Charging' : 'Unknown';
-    document.getElementById('battery-estimate').textContent = '';
-  }
-
-  // Warning
-  if (pct <= 15 && !charging) {
-    document.getElementById('battery-state').textContent = '⚠ CRITICAL — EMERGENCY MODE';
-    document.getElementById('battery-state').style.color = 'var(--red)';
-  }
+function toggleDMSSetting() {
+  dmsEnabled = !dmsEnabled;
+  const btn = document.getElementById('dms-toggle-btn');
+  const dot = document.getElementById('dms-dot');
+  const statusLabel = document.getElementById('dms-status-label');
+  if (btn) { btn.classList.toggle('on', dmsEnabled); btn.setAttribute('aria-checked', dmsEnabled); }
+  if (dot) { dot.style.background = dmsEnabled ? 'var(--green)' : 'var(--amber)'; dot.style.boxShadow = dmsEnabled ? '0 0 6px var(--green)' : '0 0 6px var(--amber)'; }
+  if (statusLabel) statusLabel.textContent = dmsEnabled ? 'ARMED' : 'DISABLED';
+  if (dmsEnabled) scheduleDMS(); else clearTimeout(dmsTimer);
+  populateSystemChecklist();
 }
 
-// ============================================================
-// SIGNAL SIMULATION
-// ============================================================
-function initSignalSimulation() {
-  function updateSignal() {
-    const strength = Math.floor(Math.random() * 4) + 1;
-    for (let i = 1; i <= 4; i++) {
-      document.getElementById('sig' + i).classList.toggle('active', i <= strength);
-    }
-  }
-  updateSignal();
-  setInterval(updateSignal, 8000);
+function updateDMSTimeout() {
+  dmsTimeoutMinutes = parseInt(document.getElementById('dms-timeout-select').value);
+  scheduleDMS();
+  startDMSBar();
 }
 
 // ============================================================
@@ -1388,33 +1323,17 @@ function initSignalSimulation() {
 // ============================================================
 function populateSystemChecklist() {
   const checks = [
-    { name: 'ACOUSTIC BEACON', status: 'ok', note: 'Ready — 4000Hz SOS pattern' },
-    { name: 'SURVIVAL TIMER', status: 'ok', note: 'Running' },
-    { name: 'MEDICAL ID', status: survivorData.blood ? 'ok' : 'warn', note: survivorData.blood ? 'Configured' : 'Incomplete data' },
-    { name: 'AI PSYCHOLOGIST', status: 'ok', note: 'Claude Sonnet connected' },
+    { name: 'ACOUSTIC BEACON', status: 'ok', note: 'Ready — 4000Hz SOS' },
+    { name: 'MEDICAL ID', status: (survivorData.blood && survivorData.blood !== 'Unknown') ? 'ok' : 'warn', note: (survivorData.blood && survivorData.blood !== 'Unknown') ? 'Configured' : 'Incomplete' },
+    { name: 'AI PSYCHOLOGIST', status: 'ok', note: 'Connected' },
     { name: 'HAZARD MONITORING', status: 'ok', note: 'USGS feed active' },
-    { name: 'OFFLINE CACHE', status: 'ok', note: 'Service Worker registered' },
-    { name: 'WEB AUDIO API', status: window.AudioContext || window.webkitAudioContext ? 'ok' : 'danger', note: window.AudioContext || window.webkitAudioContext ? 'Available' : 'Not supported' },
-    { name: 'BATTERY API', status: 'getBattery' in navigator ? 'ok' : 'warn', note: 'getBattery' in navigator ? 'Native monitoring' : 'Simulated' },
+    { name: 'WEB AUDIO API', status: (window.AudioContext || window.webkitAudioContext) ? 'ok' : 'danger', note: (window.AudioContext || window.webkitAudioContext) ? 'Available' : 'Not supported' },
+    { name: 'BATTERY API', status: 'getBattery' in navigator ? 'ok' : 'warn', note: 'getBattery' in navigator ? 'Native' : 'Simulated' },
+    { name: 'AUTO-SOS (DMS)', status: dmsEnabled ? 'ok' : 'warn', note: dmsEnabled ? `Armed — ${dmsTimeoutMinutes}m timeout` : 'Disabled' },
   ];
-
   const container = document.getElementById('sys-checklist');
-  container.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--surface2);border-radius:6px;border:1px solid var(--border);margin-bottom:8px;">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div class="status-dot ${dmsEnabled ? 'ok' : 'warn'}" id="dms-active-dot"></div>
-        <span style="font-family:var(--font-display);font-size:10px;letter-spacing:0.1em;">АВТОСОС</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div id="dms-toggle-btn" class="toggle-switch${dmsEnabled ? ' on' : ''}" tabindex="0" role="switch" aria-checked="${dmsEnabled}" onclick="toggleDMSSetting()" style="margin-right:8px;"></div>
-        <select id="dms-timeout-select" class="tactical-input" style="width:70px;font-size:11px;padding:4px 8px;" onchange="updateDMSTimeout()">
-          <option value="5" ${dmsTimeoutMinutes==5?'selected':''}>5 хв</option>
-          <option value="10" ${dmsTimeoutMinutes==10?'selected':''}>10 хв</option>
-          <option value="15" ${dmsTimeoutMinutes==15?'selected':''}>15 хв</option>
-        </select>
-      </div>
-    </div>
-    ` + checks.map(c => `
+  if (!container) return;
+  container.innerHTML = checks.map(c => `
     <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--surface2);border-radius:6px;border:1px solid var(--border);">
       <div style="display:flex;align-items:center;gap:8px;">
         <div class="status-dot ${c.status}"></div>
@@ -1436,71 +1355,39 @@ async function fetchHazardData() {
 async function fetchEarthquakes() {
   const container = document.getElementById('quake-list');
   try {
-    // USGS Earthquake API - significant quakes in past 7 days
-    const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_week.geojson';
-    const res = await fetch(url);
+    const res  = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_week.geojson');
     const data = await res.json();
     const quakes = data.features.slice(0, 5);
-    
     if (quakes.length === 0) {
-      container.innerHTML = `<div class="alert-card safe" role="listitem">
-        <div style="font-family:var(--font-display);font-size:11px;color:var(--green);letter-spacing:0.1em;">NO SIGNIFICANT EVENTS</div>
-        <div style="font-size:12px;color:var(--text-dim);margin-top:4px;">No significant earthquakes in past 7 days (USGS)</div>
-      </div>`;
+      container.innerHTML = `<div class="alert-card safe"><div style="font-family:var(--font-display);font-size:11px;color:var(--green);letter-spacing:0.1em;">NO SIGNIFICANT EVENTS</div><div style="font-size:12px;color:var(--text-dim);margin-top:4px;">No significant earthquakes in past 7 days (USGS)</div></div>`;
     } else {
       container.innerHTML = quakes.map(q => {
         const mag = q.properties.mag;
         const place = q.properties.place;
-        const time = new Date(q.properties.time).toLocaleString();
-        const severity = mag >= 6.5 ? 'danger' : mag >= 5.5 ? 'moderate' : 'safe';
-        const sevLabel = mag >= 6.5 ? 'MAJOR' : mag >= 5.5 ? 'MODERATE' : 'MINOR';
-        return `<div class="alert-card ${severity}" role="listitem">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-            <span class="tag tag-${severity === 'danger' ? 'red' : severity === 'moderate' ? 'amber' : 'green'}">${sevLabel}</span>
-            <span style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--amber);">M${mag.toFixed(1)}</span>
-          </div>
-          <div style="font-size:12px;color:var(--text);margin-bottom:2px;">${place}</div>
-          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">${time}</div>
-        </div>`;
+        const time  = new Date(q.properties.time).toLocaleString();
+        const sev   = mag >= 6.5 ? 'danger' : mag >= 5.5 ? 'moderate' : 'safe';
+        const lab   = mag >= 6.5 ? 'MAJOR' : mag >= 5.5 ? 'MODERATE' : 'MINOR';
+        return `<div class="alert-card ${sev}"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span class="tag tag-${sev==='danger'?'red':sev==='moderate'?'amber':'green'}">${lab}</span><span style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--amber);">M${mag.toFixed(1)}</span></div><div style="font-size:12px;color:var(--text);margin-bottom:2px;">${place}</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">${time}</div></div>`;
       }).join('');
     }
-
     document.getElementById('quake-updated').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
   } catch(e) {
-    // Fallback simulated data
-    container.innerHTML = generateSimulatedQuakes();
-    document.getElementById('quake-updated').textContent = 'USGS unreachable — simulated data';
+    container.innerHTML = `<div class="alert-card moderate"><div style="font-family:var(--font-display);font-size:11px;color:var(--amber);">USGS FEED UNAVAILABLE</div><div style="font-size:12px;color:var(--text-dim);margin-top:4px;">Check connection. Data may be delayed.</div></div>`;
+    document.getElementById('quake-updated').textContent = 'USGS unreachable';
   }
-}
-
-function generateSimulatedQuakes() {
-  const quakes = [
-    { mag: 6.2, place: '47km NE of local epicenter', time: '2m ago', level: 'moderate' },
-    { mag: 4.8, place: '12km from your location', time: '18m ago', level: 'safe' },
-    { mag: 3.1, place: '31km SE of city center', time: '1hr ago', level: 'safe' },
-  ];
-  return quakes.map(q => `<div class="alert-card ${q.level}" role="listitem">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-      <span class="tag tag-${q.level === 'moderate' ? 'amber' : 'green'}">${q.level.toUpperCase()}</span>
-      <span style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--amber);">M${q.mag}</span>
-    </div>
-    <div style="font-size:12px;color:var(--text);margin-bottom:2px;">${q.place}</div>
-    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">${q.time}</div>
-  </div>`).join('');
 }
 
 function generateWeatherThreats() {
   const threats = [
     { type: 'STRUCTURAL FIRE RISK', icon: '🔥', level: 'danger', note: 'Gas line damage likely in collapse zones. No open flames.', time: 'Ongoing' },
-    { type: 'DUST & PARTICULATE', icon: '🌫', level: 'moderate', note: 'Concrete dust hazard. Cover nose/mouth with fabric.', time: 'Ongoing' },
-    { type: 'RAIN FORECAST', icon: '🌧', level: 'moderate', note: 'Rain expected in 4-6 hours. May assist acoustic signals.', time: 'In ~4hrs' },
+    { type: 'DUST & PARTICULATE',  icon: '🌫', level: 'moderate', note: 'Concrete dust hazard. Cover nose/mouth with fabric.', time: 'Ongoing' },
+    { type: 'RAIN FORECAST',       icon: '🌧', level: 'moderate', note: 'Rain expected in 4-6 hours. May assist acoustic signals.', time: 'In ~4hrs' },
   ];
-  
   document.getElementById('weather-list').innerHTML = threats.map(t => `
-    <div class="alert-card ${t.level}" role="listitem">
+    <div class="alert-card ${t.level}">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
         <span style="font-size:16px;">${t.icon}</span>
-        <span class="tag tag-${t.level === 'danger' ? 'red' : 'amber'}">${t.type}</span>
+        <span class="tag tag-${t.level==='danger'?'red':'amber'}">${t.type}</span>
         <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-left:auto;">${t.time}</span>
       </div>
       <div style="font-size:12px;color:var(--text-dim);">${t.note}</div>
@@ -1518,12 +1405,11 @@ function updateHazardTime() {
 }
 
 // ============================================================
-// AI CRISIS PSYCHOLOGIST (Claude API)
+// AI CHAT
 // ============================================================
 function addInitialChatMessage() {
-  const container = document.getElementById('chat-messages');
-  const name = survivorData.name !== 'Unknown' ? survivorData.name : 'Survivor';
-  appendAIMessage(`${name}, I'm Dr. Aria. I'm here with you. You are not alone in this. Right now, I need you to take one slow breath — in through your nose, out through your mouth. Good. What's your most immediate need right now?`);
+  const name = (survivorData.name && survivorData.name !== 'Unknown') ? survivorData.name : 'Survivor';
+  appendAIMessage(`${name}, I'm Dr. Aria. I'm here with you right now. Take one slow breath — in through your nose, out through your mouth. What's your most immediate need right now?`);
 }
 
 function appendAIMessage(text) {
@@ -1564,144 +1450,83 @@ async function processMessage(msg) {
   document.getElementById('ai-loading').style.display = 'block';
   document.getElementById('chat-messages').scrollTop = 9999;
 
+  const prov   = localStorage.getItem('underrubbl_provider') || 'openai';
+  const oaiKey = localStorage.getItem('underrubbl_openai_key');
+  const orKey  = localStorage.getItem('underrubbl_ds_key');
+
   try {
-    const messages = chatHistory.slice(-10); // last 10 for context
-    
-    // OpenRouter LLM call
-    if (localStorage.getItem('underrubbl_ds_key')) {
-    try {
-      const reply = await callOpenRouter(msg);
-
-        document.getElementById('ai-loading').style.display = 'none';
-        appendAIMessage(reply || 'Take a slow breath. I am here with you.');
-        return;
-      } catch(deepSeekError) {
-        console.warn('DeepSeek failed, using fallback:', deepSeekError.message);
-        // Fall through to fallback responses
-      }
+    let reply = '';
+    if (prov === 'openai' && oaiKey) {
+      reply = await callOpenAI(msg, oaiKey);
+    } else if (orKey) {
+      reply = await callOpenRouter(msg, orKey);
+    } else if (oaiKey) {
+      // fallback: try OpenAI even if not selected provider
+      reply = await callOpenAI(msg, oaiKey);
     }
-
-    // Use contextual fallback responses
-    document.getElementById('ai-loading').style.display = 'none';
-    const fallbackResponse = getContextualFallback(msg);
-    appendAIMessage(fallbackResponse);
-    
+    if (reply) {
+      document.getElementById('ai-loading').style.display = 'none';
+      appendAIMessage(reply);
+      return;
+    }
   } catch(e) {
-    console.error('AI Error:', e);
-    document.getElementById('ai-loading').style.display = 'none';
-    const fallbackResponse = getContextualFallback(msg);
-    appendAIMessage(fallbackResponse);
+    console.warn('AI call failed:', e.message);
   }
+  document.getElementById('ai-loading').style.display = 'none';
+  appendAIMessage(getContextualFallback(msg));
+}
+
+async function callOpenRouter(userMessage, key) {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+    body: JSON.stringify({
+      model: 'openai/gpt-4o-mini',
+      max_tokens: 300,
+      temperature: 0.7,
+      messages: [
+        { role: 'system', content: AI_SYSTEM_PROMPT },
+        { role: 'user',   content: userMessage + `\n\nSurvivor: ${survivorData.name}, Blood: ${survivorData.blood}, Age: ${survivorData.age}` }
+      ]
+    })
+  });
+  if (!res.ok) throw new Error('API ' + res.status);
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || '';
 }
 
 function getContextualFallback(msg) {
-  const raw = (msg || '').trim();
-  if (raw === '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') {
-    return 'ШІ';
-  }
-
-  const msgLower = raw.toLowerCase();
-  
-  // Varied responses based on user input keywords
-
-  if (msgLower.includes('panick') || msgLower.includes('scare') || msgLower.includes('afraid')) {
-    const responses = [
-      "Your fear is valid. What you're feeling is a normal survival response. Let's ground you: name 3 things you can see around you right now.",
-      "I hear the fear. That's your body protecting you. We can work through this together. What's the most pressing worry right now?",
-      "Panic burns oxygen. Let's slow your breath: in for 4, hold for 4, out for 4. Can you do that with me right now?"
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  }
-  
-  if (msgLower.includes('pain') || msgLower.includes('hurt') || msgLower.includes('injur')) {
-    const responses = [
-      "Tell me where it hurts and rate it 0-10. Have you checked for bleeding? Applying pressure will help.",
-      "Injuries are treatable. Stay still to minimize bleeding. Apply pressure if needed. What's injured and how severe?",
-      "Your body is signaling to us. Tell me everything you're feeling so I can guide treatment. Can you move?"
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  }
-  
-  if (msgLower.includes('breath') || msgLower.includes('breathe') || msgLower.includes('suffocate') || msgLower.includes('air')) {
-    const responses = [
-      "Breathing is your superpower right now. Slow it down: IN 4, HOLD 4, OUT 4. This calms your nervous system. Try it now.",
-      "The dust makes breathing harder. Cover your nose if possible. Your breathing is FINE even though it feels difficult. Trust me.",
-      "Let's reset your breath: 4 counts in, 4 hold, 4 out. Ready? Do this with me right now."
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  }
-  
-  if (msgLower.includes('help') || msgLower.includes('rescue') || msgLower.includes('save')) {
-    const responses = [
-      "Rescuers ARE looking for you. The SOS beacon is active. Your job: stay calm, signal when you hear them, conserve energy. You will be found.",
-      "Help is coming. Rescue teams search methodically. Make yourself findable: stay still, tap on metal when you hear sounds.",
-      "You're not alone. Teams are actively searching for survivors like you. Stay in one place. Tap when you hear them. Help is coming."
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  }
-  
-  if (msgLower.includes('water') || msgLower.includes('thirst') || msgLower.includes('drink')) {
-    const responses = [
-      "You can survive weeks without food, days without water. Sip small amounts every few hours if you have water. Avoid excessive sweating.",
-      "Ration any water: small sips only. Don't drink dirty water unless absolutely necessary. Focus on breathing to reduce thirst sensation.",
-      "Thirst is hard in stress. Save your water. You're stronger than your thirst right now. Stay patient."
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  }
-  
-  if (msgLower.includes('sleep') || msgLower.includes('tired') || msgLower.includes('exhausted') || msgLower.includes('numb')) {
-    const responses = [
-      "Your body runs on adrenaline. Sleep when you can in short bursts. Stay alert for rescue sounds but rest is recovery.",
-      "Numbness and exhaustion are normal. Rest is healing. Close your eyes. Keep one ear open for rescuers.",
-      "You need rest. Your mind and body work overtime. Sleep if it comes naturally. Your survival instincts are strong."
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  }
-  
-  if (msgLower.includes('alone') || msgLower.includes('hopeless') || msgLower.includes('give up')) {
-    const responses = [
-      "You are NOT alone. I'm here. Thousands survived trapped. You're stronger than this moment. What keeps you going?",
-      "Hopelessness is the hardest part. But survival is a mindset. People survive impossible odds every day. You will too.",
-      "I'm with you right now. You matter. The rescuers don't know you yet, but they're looking. Hold on. Tell me your name again?"
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  }
-  
-  if (msgLower.includes('sound') || msgLower.includes('noise') || msgLower.includes('hear')) {
-    const responses = [
-      "Sounds are good news. That might be rescuers. Stay still and quiet. When you hear them again, tap back on pipes firmly.",
-      "Listen carefully. When you hear digging or voices, signal back. Three taps or knocks. Rescuers listen for survivors.",
-      "Your hearing is your lifeline. Pay attention to all sounds. Respond when you hear anything that sounds like rescue efforts."
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  }
-  
-  // Default varied responses
+  const m = (msg || '').toLowerCase();
+  if (m.includes('panic') || m.includes('scare') || m.includes('afraid'))
+    return "Your fear is valid — that's your survival instinct. Let's ground you: name 3 things you can physically touch right now.";
+  if (m.includes('pain') || m.includes('hurt') || m.includes('injur'))
+    return "Tell me where it hurts and rate it 1-10. If there's bleeding, apply firm pressure with fabric and keep it there. Stay as still as possible.";
+  if (m.includes('breath') || m.includes('breathe') || m.includes('air'))
+    return "Slow your breath now: IN for 4 counts, HOLD 4, OUT 4. Your airway is open. Shallow breathing feels scary but you have enough air.";
+  if (m.includes('help') || m.includes('rescue') || m.includes('save'))
+    return "Rescuers ARE searching for you right now. Your SOS beacon is active. Stay in place and tap on pipes when you hear sounds above you.";
+  if (m.includes('water') || m.includes('thirst'))
+    return "Ration any water — small sips only. You can survive 3 days without water. Focus on slow breathing to reduce your body's demand.";
+  if (m.includes('hopeless') || m.includes('give up') || m.includes('alone'))
+    return "You are not alone. I'm here. People survive impossible odds every day — and your rescuers are working toward you right now. Hold on. Tell me one thing you're grateful for.";
   const defaults = [
-    "Tell me more about what's happening. I'm listening.",
-    "What's your biggest concern right now?",
-    "You're doing better than you think. Keep going.",
-    "Help is on the way. What do you need most?",
-    "Your strength matters. What should we focus on?",
-    "I'm right here with you. Talk to me."
+    "Tell me more — what's happening right now?",
+    "You're doing better than you think. What do you need most?",
+    "Stay still and conserve energy. What's your biggest worry right now?",
+    "Help is coming. I'm right here with you."
   ];
   return defaults[Math.floor(Math.random() * defaults.length)];
 }
 
 // ============================================================
-// BOX BREATHING EXERCISE
+// BOX BREATHING
 // ============================================================
 const BREATH_PHASES = [
-  { name: 'INHALE', class: 'inhale', label: 'IN', seconds: 4 },
-  { name: 'HOLD', class: 'hold', label: 'HOLD', seconds: 4 },
-  { name: 'EXHALE', class: 'exhale', label: 'OUT', seconds: 4 },
-  { name: 'HOLD', class: 'hold', label: 'HOLD', seconds: 4 },
+  { name: 'INHALE', class: 'inhale', label: 'IN',   seconds: 4 },
+  { name: 'HOLD',   class: 'hold',   label: 'HOLD', seconds: 4 },
+  { name: 'EXHALE', class: 'exhale', label: 'OUT',  seconds: 4 },
+  { name: 'HOLD',   class: 'hold',   label: 'HOLD', seconds: 4 },
 ];
-
-let currentPhaseIdx = 0;
-let currentSecond = 4;
-let breathInterval = null;
-let breathRunning = false;
 
 function startBreathingExercise() {
   document.getElementById('breath-widget').style.display = 'block';
@@ -1711,29 +1536,23 @@ function startBreathingExercise() {
 function toggleBreathing() {
   breathRunning = !breathRunning;
   document.getElementById('breath-toggle-btn').textContent = breathRunning ? '⏸ PAUSE' : '▶ START';
-  
-  if (breathRunning) {
-    runBreathPhase();
-  } else {
-    clearInterval(breathInterval);
-  }
+  if (breathRunning) { currentPhaseIdx = 0; runBreathPhase(); }
+  else clearInterval(breathInterval);
 }
 
 function runBreathPhase() {
   clearInterval(breathInterval);
-  const phase = BREATH_PHASES[currentPhaseIdx];
-  const circle = document.getElementById('breath-circle');
+  const phase   = BREATH_PHASES[currentPhaseIdx];
+  const circle  = document.getElementById('breath-circle');
   const phaseEl = document.getElementById('breath-phase');
   const countEl = document.getElementById('breath-count');
   const labelEl = document.getElementById('breath-label');
-
   circle.className = '';
   setTimeout(() => circle.classList.add(phase.class), 50);
   phaseEl.textContent = phase.name;
   labelEl.textContent = phase.label;
   currentSecond = phase.seconds;
   countEl.textContent = currentSecond;
-
   breathInterval = setInterval(() => {
     if (!breathRunning) return;
     currentSecond--;
@@ -1747,802 +1566,278 @@ function runBreathPhase() {
 }
 
 // ============================================================
-// SERVICE WORKER REGISTRATION
+// VOICE INPUT
 // ============================================================
-function registerServiceWorker() {
-  const swContent = `
-const CACHE = 'underrubbl-v1';
-const ASSETS = ['/'];
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-  self.skipWaiting();
-});
-self.addEventListener('activate', e => { clients.claim(); });
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    fetch(e.request).catch(() => caches.match(e.request))
-  );
-});
-  `;
-  const blob = new Blob([swContent], { type: 'application/javascript' });
-  const url = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(url).catch(() => {});
+let voiceRecognition = null;
+let voiceListening = false;
+let voiceWaveAnim = null;
+
+function toggleVoiceInput() {
+  if (voiceListening) { stopVoiceInput(); return; }
+  startVoiceInput();
+}
+
+function startVoiceInput() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    alert('Speech recognition is not supported in this browser. Please use Chrome or Edge.');
+    return;
+  }
+  if (!voiceRecognition) {
+    voiceRecognition = new SpeechRec();
+    voiceRecognition.lang = 'uk-UA';
+    voiceRecognition.interimResults = true;
+    voiceRecognition.maxAlternatives = 1;
+    voiceRecognition.continuous = false;
+  }
+
+  voiceRecognition.onstart = () => {
+    voiceListening = true;
+    const btn = document.getElementById('voice-btn');
+    if (btn) { btn.textContent = '🎙'; btn.style.background = 'rgba(255,149,0,0.15)'; btn.style.borderColor = 'var(--amber)'; }
+    const bar = document.getElementById('voice-status-bar');
+    if (bar) bar.style.display = 'flex';
+    startVoiceWave();
+  };
+
+  voiceRecognition.onresult = (event) => {
+    let transcript = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript;
+    }
+    const input = document.getElementById('chat-input');
+    if (input && transcript.trim()) {
+      input.value = transcript.trim();
+      const statusTxt = document.getElementById('voice-status-txt');
+      if (statusTxt) statusTxt.textContent = transcript.trim().substring(0, 40) + (transcript.length > 40 ? '...' : '');
+    }
+  };
+
+  voiceRecognition.onerror = (e) => {
+    stopVoiceInput();
+    if (e.error !== 'no-speech' && e.error !== 'aborted') {
+      const statusTxt = document.getElementById('voice-status-txt');
+      if (statusTxt) statusTxt.textContent = 'Error: ' + e.error;
+    }
+  };
+
+  voiceRecognition.onend = () => {
+    voiceListening = false;
+    const btn = document.getElementById('voice-btn');
+    if (btn) { btn.textContent = '🎤'; btn.style.background = ''; btn.style.borderColor = ''; }
+    const bar = document.getElementById('voice-status-bar');
+    if (bar) bar.style.display = 'none';
+    stopVoiceWave();
+    // Auto-send if text was captured
+    const input = document.getElementById('chat-input');
+    if (input && input.value.trim()) sendChat();
+  };
+
+  try { voiceRecognition.start(); } catch(e) { stopVoiceInput(); }
+}
+
+function stopVoiceInput() {
+  if (voiceRecognition) { try { voiceRecognition.stop(); } catch(e){} }
+  voiceListening = false;
+  const btn = document.getElementById('voice-btn');
+  if (btn) { btn.textContent = '🎤'; btn.style.background = ''; btn.style.borderColor = ''; }
+  const bar = document.getElementById('voice-status-bar');
+  if (bar) bar.style.display = 'none';
+  stopVoiceWave();
+}
+
+function startVoiceWave() {
+  let t = 0;
+  voiceWaveAnim = setInterval(() => {
+    for (let i = 0; i < 5; i++) {
+      const el = document.getElementById('vw' + i);
+      if (el) el.style.height = (Math.abs(Math.sin(t + i * 0.6)) * 16 + 4) + 'px';
+    }
+    t += 0.2;
+  }, 80);
+}
+
+function stopVoiceWave() {
+  clearInterval(voiceWaveAnim);
+  for (let i = 0; i < 5; i++) {
+    const el = document.getElementById('vw' + i);
+    if (el) el.style.height = '6px';
+  }
 }
 
 // ============================================================
-// ONLINE / OFFLINE STATUS
+// API KEY MANAGEMENT
 // ============================================================
-window.addEventListener('online', () => {
-  document.getElementById('sys-status').className = 'status-dot ok';
-  document.getElementById('sys-status-txt').textContent = 'ONLINE';
-});
-window.addEventListener('offline', () => {
-  document.getElementById('sys-status').className = 'status-dot warn';
-  document.getElementById('sys-status-txt').textContent = 'OFFLINE';
-});
-if (!navigator.onLine) {
-  document.getElementById('sys-status').className = 'status-dot warn';
-  document.getElementById('sys-status-txt').textContent = 'OFFLINE';
+let activeProvider = 'openai'; // 'openai' | 'openrouter'
+
+function selectProvider(prov) {
+  activeProvider = prov;
+  localStorage.setItem('underrubbl_provider', prov);
+  document.getElementById('section-openai').style.display      = prov === 'openai' ? 'block' : 'none';
+  document.getElementById('section-openrouter').style.display  = prov === 'openrouter' ? 'block' : 'none';
+  const btnOAI = document.getElementById('prov-openai');
+  const btnOR  = document.getElementById('prov-openrouter');
+  if (prov === 'openai') {
+    btnOAI.style.borderColor = 'var(--amber)'; btnOAI.style.background = 'rgba(255,149,0,0.1)'; btnOAI.style.color = 'var(--amber)';
+    btnOR.style.borderColor  = 'var(--border)'; btnOR.style.background  = 'transparent';        btnOR.style.color  = 'var(--text-dim)';
+  } else {
+    btnOR.style.borderColor  = 'var(--amber)'; btnOR.style.background  = 'rgba(255,149,0,0.1)'; btnOR.style.color  = 'var(--amber)';
+    btnOAI.style.borderColor = 'var(--border)'; btnOAI.style.background = 'transparent';         btnOAI.style.color = 'var(--text-dim)';
+  }
+  refreshKeyStatus();
+}
+
+function saveOpenAIKey() {
+  const val = document.getElementById('openai-key-input').value.trim();
+  if (!val.startsWith('sk-')) { setTestResult('openai', '⚠ Invalid key — must start with sk-', 'var(--red)'); return; }
+  localStorage.setItem('underrubbl_openai_key', val);
+  document.getElementById('openai-key-input').value = '';
+  document.getElementById('openai-key-input').placeholder = '●●●● saved — paste to replace';
+  refreshKeyStatus();
+  setTestResult('openai', '✅ Key saved locally on device', 'var(--green)');
+}
+
+function updateOpenAIModel() {
+  const model = document.getElementById('openai-model-select').value;
+  localStorage.setItem('underrubbl_openai_model', model);
+  document.getElementById('openai-model-label').textContent = model;
+}
+
+async function testOpenAIKey() {
+  const key = localStorage.getItem('underrubbl_openai_key');
+  if (!key) { setTestResult('openai', '⚠ Save a key first', 'var(--amber)'); return; }
+  const btn = document.getElementById('openai-test-btn');
+  btn.textContent = '⏳ TESTING...'; btn.disabled = true;
+  try {
+    const reply = await callOpenAI('Say "UNDERRUBBL ONLINE" and nothing else.', key);
+    setTestResult('openai', '✅ Connected: ' + (reply || '').substring(0, 50), 'var(--green)');
+    refreshKeyStatus();
+  } catch(e) {
+    setTestResult('openai', '❌ ' + e.message, 'var(--red)');
+  }
+  btn.textContent = '⚡ TEST CONNECTION'; btn.disabled = false;
+}
+
+function saveORKey() {
+  const val = document.getElementById('or-key-input').value.trim();
+  if (!val.startsWith('sk-')) { setTestResult('openrouter', '⚠ Invalid key format', 'var(--red)'); return; }
+  localStorage.setItem('underrubbl_ds_key', val);
+  document.getElementById('or-key-input').value = '';
+  document.getElementById('or-key-input').placeholder = '●●●● saved — paste to replace';
+  refreshKeyStatus();
+  setTestResult('openrouter', '✅ Key saved locally on device', 'var(--green)');
+}
+
+async function testORKey() {
+  const key = localStorage.getItem('underrubbl_ds_key');
+  if (!key) { setTestResult('openrouter', '⚠ Save a key first', 'var(--amber)'); return; }
+  const btn = document.getElementById('or-test-btn');
+  btn.textContent = '⏳ TESTING...'; btn.disabled = true;
+  try {
+    const reply = await callOpenRouter('Say "UNDERRUBBL ONLINE" and nothing else.', key);
+    setTestResult('openrouter', '✅ Connected: ' + (reply || '').substring(0, 50), 'var(--green)');
+    refreshKeyStatus();
+  } catch(e) {
+    setTestResult('openrouter', '❌ ' + e.message, 'var(--red)');
+  }
+  btn.textContent = '⚡ TEST CONNECTION'; btn.disabled = false;
+}
+
+function setTestResult(prov, msg, color) {
+  const el = document.getElementById(prov === 'openai' ? 'openai-test-result' : 'or-test-result');
+  if (el) { el.textContent = msg; el.style.color = color; }
+}
+
+function refreshKeyStatus() {
+  const oaiKey = localStorage.getItem('underrubbl_openai_key');
+  const orKey  = localStorage.getItem('underrubbl_ds_key');
+  const dot    = document.getElementById('ai-key-dot');
+  const status = document.getElementById('ai-key-status');
+  const prov   = localStorage.getItem('underrubbl_provider') || 'openai';
+
+  if (prov === 'openai' && oaiKey) {
+    const model = localStorage.getItem('underrubbl_openai_model') || 'gpt-4o-mini';
+    if (dot)    { dot.style.background = 'var(--green)'; dot.style.boxShadow = '0 0 6px var(--green)'; }
+    if (status) status.textContent = `✅ OpenAI active — ${model}`;
+  } else if (prov === 'openrouter' && orKey) {
+    if (dot)    { dot.style.background = 'var(--green)'; dot.style.boxShadow = '0 0 6px var(--green)'; }
+    if (status) status.textContent = '✅ OpenRouter active — gpt-4o-mini';
+  } else if (oaiKey || orKey) {
+    if (dot)    { dot.style.background = 'var(--amber)'; dot.style.boxShadow = '0 0 6px var(--amber)'; }
+    if (status) status.textContent = 'Key saved — switch to active provider above';
+  } else {
+    if (dot)    { dot.style.background = 'var(--text-dim)'; dot.style.boxShadow = 'none'; }
+    if (status) status.textContent = 'No key configured — using fallback responses';
+  }
+}
+
+function initAPIKeyUI() {
+  const savedProv = localStorage.getItem('underrubbl_provider') || 'openai';
+  const savedModel = localStorage.getItem('underrubbl_openai_model') || 'gpt-4o-mini';
+  const oaiKey = localStorage.getItem('underrubbl_openai_key');
+  const orKey  = localStorage.getItem('underrubbl_ds_key');
+
+  selectProvider(savedProv);
+  const modelSel = document.getElementById('openai-model-select');
+  if (modelSel) { modelSel.value = savedModel; }
+  const modelLabel = document.getElementById('openai-model-label');
+  if (modelLabel) modelLabel.textContent = savedModel;
+
+  if (oaiKey) document.getElementById('openai-key-input').placeholder = '●●●● saved — paste to replace';
+  if (orKey)  document.getElementById('or-key-input').placeholder     = '●●●● saved — paste to replace';
+
+  // If no OpenAI key but has OR key, auto-set default OR key
+  if (!oaiKey && !orKey) {
+    localStorage.setItem('underrubbl_ds_key', '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');
+    document.getElementById('or-key-input').placeholder = '●●●● saved — paste to replace';
+  }
+  refreshKeyStatus();
 }
 
 // ============================================================
-// PREVENT SCREEN SLEEP (Wake Lock API)
+// OPENAI DIRECT CALL
 // ============================================================
+async function callOpenAI(userMessage, key) {
+  const model = localStorage.getItem('underrubbl_openai_model') || 'gpt-4o-mini';
+  const apiKey = key || localStorage.getItem('underrubbl_openai_key');
+  if (!apiKey) throw new Error('No OpenAI key');
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+    body: JSON.stringify({
+      model,
+      max_tokens: 300,
+      temperature: 0.7,
+      messages: [
+        { role: 'system', content: AI_SYSTEM_PROMPT },
+        { role: 'user',   content: userMessage + `\n\nSurvivor: ${survivorData.name || 'Unknown'}, Blood: ${survivorData.blood || 'Unknown'}, Age: ${survivorData.age || 'Unknown'}` }
+      ]
+    })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error((err.error && err.error.message) ? err.error.message : 'API error ' + res.status);
+  }
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+
 async function requestWakeLock() {
   if ('wakeLock' in navigator) {
-    try {
-      await navigator.wakeLock.request('screen');
-    } catch(e) {}
+    try { await navigator.wakeLock.request('screen'); } catch(e) {}
   }
 }
-// ============================================================
-// DEAD MAN'S SWITCH
-// ============================================================
-let dmsEnabled = true;
-let dmsTimeoutMinutes = 10;
-let dmsTimer = null;
-let dmsCountdownTimer = null;
-let dmsCountdownVal = 10;
-let lastActivity = Date.now();
-
-function initDeadManSwitch() {
-  // Reset on any user interaction
-  ['touchstart','touchend','click','keydown','scroll'].forEach(evt => {
-    document.addEventListener(evt, resetDMSActivity, { passive: true });
-  });
-  scheduleDMS();
-}
-
-function resetDMSActivity() {
-  lastActivity = Date.now();
-  updateDMSLabel();
-  if (document.getElementById('dms-overlay').classList.contains('visible')) {
-    // User responded — cancel
-    resetDeadManSwitch();
-    return;
-  }
-  scheduleDMS();
-}
-
-function scheduleDMS() {
-  clearTimeout(dmsTimer);
-  if (!dmsEnabled) return;
-  dmsTimer = setTimeout(triggerDMSWarning, dmsTimeoutMinutes * 60 * 1000);
-}
-
-function triggerDMSWarning() {
-  if (!dmsEnabled) return;
-  dmsCountdownVal = 10;
-  document.getElementById('dms-countdown').textContent = dmsCountdownVal;
-  document.getElementById('dms-overlay').classList.add('visible');
-  document.getElementById('dms-sms-status').textContent = '';
-
-  dmsCountdownTimer = setInterval(() => {
-    dmsCountdownVal--;
-    document.getElementById('dms-countdown').textContent = dmsCountdownVal;
-    if (dmsCountdownVal <= 0) {
-      clearInterval(dmsCountdownTimer);
-      activateDMS();
-    }
-  }, 1000);
-}
-
-
-function activateDMS() {
-  // 1) Arm SOS beacon
-  if (!sosActive) toggleSOS();
-
-  // 2) Дзвінок у 102 (поліція)
-  document.getElementById('dms-sms-status').textContent = '📞 Відкривається дзвінок у поліцію (102)...';
-  setTimeout(() => {
-    window.location.href = 'tel:102';
-  }, 1200);
-}
-
-function resetDeadManSwitch() {
-  clearInterval(dmsCountdownTimer);
-  document.getElementById('dms-overlay').classList.remove('visible');
-  lastActivity = Date.now();
-  updateDMSLabel();
-  scheduleDMS();
-}
-
-function toggleDMSSetting() {
-  dmsEnabled = !dmsEnabled;
-  const btn = document.getElementById('dms-toggle-btn');
-  const dot = document.getElementById('dms-active-dot');
-
-  if (btn) {
-    btn.classList.toggle('on', dmsEnabled);
-    btn.setAttribute('aria-checked', dmsEnabled);
-  }
-
-  if (dot) {
-    dot.className = 'status-dot ' + (dmsEnabled ? 'ok' : 'warn');
-  }
-
-  if (dmsEnabled) scheduleDMS();
-  else clearTimeout(dmsTimer);
-
-  updateDMSLabel();
-}
-
-
-function updateDMSTimeout() {
-  dmsTimeoutMinutes = parseInt(document.getElementById('dms-timeout-select').value);
-  scheduleDMS();
-  populateSystemChecklist();
-}
-
-function updateDMSLabel() {
-  const labelEl = document.getElementById('dms-active-label');
-  if (!labelEl) return; // UI element removed in this version
-
-  const secs = Math.round((Date.now() - lastActivity) / 1000);
-  const label = dmsEnabled
-    ? `Switch armed — last activity: ${secs < 60 ? secs + 's ago' : Math.round(secs/60) + 'm ago'}`
-    : 'Switch DISABLED';
-
-  labelEl.textContent = label;
-}
-
-setInterval(updateDMSLabel, 5000);
-
-// ============================================================
-// MORSE LISTENER (Web Audio API — microphone amplitude detection)
-// ============================================================
-let morseListening = false;
-let speechListening = false;
-let listenerMode = 'morse'; // 'morse' | 'speech'
-let morseAudioCtx = null;
-let morseAnalyser = null;
-let morseStream = null;
-let morseAnimFrame = null;
-let morseBuffer = [];        // sequence of {type:'dot'|'dash'|'gap', t}
-let morseLastHit = 0;
-let morseSignalActive = false;
-let morseSilentCounter = 0;
-let morseDecodeTimer = null;
-let morseLogEntries = [];
-let speechRecognition = null;
-let speechTranscript = '';
-
-const MORSE_TABLE = {
-  '.-':'A','−...':'B','−.−.':'C','−..':'D','.':'E','..−.':'F',
-  '−−.':'G','....':'H','..':'I','.−−−':'J','−.−':'K','.-..':'L',
-  '−−':'M','−.':'N','−−−':'O','.--.':'P','−−.−':'Q','.−.':'R',
-  '...':'S','−':'T','.._':'U','..._':'V','.−−':'W','−..−':'X',
-  '−.−−':'Y','−−..':'Z',
-  '.----':'1','..---':'2','...--':'3','....-':'4','.....' :'5',
-  '-....':'6','--...':'7','---..':'8','----.':'9','-----':'0',
-  '...---...':'SOS'
-};
-
-// Initialize speech recognition
-function initSpeechRecognition() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) return null;
-  
-  const recognition = new SpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = 'en-US'; // Can be changed to other languages like 'uk-UA' for Ukrainian
-  
-  recognition.onstart = () => {
-    speechListening = true;
-    document.getElementById('listen-status').textContent = 'ACTIVE — LISTENING';
-    document.getElementById('listen-status').style.color = 'var(--green)';
-    document.getElementById('listen-ring').classList.add('active');
-    document.getElementById('listen-ring').style.borderColor = 'var(--green)';
-  };
-  
-  recognition.onresult = (event) => {
-    let interimTranscript = '';
-    speechTranscript = '';
-    
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      const transcript = event.results[i][0].transcript;
-      if (event.results[i].isFinal) {
-        speechTranscript += transcript + ' ';
-      } else {
-        interimTranscript += transcript;
-      }
-    }
-    
-    const displayText = speechTranscript + interimTranscript;
-    document.getElementById('morse-decoded').textContent = displayText || 'Listening...';
-    document.getElementById('morse-decoded').style.color = 'var(--amber)';
-    
-    if (speechTranscript.trim()) {
-      addSpeechLog(speechTranscript.trim());
-      speechTranscript = '';
-    }
-  };
-  
-  recognition.onerror = (event) => {
-    document.getElementById('listen-status').textContent = 'ERROR: ' + event.error.toUpperCase();
-    document.getElementById('listen-status').style.color = 'var(--red)';
-  };
-  
-  recognition.onend = () => {
-    speechListening = false;
-    if (listenerMode === 'speech') {
-      document.getElementById('listen-status').textContent = 'STANDBY';
-      document.getElementById('listen-status').style.color = 'var(--amber)';
-      document.getElementById('listen-ring').classList.remove('active');
-      document.getElementById('listen-ring').style.borderColor = 'var(--amber)';
-    }
-  };
-  
-  return recognition;
-}
-
-// Toggle between morse code and speech recognition modes
-function toggleListenerMode() {
-  listenerMode = listenerMode === 'morse' ? 'speech' : 'morse';
-  const btn = document.getElementById('mode-toggle-btn');
-  const modeLabel = document.getElementById('current-mode');
-  const helpText = document.getElementById('listen-help');
-  
-  if (listenerMode === 'speech') {
-    btn.textContent = '📡 MORSE ON / 🎤 SPEECH OFF';
-    modeLabel.textContent = 'Mode: SPEECH RECOGNITION';
-    helpText.textContent = 'Tap START to activate voice recognition. Speak clearly into the microphone.';
-  } else {
-    btn.textContent = '📡 MORSE OFF / 🎤 SPEECH ON';
-    modeLabel.textContent = 'Mode: MORSE CODE';
-    helpText.textContent = 'Tap START to listen for tapping / SOS signals from nearby survivors.';
-  }
-  
-  // Stop current listener if active
-  if (morseListening) stopMorseListener();
-  if (speechListening && speechRecognition) speechRecognition.stop();
-  
-  clearMorseLog();
-}
-
-// Simplified: detect transient amplitude spikes → classify as dot/dash by duration
-async function toggleMorseListener() {
-  if (listenerMode === 'speech') {
-    // Speech mode
-    if (!speechRecognition) {
-      speechRecognition = initSpeechRecognition();
-      if (!speechRecognition) {
-        document.getElementById('listen-status').textContent = 'SPEECH RECOGNITION NOT SUPPORTED';
-        document.getElementById('listen-status').style.color = 'var(--red)';
-        return;
-      }
-    }
-    
-    if (speechListening) {
-      speechRecognition.stop();
-      document.getElementById('listen-btn').textContent = '🎤 START SPEECH';
-    } else {
-      clearMorseLog();
-      speechRecognition.start();
-      document.getElementById('listen-btn').textContent = '⏹ STOP SPEECH';
-    }
-  } else {
-    // Morse code mode
-    if (morseListening) {
-      stopMorseListener();
-    } else {
-      await startMorseListener();
-    }
-  }
-}
-
-async function startMorseListener() {
-  try {
-    morseStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-    morseAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const source = morseAudioCtx.createMediaStreamSource(morseStream);
-    morseAnalyser = morseAudioCtx.createAnalyser();
-    morseAnalyser.fftSize = 512;
-    morseAnalyser.smoothingTimeConstant = 0.3;
-    source.connect(morseAnalyser);
-
-    morseListening = true;
-    morseBuffer = [];
-    morseSilentCounter = 0;
-    document.getElementById('listen-btn').textContent = '⏹ STOP LISTENING';
-    document.getElementById('listen-status').textContent = 'ACTIVE — LISTENING';
-    document.getElementById('listen-status').style.color = 'var(--green)';
-    document.getElementById('listen-ring').classList.add('active');
-    document.getElementById('listen-ring').style.borderColor = 'var(--green)';
-    document.getElementById('morse-visual').innerHTML = '<span style="font-family:var(--font-mono);font-size:10px;color:var(--green);">● listening...</span>';
-
-    processMorseAudio();
-  } catch(e) {
-    document.getElementById('listen-status').textContent = 'MIC ACCESS DENIED';
-    document.getElementById('listen-status').style.color = 'var(--red)';
-  }
-}
-
-function stopMorseListener() {
-  morseListening = false;
-  if (morseAnimFrame) cancelAnimationFrame(morseAnimFrame);
-  if (morseStream) morseStream.getTracks().forEach(t => t.stop());
-  if (morseAudioCtx) morseAudioCtx.close().catch(()=>{});
-  morseStream = null; morseAudioCtx = null; morseAnalyser = null;
-  document.getElementById('listen-btn').textContent = '🎙 START LISTENING';
-  document.getElementById('listen-status').textContent = 'STANDBY';
-  document.getElementById('listen-status').style.color = 'var(--amber)';
-  document.getElementById('listen-ring').classList.remove('active');
-  document.getElementById('listen-ring').style.borderColor = 'var(--amber)';
-}
-
-function processMorseAudio() {
-  if (!morseListening || !morseAnalyser) return;
-  const data = new Uint8Array(morseAnalyser.frequencyBinCount);
-  morseAnalyser.getByteTimeDomainData(data);
-
-  // RMS amplitude
-  let sum = 0;
-  for (let i = 0; i < data.length; i++) {
-    const v = (data[i] - 128) / 128;
-    sum += v * v;
-  }
-  const rms = Math.sqrt(sum / data.length);
-  const threshold = 0.05; // lowered threshold for better detection
-  const now = Date.now();
-
-  if (rms > threshold) {
-    morseSilentCounter = 0; // reset silence counter when sound detected
-    if (!morseSignalActive) {
-      morseSignalActive = true;
-      morseLastHit = now;
-      flashMorseVisual(true);
-    }
-  } else {
-    // Sound stopped
-    if (morseSignalActive) {
-      morseSilentCounter++;
-      // Wait for 2-3 frames of silence to confirm sound ended
-      if (morseSilentCounter > 2) {
-        const duration = now - morseLastHit;
-        morseSignalActive = false;
-        flashMorseVisual(false);
-        // dot: < 250ms, dash: >= 250ms
-        const symbol = duration < 250 ? '.' : '-';
-        morseBuffer.push(symbol);
-        updateMorseDisplay();
-        
-        // Schedule letter decode after gap
-        clearTimeout(morseDecodeTimer);
-        morseDecodeTimer = setTimeout(decodeMorseBuffer, 800);
-        morseSilentCounter = 0;
-      }
-    }
-  }
-
-  morseAnimFrame = requestAnimationFrame(processMorseAudio);
-}
-
-function flashMorseVisual(on) {
-  const el = document.getElementById('morse-visual');
-  if (on) {
-    el.innerHTML = '<div style="width:16px;height:16px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px var(--amber);"></div>';
-  }
-}
-
-function updateMorseDisplay() {
-  const el = document.getElementById('morse-visual');
-  el.innerHTML = morseBuffer.map(s =>
-    s === '.' ? '<div style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block;margin:0 2px;"></div>'
-              : '<div style="width:22px;height:8px;border-radius:4px;background:var(--amber);display:inline-block;margin:0 2px;"></div>'
-  ).join('');
-}
-
-function decodeMorseBuffer() {
-  if (morseBuffer.length === 0) return;
-  const code = morseBuffer.join('');
-  const letter = MORSE_TABLE[code] || '?';
-  const now = new Date().toLocaleTimeString();
-
-  // SOS special detection: 3 dots, 3 dashes, 3 dots
-  const isSOS = code === '...---...' || code === '...−−−...' ||
-                morseBuffer.join('') === '...---...';
-
-  if (isSOS) {
-    addMorseLog(`⚠️ SOS DETECTED at ${now} — pattern: ${code}`, true);
-    document.getElementById('morse-decoded').textContent = '🆘 SOS';
-    document.getElementById('morse-decoded').style.color = 'var(--red)';
-  } else if (letter !== '?') {
-    addMorseLog(`${now}: [${code}] → "${letter}"`, false);
-    const current = document.getElementById('morse-decoded').textContent;
-    document.getElementById('morse-decoded').textContent =
-      (current === '—' ? '' : current) + letter;
-    document.getElementById('morse-decoded').style.color = 'var(--amber)';
-  }
-
-  morseBuffer = [];
-}
-
-function addMorseLog(entry, isSOS) {
-  morseLogEntries.unshift(entry);
-  if (morseLogEntries.length > 20) morseLogEntries.pop();
-  const el = document.getElementById('morse-log');
-  el.innerHTML = morseLogEntries.map((e, i) =>
-    `<div style="color:${i===0 && isSOS ? 'var(--red)' : 'var(--text-dim)'};margin-bottom:3px;">${e}</div>`
-  ).join('');
-}
-
-function addSpeechLog(speech) {
-  const now = new Date().toLocaleTimeString();
-  const entry = `${now}: "${speech}"`;
-  morseLogEntries.unshift(entry);
-  if (morseLogEntries.length > 20) morseLogEntries.pop();
-  const el = document.getElementById('morse-log');
-  el.innerHTML = morseLogEntries.map((e, i) =>
-    `<div style="color:var(--green);margin-bottom:3px;">${e}</div>`
-  ).join('');
-}
-
-function clearMorseLog() {
-  morseLogEntries = [];
-  morseBuffer = [];
-  document.getElementById('morse-log').textContent = 'No signals detected yet.';
-  document.getElementById('morse-decoded').textContent = '—';
-  document.getElementById('morse-decoded').style.color = 'var(--amber)';
-  document.getElementById('morse-visual').innerHTML =
-    '<span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">— waiting for input —</span>';
-}
-
-// ============================================================
-// DEEPSEEK AI INTEGRATION
-// ============================================================
-let deepSeekEnabled = false;
-
-
-const DEEPSEEK_PSYCH_PROMPT = `You are a compassionate AI psychologist specializing in crisis intervention and trauma support. You are embedded in a survival app for people trapped in disaster zones.
-
-Your communication style:
-- Extremely warm, human, and grounding
-- Short, clear sentences — the person may be injured or in shock
-- Always validate emotions first, then guide
-- Use evidence-based techniques: CBT, somatic grounding, ACT
-- Focus on the present moment
-- Be honest but hopeful
-- Give ONE concrete action at the end of every response
-
-Survivor profile will be included in user messages. Prioritize their safety above all.`;
-
-function saveDeepSeekKey() {
-  const key = document.getElementById('ds-api-key').value.trim();
-  if (!key.startsWith('sk-')) {
-    showDSResult('⚠ Invalid key format. Should start with sk-', 'var(--red)');
-    return;
-  }
-  localStorage.setItem('underrubbl_ds_key', key);
-  document.getElementById('ds-api-key').value = '●'.repeat(20);
-  deepSeekEnabled = true;
-  updateDSStatus(true);
-  showDSResult('✅ Key saved locally on device', 'var(--green)');
-}
-
-function loadDeepSeekKey() {
-  const saved = localStorage.getItem('underrubbl_ds_key');
-  if (saved) {
-    deepSeekEnabled = true;
-    updateDSStatus(true);
-    document.getElementById('ds-api-key').placeholder = 'Key saved — tap to replace';
-  } else {
-    // Set default API key if not already saved
-    const defaultKey = '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';
-    localStorage.setItem('underrubbl_ds_key', defaultKey);
-    deepSeekEnabled = true;
-    updateDSStatus(true);
-    document.getElementById('ds-api-key').placeholder = 'Key saved — tap to replace';
-  }
-}
-
-function toggleDeepSeek() {
-  if (!deepSeekEnabled && !localStorage.getItem('underrubbl_ds_key')) {
-    showDSResult('⚠ Enter and save your API key first', 'var(--amber)');
-    return;
-  }
-  const toggle = document.getElementById('ds-toggle');
-  const isOn = toggle.classList.contains('on');
-  toggle.classList.toggle('on', !isOn);
-  toggle.setAttribute('aria-checked', !isOn);
-  if (!isOn) {
-    setAIMode('deepseek');
-  } else {
-    setAIMode('claude');
-  }
-}
-
-function setAIMode(mode) {
-  currentAIMode = mode;
-  const cladeBtn = document.getElementById('mode-claude');
-  const dsBtn = document.getElementById('mode-deepseek');
-  const infoEl = document.getElementById('ai-mode-info');
-  const dsToggle = document.getElementById('ds-toggle');
-
-  if (mode === 'deepseek') {
-    if (!localStorage.getItem('underrubbl_ds_key')) {
-      showDSResult('⚠ Save a DeepSeek key first', 'var(--amber)');
-      return;
-    }
-    cladeBtn.style.opacity = '0.5'; cladeBtn.setAttribute('aria-pressed','false');
-    dsBtn.style.opacity = '1';      dsBtn.setAttribute('aria-pressed','true');
-    dsToggle.classList.add('on');   dsToggle.setAttribute('aria-checked','true');
-    infoEl.textContent = 'Active: DeepSeek — enhanced psychological support';
-    updateDSStatus(true);
-  } else {
-    cladeBtn.style.opacity = '1';  cladeBtn.setAttribute('aria-pressed','true');
-    dsBtn.style.opacity = '0.5';   dsBtn.setAttribute('aria-pressed','false');
-    dsToggle.classList.remove('on'); dsToggle.setAttribute('aria-checked','false');
-    infoEl.textContent = 'Active: Claude Sonnet — crisis psychologist mode';
-  }
-}
-
-function updateDSStatus(connected) {
-  const el = document.getElementById('ds-status-label');
-  el.textContent = connected ? '● CONNECTED' : '● DISCONNECTED';
-  el.style.color = connected ? 'var(--green)' : 'var(--text-dim)';
-}
-
-// legacy (ui): OpenRouter-only call
-async function testDeepSeek() {
-  const key = localStorage.getItem('underrubbl_ds_key');
-  if (!key) { showDSResult('⚠ No key saved', 'var(--red)'); return; }
-  const btn = document.getElementById('ds-test-btn');
-  btn.textContent = '⏳ TESTING...';
-  btn.disabled = true;
-  
-  try {
-    console.log('Testing DeepSeek with key:', key.substring(0, 10) + '...');
-    const res = await callDeepSeek('Say "UNDERRUBBL CONNECTED" - reply with just those words.');
-    if (res && res.length > 0) {
-      showDSResult('✅ DeepSeek connected: ' + res.substring(0, 60), 'var(--green)');
-      updateDSStatus(true);
-      deepSeekEnabled = true;
-    } else {
-      showDSResult('⚠ Response received but empty', 'var(--amber)');
-    }
-  } catch(e) {
-    console.error('DeepSeek test error:', e);
-    showDSResult('❌ Connection failed: ' + e.message, 'var(--red)');
-    updateDSStatus(false);
-  }
-  btn.textContent = '⚡ TEST CONNECTION';
-  btn.disabled = false;
-}
-
-async function callOpenRouter(userMessage, key) {
-  const apiKey = key || localStorage.getItem('underrubbl_ds_key');
-  if (!apiKey) throw new Error('No API key');
-
-  try {
-function sanitizeMessagesForProvider(messages) {
-  const allowedRoles = new Set(['system', 'user', 'assistant']);
-  return Array.isArray(messages)
-    ? messages
-        .filter(m => m && allowedRoles.has(m.role))
-        .map(m => ({ role: m.role, content: String(m.content ?? '') }))
-    : [];
-}
-
-  const baseMessages = [
-          { role: 'system', content: DEEPSEEK_PSYCH_PROMPT },
-          { role: 'user', content: userMessage + `\n\nSurvivor: ${survivorData.name}, Blood: ${survivorData.blood}, Age: ${survivorData.age}, Allergies: ${survivorData.allergies}` }
-        ];
-
-        const messages = sanitizeMessagesForProvider(baseMessages);
-
-const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + apiKey,
-      },
-
-      body: JSON.stringify({
-        model: 'openai/gpt-4o-mini',
-        max_tokens: 600,
-        temperature: 0.7,
-        messages: [
-          { role: 'system', content: DEEPSEEK_PSYCH_PROMPT },
-          { role: 'user', content: userMessage + `\n\nSurvivor: ${survivorData.name}, Blood: ${survivorData.blood}, Age: ${survivorData.age}, Allergies: ${survivorData.allergies}` }
-        ]
-      })
-    });
-    
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      console.error('DeepSeek API Error:', res.status, errorData);
-      throw new Error(`API Error ${res.status}: ${errorData.error?.message || 'Unknown error'}`);
-    }
-    
-    const data = await res.json();
-    const content = data.choices?.[0]?.message?.content;
-    if (!content) {
-      throw new Error('No response from DeepSeek');
-    }
-    return content;
-  } catch(e) {
-    console.error('DeepSeek connection error:', e.message);
-    // Fallback to contextual fallback
-    throw e;
-  }
-}
-
-function showDSResult(msg, color) {
-  const el = document.getElementById('ds-test-result');
-  el.textContent = msg;
-  el.style.color = color || 'var(--text-dim)';
-}
-
-// AI routing is now OpenRouter-only
-const _origProcessMessage = processMessage;
-window.processMessage = async function(msg) {
-  if (localStorage.getItem('underrubbl_ds_key')) {
-
-    appendUserMessage(msg);
-    document.getElementById('ai-loading').style.display = 'block';
-    document.getElementById('chat-messages').scrollTop = 9999;
-    try {
-      const reply = await callOpenRouter(msg);
-      document.getElementById('ai-loading').style.display = 'none';
-      appendAIMessage(reply || 'Take a slow breath. I am here with you.');
-    } catch(e) {
-      document.getElementById('ai-loading').style.display = 'none';
-      appendAIMessage('DeepSeek connection lost. Core protocol: breathe slowly, stay still, tap walls in groups of 3. Help is coming.');
-    }
-  } else {
-    await _origProcessMessage(msg);
-  }
-};
-
-// ============================================================
-// MOOD TRACKER
-// ============================================================
-let moodHistory = JSON.parse(localStorage.getItem('underrubbl_mood') || '[]');
-let selectedMood = null;
-
-function setMood(val) {
-  selectedMood = val;
-  document.querySelectorAll('.mood-btn').forEach(btn => {
-    const isSelected = parseInt(btn.dataset.mood) === val;
-    btn.style.transform = isSelected ? 'scale(1.1)' : 'scale(1)';
-    btn.style.boxShadow = isSelected ? '0 0 12px rgba(255,149,0,0.4)' : 'none';
-  });
-}
-
-async function logMoodAndGetAdvice() {
-  if (!selectedMood) {
-    document.getElementById('mood-ai-text').textContent = 'Please select a mood first.';
-    document.getElementById('mood-ai-response').style.display = 'block';
-    return;
-  }
-
-  const entry = { mood: selectedMood, time: Date.now() };
-  moodHistory.push(entry);
-  if (moodHistory.length > 8) moodHistory.shift();
-  localStorage.setItem('underrubbl_mood', JSON.stringify(moodHistory));
-  renderMoodChart();
-
-  // Get AI advice
-  const moodLabels = ['','PANIC','ANXIOUS','COPING','STABLE','STRONG'];
-  const moodLabel = moodLabels[selectedMood];
-  const btn = document.getElementById('mood-log-btn');
-  btn.textContent = '⏳ Getting AI assessment...';
-
-  const prompt = `The survivor just reported their psychological state as: ${moodLabel} (${selectedMood}/5).
-Mood history (newest last): ${moodHistory.map(m => moodLabels[m.mood]).join(' → ')}.
-Please provide: 1) A brief empathetic acknowledgment 2) Assessment of their psychological trend 3) One specific coping technique for their current state. Keep it under 4 sentences total.`;
-
-  try {
-    let response = '';
-  if (localStorage.getItem('underrubbl_ds_key')) {
-response = await callOpenRouter(prompt);
-  } else {
-
-      // Use Claude
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 400,
-          system: AI_SYSTEM_PROMPT,
-          messages: [{ role: 'user', content: prompt }]
-        })
-      });
-      const data = await res.json();
-      response = data.content?.map(c => c.text || '').join('').trim();
-    }
-    document.getElementById('mood-ai-text').textContent = response || 'Stay strong. Your feelings are valid.';
-    document.getElementById('mood-ai-response').style.display = 'block';
-  } catch(e) {
-    document.getElementById('mood-ai-text').textContent = 'AI unavailable. Remember: what you feel is normal. Take 3 slow breaths and focus on one small thing you can control right now.';
-    document.getElementById('mood-ai-response').style.display = 'block';
-  }
-
-  btn.textContent = '📊 LOG MOOD + GET AI ADVICE';
-}
-
-function renderMoodChart() {
-  const chart = document.getElementById('mood-chart');
-  if (moodHistory.length === 0) {
-    chart.innerHTML = '<span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">No data yet</span>';
-    return;
-  }
-  const colors = ['','#FF3B30','#FF6B35','#FF9500','#86C67C','#30D158'];
-  chart.innerHTML = moodHistory.map((m, i) => {
-    const pct = (m.mood / 5) * 100;
-    const color = colors[m.mood];
-    const isLatest = i === moodHistory.length - 1;
-    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
-      <div style="font-family:var(--font-mono);font-size:8px;color:${color};">${m.mood}</div>
-      <div style="width:100%;background:var(--surface3);border-radius:3px;height:36px;display:flex;align-items:flex-end;">
-        <div style="width:100%;height:${pct}%;background:${color};border-radius:3px;${isLatest ? 'box-shadow:0 0 6px ' + color : ''}"></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ============================================================
-// INIT EXTENSIONS (called after main initApp)
-// ============================================================
-const _origInitApp = initApp;
-window.initApp = function() {
-  _origInitApp();
-  initDeadManSwitch();
-  loadDeepSeekKey();
-  renderMoodChart();
-};
-
-// Load extensions for returning users (already have saved profile)
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    if (localStorage.getItem('underrubbl_survivor')) {
-      initDeadManSwitch();
-      loadDeepSeekKey();
-      renderMoodChart();
-    }
-  }, 600);
-  
-  // Auto-load DeepSeek if key is available
-  setTimeout(() => {
-    if (localStorage.getItem('underrubbl_ds_key')) {
-      deepSeekEnabled = true;
-      currentAIMode = 'deepseek';
-      updateDSStatus(true);
-      if (document.getElementById('ds-toggle')) {
-        document.getElementById('ds-toggle').classList.add('on');
-        document.getElementById('ds-toggle').setAttribute('aria-checked', 'true');
-      }
-    }
-  }, 800);
-});
-
-requestWakeLock();
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') requestWakeLock();
 });
+
+// ============================================================
+// ONLINE / OFFLINE
+// ============================================================
+window.addEventListener('online',  () => { document.getElementById('sys-status').className = 'status-dot ok';   document.getElementById('sys-status-txt').textContent = 'ONLINE'; });
+window.addEventListener('offline', () => { document.getElementById('sys-status').className = 'status-dot warn'; document.getElementById('sys-status-txt').textContent = 'OFFLINE'; });
+if (!navigator.onLine) { document.getElementById('sys-status').className = 'status-dot warn'; document.getElementById('sys-status-txt').textContent = 'OFFLINE'; }
 </script>
 </body>
 </html>
