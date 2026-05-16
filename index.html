@@ -1206,18 +1206,19 @@ function toggleSOS() {
   const btn = document.getElementById('sos-btn');
   const label = document.getElementById('sos-label');
   const statusLabel = document.getElementById('sos-status-label');
-  btn.classList.toggle('active', sosActive);
-  btn.setAttribute('aria-pressed', sosActive);
+
+  if (btn) btn.classList.toggle('active', sosActive);
+  if (btn) btn.setAttribute('aria-pressed', sosActive);
 
   if (sosActive) {
-    label.textContent = 'TRANSMITTING';
-    statusLabel.textContent = '📡 SOS ACTIVE';
+    if (label) label.textContent = 'TRANSMITTING';
+    if (statusLabel) statusLabel.textContent = '📡 SOS ACTIVE';
     document.getElementById('beacon-mode').textContent = 'MODE: ACTIVE';
     startAcousticBeacon();
     startWaveAnimation();
   } else {
-    label.textContent = 'TAP TO ARM';
-    statusLabel.textContent = '';
+    if (label) label.textContent = 'TAP TO ARM';
+    if (statusLabel) statusLabel.textContent = '';
     document.getElementById('beacon-mode').textContent = 'MODE: STANDBY';
     stopAcousticBeacon();
     stopWaveAnimation();
